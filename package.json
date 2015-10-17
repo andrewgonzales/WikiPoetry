@@ -1,0 +1,39 @@
+{
+  "name": "wikipoetry",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "watchify -o client/app/bundle.js -v -d client/app/app.js",
+    "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > client/bundle.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MischievousBoys/WikiPoetry.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MischievousBoys/WikiPoetry/issues"
+  },
+  "dependencies": {
+    "flux": "^2.1.1",
+    "history": "^1.12.5",
+    "keymirror": "^0.1.1",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-router": "^1.0.0-rc3"
+  },
+  "devDependencies": {
+    "browserify": "^11.2.0",
+    "envify": "^3.4.0",
+    "reactify": "^1.1.1",
+    "uglify-js": "^2.5.0",
+    "watchify": "^3.4.0"
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify"
+    ]
+  }
+}
