@@ -1,13 +1,15 @@
 //Quote of the hour
   //changes every hour
 var React = require('react');
+var ReactRouter = require('react-router');
+var Link = ReactRouter.Link;
 
 var Navbar = React.createClass({
 
   render: function () {
     return (
       <div className="navbar"> 
-        <div><a href="#">Home</a></div>
+        <Link to="/">Home</Link>{' '}
         <div><a href="#">How It Works</a></div>
         <div><a href="#">About Us</a></div>
       </div>
