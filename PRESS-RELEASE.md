@@ -1,4 +1,4 @@
-# Project Name #
+# WikiPoetry #
 
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
@@ -17,28 +17,16 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
-
-## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  A Recurring Neural Network displaying wikipedia-type pages.
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
-
-## Problem ##
-  > Describe the problem your product solves.
-
-## Solution ##
-  > Describe how your product elegantly solves the problem.
+  View machine generated Wikipedia articles through the use of a Recurring Neural Network. 
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  WikiPoetry will give users the opportunity to experience a living web application. It will constantly improve itself to produce English poetry based off of Wikipedia articles.  
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
-
-## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  Go on the web app and start exploring!
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  If this type of interaction interests you and it doesn't make sense be sure to check out the How It Works tab.
