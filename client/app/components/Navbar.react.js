@@ -14,7 +14,7 @@ var Navbar = React.createClass({
           <li><Link to="/Home" activeClassName="link-active">Home</Link></li>
           <li><Link to="/Article" activeClassName="link-active">Article</Link></li>
           <li><Link to="/HowItWorks" activeClassName="link-active">How It Works</Link></li>
-          <div><a href="#">About Us</a></div>
+          <li><Link to="/AboutUs" activeClassName="link-active">About Us</Link></li>
         </ul>
       </div>
     );
