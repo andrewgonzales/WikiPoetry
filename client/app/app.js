@@ -9,8 +9,8 @@ var useBasename = history.useBasename;
 var createHistory = history.createHistory;
 
 var WikiPoetryApp = require('./components/WikiPoetryApp.react');
-var Home = require('./components/Home.react');
-var Article = require('./components/Article.react');
+var Home = require('./components/home/Home.react');
+var Article = require('./components/article/Article.react');
 //Perform routing
 var base = useBasename(createHistory)({
   basename: '/wikiPoetry'

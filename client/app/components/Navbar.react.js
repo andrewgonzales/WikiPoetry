@@ -7,7 +7,7 @@ var Link = ReactRouter.Link;
 var Navbar = React.createClass({
 
   render: function () {
-    var pathname = this.props.location;
+
     return (
       <div className="navbar">
         <ul>
@@ -16,9 +16,6 @@ var Navbar = React.createClass({
           <li><Link to="/HowItWorks" activeClassName="link-active">How It Works</Link></li>
           <div><a href="#">About Us</a></div>
         </ul>
-        <div>
-        {React.cloneElement(this.props.children || <div/>, { key: pathname })}
-        </div>
       </div>
     );
   }

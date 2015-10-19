@@ -6,6 +6,7 @@ var React = require('react');
 var Article = React.createClass({
 
   render: function () {
+    console.log('how do i get to article');
     return (
       <div> Article </div>
     );
