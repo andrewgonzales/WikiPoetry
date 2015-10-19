@@ -1,10 +1,24 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Router = require('react-router');
-var WikiPoetryApp = require('./components/WikiPoetryApp.react')
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route
+//for history within browser
+// var history = require('history');
+// var useBasename = history.useBasename;
+// var createHistory = history.createHistory;
+//require route file
+var routes = require('./routes');
 
-//Perform routing
+
+// //Perform routing
+// var base = useBasename(createHistory)({
+//   basename: '/#'
+// });
+
 
 // Render FluxCartApp Controller View
 ReactDOM.render(
-  <WikiPoetryApp />, wiki);
+  <Router>
+  {routes}
+  </Router>, wiki);
