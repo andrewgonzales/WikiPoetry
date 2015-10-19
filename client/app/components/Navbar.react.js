@@ -7,7 +7,7 @@ var Link = ReactRouter.Link;
 var Navbar = React.createClass({
 
   render: function () {
-
+    
     return (
       <div className="navbar">
         <ul>
