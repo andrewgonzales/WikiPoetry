@@ -7,7 +7,9 @@ var Article = React.createClass({
 
   render: function () {
     return (
-      <div> Article </div>
+      <div>
+        <h1>Article Main</h1>
+      </div>
     );
   }
 });
