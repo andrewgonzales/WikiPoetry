@@ -1,10 +1,19 @@
-//Will display the featured articles page
-//Search Bar
+(function() {
+  'use strict';
 
-var React = require('react');
+  var React = require('react');
 
-var Home = React.createClass({
+  var Home = React.createClass({
+    render: function () {
+      return (
+        <div>
+          <h1>WikiPoetry Home</h1>
+        </div>
+      );
+    }
+  });
 
+<<<<<<< Updated upstream
   render: function () {
 
     return (
@@ -14,3 +23,7 @@ var Home = React.createClass({
 });
 
 module.exports = Home;
+=======
+  module.exports = Home;
+})()
+>>>>>>> Stashed changes

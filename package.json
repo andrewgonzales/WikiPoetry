@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "flux": "^2.1.1",
+    "gulp-eslint": "^1.0.0",
     "history": "^1.12.5",
     "keymirror": "^0.1.1",
     "react": "^0.14.0",
