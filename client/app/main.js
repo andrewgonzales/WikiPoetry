@@ -2,7 +2,6 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
-var Route = ReactRouter.Route
 //for history within browser
 // var history = require('history');
 // var useBasename = history.useBasename;
@@ -18,7 +17,4 @@ var routes = require('./routes');
 
 
 // Render FluxCartApp Controller View
-ReactDOM.render(
-  <Router>
-  {routes}
-  </Router>, wiki);
+ReactDOM.render(<Router>{routes}</Router>, document.getElementById('wiki'));

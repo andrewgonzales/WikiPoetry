@@ -11,7 +11,7 @@
 
     render: function () {
       return (
-        <nav className="navbar navbar-default"> 
+        <nav className="navbar navbar-default">
           <div className="container-fluid">
             <Link to="/" className="navbar-brand">
               <img src="#" />

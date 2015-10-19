@@ -13,17 +13,5 @@
     }
   });
 
-<<<<<<< Updated upstream
-  render: function () {
-
-    return (
-      <div> Home </div>
-    );
-  }
-});
-
-module.exports = Home;
-=======
   module.exports = Home;
 })()
->>>>>>> Stashed changes
