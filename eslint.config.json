@@ -1,0 +1,34 @@
+{
+  "ecmaFeatures": {
+    "jsx": true
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jquery": true
+  },
+  "rules": {
+    "no-trailing-spaces": 0,
+    "eol-last": 0,
+    "no-underscore-dangle": 0,
+    "no-alert": 0,
+    "no-lone-blocks": 0,
+    "no-bitwise": 2,
+    "camelcase": 2,
+    "curly": 2,
+    "eqeqeq": 2,
+    "wrap-iife": [2,"any"],
+    "indent": [2,2,{"SwitchCase": 1}],
+    "no-use-before-define": 2,
+    "new-cap": 2,
+    "no-caller": 2,
+    "quotes": [2,"single"],
+    "no-undef": 2,
+    "no-unused-vars": 2,
+    "strict": [2,"function"]
+  },
+  "globals": {
+    jQuery: true,
+    $: true
+  }
+}
