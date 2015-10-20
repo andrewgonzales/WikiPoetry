@@ -12,6 +12,7 @@ var config = {
   paths: {
     html: './client/app/*.html',
     js: './client/**/*.js',
+    server: './server/**.js',
     dist: './dist',
     mainJs: './client/app/main.js'
   }
@@ -74,7 +75,7 @@ gulp.task('js', function () {
 gulp.task('js-watch', browserSync.reload);
 
 gulp.task('lint', function() {
-  return gulp.src(config.paths.js)
+  return gulp.src([config.paths.js, config.paths.server])
   .pipe(lint({config: 'eslint.config.json'}))
   .pipe(lint.format());
 });
