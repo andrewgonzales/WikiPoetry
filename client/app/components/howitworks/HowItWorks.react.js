@@ -7,7 +7,9 @@ var HowItWorks = React.createClass({
   render: function () {
 
     return (
-      <div> How It Works </div>
+      <div>
+      How It Works
+      </div>
     );
   }
 });
