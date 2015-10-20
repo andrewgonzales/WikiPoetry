@@ -5,6 +5,7 @@ var Home = React.createClass({
     return (
       <div>
         <h1>WikiPoetry Home</h1>
+        <h2>Featured Articles</h2>
       </div>
     );
   }

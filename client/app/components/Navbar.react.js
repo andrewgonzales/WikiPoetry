@@ -3,6 +3,8 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 var Link = ReactRouter.Link;
+var Search = require('./search/Search.react');
+
 
 var Navbar = React.createClass({
 
@@ -16,6 +18,7 @@ var Navbar = React.createClass({
           <li><Link to="/HowItWorks" activeClassName="link-active">How It Works</Link></li>
           <li><Link to="/AboutUs" activeClassName="link-active">About Us</Link></li>
         </ul>
+        <Search />
       </div>
     );
   }

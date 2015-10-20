@@ -7,7 +7,10 @@ var AboutUs = React.createClass({
   render: function () {
 
     return (
-      <div> About Us </div>
+      <div> 
+      About Us
+      </div>
+
     );
   }
 });
