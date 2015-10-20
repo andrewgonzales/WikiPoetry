@@ -1,6 +1,6 @@
 var gulp = require('gulp');
-var connect = require('gulp-connect'); // Run a local dev server
-var open = require('gulp-open'); // Open a URL in a web browser
+var browserSync = require("browser-sync").create();
+var nodemon = require('gulp-nodemon');
 var browserify = require('browserify'); //Bundles JS
 var reactify = require('reactify'); //Transforms React JSX to JS
 var source = require('vinyl-source-stream'); // Use conventional text streams with Gulp
@@ -17,24 +17,49 @@ var config = {
   }
 };
 
-gulp.task('connect', function () {
-  connect.server({
-    root: ['dist'],
-    port: config.port,
-    base: config.devBaseUrl,
-    livereload: true
-  });
+var BROWSER_SYNC_RELOAD_DELAY = 50;
+
+gulp.task('nodemon', function (cb) {
+  var called = false;
+  return nodemon({
+    script: './server/server.js',
+    watch: ['./server/server.js']
+  })
+    .on('start', function onStart() {
+      // ensure start only got called once
+      if (!called) { cb(); }
+      called = true;
+    })
+    .on('restart', function onRestart() {
+      // reload connected browsers after a slight delay
+      setTimeout(function reload() {
+        browserSync.reload({
+          stream: false
+        });
+      }, BROWSER_SYNC_RELOAD_DELAY);
+    });
 });
 
-gulp.task('open', ['connect'], function () {
-  gulp.src('dist/index.html')
-  .pipe(open({ uri: config.devBaseUrl + ':' + config.port + '/'}))
+gulp.task('browser-sync', ['nodemon'], function () {
+
+  // for more browser-sync config options: http://www.browsersync.io/docs/options/
+  browserSync.init({
+
+    // informs browser-sync to proxy our expressjs app which would run at the following location
+    proxy: 'http://localhost:8080',
+
+    // informs browser-sync to use the following port for the proxied app
+    // notice that the default port is 3000, which would clash with our expressjs
+    port: 4000,
+
+    // open the proxied app in chrome
+    browser: ['google-chrome']
+  });
 });
 
 gulp.task('html', function () {
   gulp.src(config.paths.html)
   .pipe(gulp.dest(config.paths.dist))
-  .pipe(connect.reload());
 });
 
 gulp.task('js', function () {
@@ -44,8 +69,9 @@ gulp.task('js', function () {
   .on('error', console.error.bind(console))
   .pipe(source('bundle.js'))
   .pipe(gulp.dest(config.paths.dist + '/scripts'))
-  .pipe(connect.reload());
 });
+
+gulp.task('js-watch', browserSync.reload);
 
 gulp.task('lint', function() {
   return gulp.src(config.paths.js)
@@ -53,9 +79,13 @@ gulp.task('lint', function() {
   .pipe(lint.format());
 });
 
-gulp.task('watch', function () {
-  gulp.watch(config.paths.html, ['html']);
-  gulp.watch(config.paths.js, ['js', 'lint']);
+gulp.task('bs-reload', function () {
+  browserSync.reload();
 });
 
-gulp.task('default', ['html', 'js', 'lint', 'open', 'watch']);
+gulp.task('watch', function () {
+  gulp.watch(config.paths.html, ['html', 'bs-reload']);
+  gulp.watch(config.paths.js, ['js', 'lint', browserSync.reload]);
+});
+
+gulp.task('default', ['html', 'js', 'lint', 'browser-sync', 'watch']);
