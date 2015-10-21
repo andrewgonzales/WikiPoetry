@@ -5,7 +5,7 @@ var HomeContent = require('./HomeContent.react');
 var Home = React.createClass({
   render: function () {
     return (
-      <div className="ten columns">
+      <div className="homecontent ten columns">
         <section className="banner">
           <Banner />
         </section>
