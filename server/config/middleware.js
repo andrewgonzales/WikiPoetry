@@ -2,7 +2,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 
 module.exports = function (app, express) {
-  
+
   var rnnRouter = express.Router();
 
   app.use(morgan('dev'));

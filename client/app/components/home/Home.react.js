@@ -1,11 +1,17 @@
 var React = require('react');
+var Banner = require('./Banner.react');
+var HomeContent = require('./HomeContent.react');
 
 var Home = React.createClass({
   render: function () {
     return (
-      <div>
-        <h1>WikiPoetry Home</h1>
-        <h2>Featured Articles</h2>
+      <div className="ten columns">
+        <section className="banner">
+          <Banner />
+        </section>
+        <section className="homecontent">
+          <HomeContent />
+        </section>
       </div>
     );
   }

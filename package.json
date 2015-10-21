@@ -28,6 +28,7 @@
     "browserify": "^11.2.0",
     "eslint-plugin-react": "^3.6.2",
     "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
     "gulp-eslint": "^1.0.0",
     "gulp-nodemon": "^2.0.4",
     "morgan": "^1.6.1",

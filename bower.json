@@ -1,0 +1,22 @@
+{
+  "name": "wikipoetry",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Tomio Mizoroki <tmizoroki@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/MischievousBoys/WikiPoetry",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "skeleton": "~2.0.4"
+  }
+}
