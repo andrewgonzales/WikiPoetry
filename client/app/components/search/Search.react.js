@@ -10,8 +10,8 @@ var Search = React.createClass({
   render: function () {
     return (
       <form className="searchForm" onSubmit={this._onSubmit}>
-        <input className="searchBar" type="text" ref="search"/>
-        <button type="submit" name="submitButton" >Search</button>
+        <input className="searchBar" type="search" placeholder="Search" ref="search"/>
+        <input className="searchButton" type="submit" name="submitButton"/>
       </form>
     );
   },
