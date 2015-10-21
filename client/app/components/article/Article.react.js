@@ -8,9 +8,6 @@ var Article = React.createClass({
 
   render: function () {
     //To handle the direct article link when there is no output
-    var term = this.props.params;
-    console.log(term);
-
     var Poem;
     if (this.props.location.state !== null) {
       Poem = this.props.location.state.text;
