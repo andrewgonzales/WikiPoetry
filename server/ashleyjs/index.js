@@ -203,9 +203,6 @@ var predictSentence = function(model, samplei, temperature, seed) {
   var prev = {};
   while(true) {
     var tokens = tokenizer.tokenize(s);
-    // RNN tick
-    console.log(s);
-    console.log(tokens);
     var ix = s.length === 0 ? 0 : letterToIndex[tokens[tokens.length - 1]];
     var lh = forwardIndex(G, model, ix, prev);
     prev = lh;
