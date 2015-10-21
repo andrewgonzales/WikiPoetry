@@ -14,8 +14,10 @@
   },
   "dependencies": {
     "body-parser": "^1.14.1",
+    "express": "^4.13.3",
     "flux": "^2.1.1",
     "history": "^1.12.5",
+    "jquery": "^2.1.4",
     "keymirror": "^0.1.1",
     "mongoose": "^4.1.12",
     "react": "^0.14.0",

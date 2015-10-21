@@ -12,7 +12,7 @@ var config = {
   paths: {
     html: './client/app/*.html',
     js: './client/**/*.js',
-    server: './server/**/*.js',
+    server: './server/config/*.js',
     dist: './dist',
     mainJs: './client/app/main.js'
   }
