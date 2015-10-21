@@ -10,8 +10,12 @@ var Navbar = React.createClass({
 
   render: function () {
     var term = this.props.params;
+<<<<<<< Updated upstream
     console.log(term);
     
+=======
+
+>>>>>>> Stashed changes
     return (
       <div className="navbar">
         <ul>

@@ -17,7 +17,6 @@ var Article = React.createClass({
     } else {
       Poem = "Please search for a term";
     }
-
     return (
       <div>
         <h1>Article Main</h1>
