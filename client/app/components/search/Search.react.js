@@ -11,7 +11,7 @@ var Search = React.createClass({
     return (
       <form className="searchForm" onSubmit={this._onSubmit}>
         <input className="searchBar" type="search" placeholder="Search" ref="search"/>
-        <input className="searchButton" type="submit" name="submitButton"/>
+        <button type="submit" name="submitButton">Search</button>
       </form>
     );
   },
