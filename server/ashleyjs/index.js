@@ -199,7 +199,7 @@ var predictSentence = function(model, samplei, temperature, seed) {
   if(typeof samplei === 'undefined') { samplei = false; }
   if(typeof temperature === 'undefined') { temperature = 1.0; }
   var G = new R.Graph(false);
-  var s = seed || '';
+  var s = seed + ' ' || '';
   var prev = {};
   while(true) {
     var tokens = tokenizer.tokenize(s);
@@ -299,26 +299,53 @@ var tick = function() {
   cost_struct.G.backward();
   // perform param update
   var solver_stats = solver.step(model, learning_rate, regc, clipval);
-}
+};
 
-var createPoem = function (type, seed) {
+var getEntities = function(text, threshold) {
+  // returns entities (locations, persons, proper nouns) from a text
+  var entities = {};
+  var popularEntities = [];
+  var sent = nlp.pos(text).sentences;
+  for (var i = 20; i < sent.length / 2; i++) {
+    for (var j = 0; j < sent[i].entities().length; j++) {
+      if(entities.hasOwnProperty(sent[i].entities()[j].text)) {
+        entities[sent[i].entities()[j].text]++;
+      } else {
+        entities[sent[i].entities()[j].text] = 1;
+      }
+    }
+  }
+
+  for(var key in entities) {
+    if(entities[key] > threshold) {
+      popularEntities.push(key);
+    }
+  }
+  console.log(popularEntities);
+  return popularEntities
+};
+
+var loadType = function (type) {
   // get correct model from output folder
   var modelRaw = JSON.parse(fs.readFileSync(__dirname + '/output/' + type + '.txt', 'utf8'));
   loadModel(modelRaw);
   tick();
-  return predictSentence(model, true, Math.pow(10, 0.5), seed);
 };
 
 var getPoem = function (type, searchTerm) {
-  // create a poem with type
-  return createPoem(type, searchTerm);
   // make ajax request
-  // wiki.page.data(searchTerm, { content: true }, function(response) {
-  //   fs.writeFile(__dirname + '/output/wiki.txt', JSON.stringify(response.text['*']), 'utf8');
-  //   var text = htmlToText.fromString(response.text['*']);
-  // });
+  var text = '', plain = '', entities = [];
+  wiki.page.data(searchTerm, { content: true }, function(response) {
+    // convert html to text for nlp processing
+    text = htmlToText.fromString(response.text['*']);
+    // get entities (places, persons,..) from wikipedia page
+    entities = getEntities(text, 5);
+    // load model of requested type
+    loadType(type);
+    // ask Ashley for a sentence
+    return predictSentence(model, true, 2.5, searchTerm);
+  });
 };
-
 exports.getPoem = getPoem;
 
 
