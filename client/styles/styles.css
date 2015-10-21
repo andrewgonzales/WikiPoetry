@@ -1,0 +1,31 @@
+.column, .columns {
+  margin-left: 4%;
+}
+
+.navbar, .header, .banner {
+  background-color: #f9f9f9;
+}
+
+.homearticle h4 {
+  border: 1px solid;
+}
+
+.leftarticlegroup {
+  background-color: #F5FFFA;
+  border: 1px solid #CEF2E0;
+}
+
+.leftarticlegroup h4 {
+  background-color: #CEF2E0;
+  border-color: #A3BFB1;
+}
+
+.rightarticlegroup {
+ background-color: #F5FAFF;
+ border: 1px solid #CEDFF2;
+}
+
+.rightarticlegroup h4 {
+  background-color: #CEDFF2;
+  border-color: #A3B0BF;
+}

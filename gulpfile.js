@@ -5,6 +5,7 @@ var browserify = require('browserify'); //Bundles JS
 var reactify = require('reactify'); //Transforms React JSX to JS
 var source = require('vinyl-source-stream'); // Use conventional text streams with Gulp
 var lint = require('gulp-eslint');
+var concat = require('gulp-concat');
 
 var config = {
   port: 8888,
@@ -12,6 +13,12 @@ var config = {
   paths: {
     html: './client/app/*.html',
     js: './client/**/*.js',
+    css: [
+      './client/lib/skeleton/css/normalize.css',
+      './client/lib/skeleton/css/skeleton.css',
+      './client/styles/styles.css'
+    ],
+    images: './client/images/*',
     server: './server/config/*.js',
     dist: './dist',
     mainJs: './client/app/main.js'
@@ -72,6 +79,20 @@ gulp.task('js', function () {
   .pipe(gulp.dest(config.paths.dist + '/scripts'))
 });
 
+gulp.task('css', function () {
+  gulp.src(config.paths.css)
+  .pipe(concat('bundle.css'))
+  .pipe(gulp.dest(config.paths.dist + '/css'))
+});
+
+gulp.task('images', function () {
+  gulp.src(config.paths.images)
+  .pipe(gulp.dest(config.paths.dist + '/images'))
+
+  gulp.src('./client/favicon')
+  .pipe(gulp.dest(config.paths.dist))
+});
+
 gulp.task('js-watch', browserSync.reload);
 
 gulp.task('lint', function() {
@@ -89,4 +110,4 @@ gulp.task('watch', function () {
   gulp.watch(config.paths.js, ['js', 'lint', browserSync.reload]);
 });
 
-gulp.task('default', ['html', 'js', 'lint', 'browser-sync', 'watch']);
+gulp.task('default', ['html', 'js', 'css', 'images', 'lint', 'browser-sync', 'watch']);
