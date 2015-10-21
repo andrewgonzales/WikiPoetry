@@ -16,7 +16,7 @@ var AboutUs = require('./components/aboutus/AboutUs.react');
 var routes = (
   <Route path="/" component={WikiPoetryApp}>
     <IndexRoute component={Home} />
-    <Route path="Article" component={Article} />
+    <Route path="Article/:term" component={Article} />
     <Route path="HowItWorks" component={HowItWorks} />
     <Route path="AboutUs" component={AboutUs} />
     <Redirect from="*" to="/" />

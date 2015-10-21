@@ -9,12 +9,12 @@ var Search = require('./search/Search.react');
 var Navbar = React.createClass({
 
   render: function () {
-
+    var term = this.props.params;
     return (
       <div className="navbar">
         <ul>
           <li><Link to="/" activeClassName="link-active">Home</Link></li>
-          <li><Link to="/Article" activeClassName="link-active">Article</Link></li>
+          <li><Link to={`/Article/${term}`} activeClassName="link-active">Article</Link></li>
           <li><Link to="/HowItWorks" activeClassName="link-active">How It Works</Link></li>
           <li><Link to="/AboutUs" activeClassName="link-active">About Us</Link></li>
         </ul>
