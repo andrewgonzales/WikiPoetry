@@ -4,8 +4,9 @@ var Rvis = require('./src/vis.js');
 var fs = require('fs');
 var natural = require('natural');
 var moment = require('moment');
+var request = require('request');
 var wiki = require('node-wikipedia');
-var htmlToText = require('html-to-text');
+var htmlToText = require("html-to-text");
 
 // Model parameters 
 var sample_softmax_temperature = Math.pow(10, 0.5); // how peaky model predictions should be
@@ -321,9 +322,27 @@ var getEntities = function(text, threshold) {
       popularEntities.push(key);
     }
   }
-  console.log(popularEntities);
   return popularEntities
 };
+
+var getPicture = function(searchTerm) {
+  // gets the main picture from the wikipedia arcticle 
+  wiki.page.image(searchTerm, function(pictureUrl) {
+    return pictureUrl.slice(2);
+  });
+}
+
+var getHeaders = function(html) {
+
+}
+
+var getArticle = function(type, searchTerm) {
+  // 
+}
+
+var getHomePage = function() {
+  // get info from the real homepage 
+}
 
 var loadType = function (type) {
   // get correct model from output folder
@@ -334,10 +353,13 @@ var loadType = function (type) {
 
 var getPoem = function (type, searchTerm) {
   // make ajax request
-  var text = '', plain = '', entities = [];
+  var text = '', plain = '', entities = [], data = {};
   wiki.page.data(searchTerm, { content: true }, function(response) {
     // convert html to text for nlp processing
+    // console.log(response.text);
     text = htmlToText.fromString(response.text['*']);
+    // build object to send
+    data.headers = getHeaders(response.text);
     // get entities (places, persons,..) from wikipedia page
     entities = getEntities(text, 5);
     // load model of requested type
@@ -346,6 +368,7 @@ var getPoem = function (type, searchTerm) {
     return predictSentence(model, true, 2.5, searchTerm);
   });
 };
+getPoem('shakespeare', 'barack obama');
 exports.getPoem = getPoem;
 
 
