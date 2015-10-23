@@ -6,6 +6,7 @@ var reactify = require('reactify'); //Transforms React JSX to JS
 var source = require('vinyl-source-stream'); // Use conventional text streams with Gulp
 var lint = require('gulp-eslint');
 var concat = require('gulp-concat');
+var mocha = require('gulp-mocha');
 
 var config = {
   port: 8888,
@@ -47,6 +48,11 @@ gulp.task('nodemon', function (cb) {
       }, BROWSER_SYNC_RELOAD_DELAY);
     });
 });
+
+gulp.task('mocha', function () {
+  gulp.src('./tests/server/ServerSpec.js', {read: false})
+  .pipe(mocha({reporter: 'nyan'}))
+})
 
 gulp.task('browser-sync', ['nodemon'], function () {
 
@@ -110,4 +116,4 @@ gulp.task('watch', function () {
   gulp.watch(config.paths.js, ['js', 'lint', browserSync.reload]);
 });
 
-gulp.task('default', ['html', 'js', 'css', 'images', 'lint', 'browser-sync', 'watch']);
+gulp.task('default', ['mocha','html', 'js', 'css', 'images', 'lint', 'browser-sync', 'watch']);
