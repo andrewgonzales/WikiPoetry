@@ -14,11 +14,13 @@
   },
   "dependencies": {
     "body-parser": "^1.14.1",
+    "chai": "^3.4.0",
     "express": "^4.13.3",
     "flux": "^2.1.1",
     "history": "^1.12.5",
     "jquery": "^2.1.4",
     "keymirror": "^0.1.1",
+    "mocha": "^2.3.3",
     "mongoose": "^4.1.12",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
@@ -34,6 +36,7 @@
     "gulp-eslint": "^1.0.0",
     "gulp-nodemon": "^2.0.4",
     "morgan": "^1.6.1",
-    "reactify": "^1.1.1"
+    "reactify": "^1.1.1",
+    "supertest": "^1.1.0"
   }
 }

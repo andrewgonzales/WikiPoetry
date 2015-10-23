@@ -14,7 +14,7 @@ var HomeContent = React.createClass({
   //Let components render first then perform AJAX request
   componentDidMount: function () {
     $.ajax({
-      url: '/api/rnn/wiki',
+      url: '/api/rnn/home',
       type: 'GET',
       success: function(data) {
         console.log('Wiki request sent');

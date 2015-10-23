@@ -11,7 +11,7 @@ module.exports = {
 
   },
 
-  getWiki: function (req, res, next) {
+  getHomeWiki: function (req, res, next) {
     console.log('wiki!');
     var testString = ashley.getPoem('shakespeare', 'home');
     res.status(200).send(testString).end();
