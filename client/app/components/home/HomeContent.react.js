@@ -49,7 +49,7 @@ var HomeContent = React.createClass({
 
   render: function () {
     return (
-      <div>
+      <div className="main-container">
         <section className="leftarticlegroup six columns">
           <article className="homearticle featured">
             <Featured wikiData={this.state.Featured}/>

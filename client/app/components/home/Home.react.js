@@ -6,12 +6,14 @@ var Home = React.createClass({
   render: function () {
     return (
       <div className="homecontent ten columns">
-        <section className="banner">
-          <Banner />
-        </section>
-        <section className="homecontent">
-          <HomeContent />
-        </section>
+        <div className="home-container">
+          <section className="banner">
+            <Banner />
+          </section>
+          <section className="homecontent">
+            <HomeContent />
+          </section>
+        </div>
       </div>
     );
   }
