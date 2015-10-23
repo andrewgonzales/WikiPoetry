@@ -5,8 +5,8 @@ var fs = require('fs');
 var natural = require('natural');
 var moment = require('moment');
 var request = require('request');
-var md5 = require('md5');
 var wiki = require('node-wikipedia');
+var htmlToText = require("html-to-text");
 
 // Model parameters 
 var sample_softmax_temperature = Math.pow(10, 0.5); // how peaky model predictions should be
@@ -333,10 +333,7 @@ var getPicture = function(searchTerm) {
 }
 
 var getHeaders = function(html) {
-  var text = "<div class='firstHeading'>turhirht</div>";
-  // console.log(html);
-  fs.writeFileSync(__dirname + '/output/wiki.txt', JSON.stringify(html), 'utf8');
-  $ = cheerio.load(html);
+
 }
 
 var getArticle = function(type, searchTerm) {
