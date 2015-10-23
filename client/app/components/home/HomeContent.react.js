@@ -3,19 +3,29 @@ var Featured = require('./Featured.react');
 var InTheNews = require('./InTheNews.react');
 var DidYouKnow = require('./DidYouKnow.react');
 var OnThisDay = require('./OnThisDay.react');
+var WikiPoetryStore = require('../../stores/WikiPoetryStore');
+
 var $ = require('jquery');
+
+function getHomeState() {
+  return {
+    type: WikiPoetryStore.getType(),
+  }
+}
 
 
 var HomeContent = React.createClass({
   //set initial state
   getInitialState: function () {
-    return {};
+    return getHomeState();
   },
   //Let components render first then perform AJAX request
   componentDidMount: function () {
+    WikiPoetryStore.addChangeListener(this._onChange);
     $.ajax({
       url: '/api/rnn/home',
       type: 'GET',
+      data: {type: this.state.type},
       success: function(data) {
         console.log('Wiki request sent');
         this.setState({
@@ -31,6 +41,10 @@ var HomeContent = React.createClass({
         console.log(xhr)
       }
     });
+  },
+
+  componentWillUnmount: function() {
+    WikiPoetryStore.removeChangeListener(this._onChange);
   },
 
   render: function () {
@@ -54,6 +68,10 @@ var HomeContent = React.createClass({
         </section>
       </div>
     );
+  },
+
+  _onChange: function() {
+    this.setState(getHomeState());
   }
 });
 

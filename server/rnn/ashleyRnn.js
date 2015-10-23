@@ -4,16 +4,16 @@ var ashley = require('../ashleyjs/index.js')
 module.exports = {
 
   getSearch: function (req, res, next) {
-    console.log(req.query.text);
-    var searchTerm = req.body.text;
-    var testString = ashley.getPoem('shakespeare', searchTerm);
-    res.status(200).send(testString).end();
+    var searchTerm = req.query.text;
+    var searchType = req.query.type;
+    var outputString = ashley.getPoem(searchType, searchTerm);
+    res.status(200).send(outputString).end();
 
   },
 
   getHomeWiki: function (req, res, next) {
-    console.log('wiki!');
-    var testString = ashley.getPoem('shakespeare', 'home');
+    var searchType = req.query.type;
+    var testString = ashley.getPoem(searchType, 'home');
     res.status(200).send(testString).end();
   }
 
