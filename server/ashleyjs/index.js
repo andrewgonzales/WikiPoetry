@@ -335,16 +335,16 @@ var loadType = function (type) {
 var getPoem = function (type, searchTerm) {
   // make ajax request
   var text = '', plain = '', entities = [];
-  wiki.page.data(searchTerm, { content: true }, function(response) {
-    // convert html to text for nlp processing
-    text = htmlToText.fromString(response.text['*']);
-    // get entities (places, persons,..) from wikipedia page
-    entities = getEntities(text, 5);
-    // load model of requested type
+  // wiki.page.data(searchTerm, { content: true }, function(response) {
+  //   // convert html to text for nlp processing
+  //   text = htmlToText.fromString(response.text['*']);
+  //   // get entities (places, persons,..) from wikipedia page
+  //   entities = getEntities(text, 5);
+  //   // load model of requested type
     loadType(type);
     // ask Ashley for a sentence
     return predictSentence(model, true, 2.5, searchTerm);
-  });
+  // });
 };
 exports.getPoem = getPoem;
 
