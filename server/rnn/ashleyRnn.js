@@ -9,6 +9,12 @@ module.exports = {
     var testString = ashley.getPoem('shakespeare', searchTerm);
     res.status(200).send(testString).end();
 
+  },
+
+  getHomeWiki: function (req, res, next) {
+    console.log('wiki!');
+    var testString = ashley.getPoem('shakespeare', 'home');
+    res.status(200).send(testString).end();
   }
 
 }

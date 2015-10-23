@@ -1,11 +1,19 @@
 var React = require('react');
 
 var DidYouKnow = React.createClass({
+
+  propTypes: {
+    wikiData: React.PropTypes.string
+  },
+
   render: function () {
+    // console.log(this.props.wikiData);
     return (
       <div>
-        <h4>DidYouKnow</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore laboriosam commodi alias dolorem tempore libero cum itaque repellendus quae magnam expedita possimus, nobis assumenda natus voluptate et dolore odio blanditiis non voluptates, iste culpa quos impedit. Fugiat dolore amet quo ratione officia nemo dignissimos facere, corporis, ad sit enim non repudiandae, ea harum ducimus! Animi quod non corporis nulla consequuntur blanditiis explicabo, doloremque consectetur hic culpa totam voluptatibus asperiores nam?</p>
+        <h4>Did You Know</h4>
+        <p>
+        {this.props.wikiData}
+        </p>
       </div>
     );
   }

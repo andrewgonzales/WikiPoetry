@@ -6,4 +6,5 @@ module.exports = function (app) {
   // app.param('seed', )
   // app.get('/:seed', ashleyRnn.compose);
   app.get('/', ashleyRnn.getSearch);
-}
+  app.get('/home', ashleyRnn.getHomeWiki);
+} 
