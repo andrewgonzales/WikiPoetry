@@ -9,7 +9,7 @@ describe('Server Tests', function () {
 
   describe('Search Bar', function () {
 
-    it('Sends seed to RNN and receives output', function(done) {
+    xit('Sends seed to RNN and receives output', function(done) {
       request(server)
         .get('/api/rnn')
         .expect(200)
@@ -21,7 +21,7 @@ describe('Server Tests', function () {
   });
 
   describe('Wiki API call', function () {
-    it('Calls Wiki API and receives output after seeding RNN', function(done) {
+    xit('Calls Wiki API and receives output after seeding RNN', function(done) {
       request(server)
         .get('/api/rnn/home')
         .expect(200)

@@ -363,7 +363,7 @@ var getPoem = function (type, searchTerm) {
     // get entities (places, persons,..) from wikipedia page
     entities = getEntities(text, 5);
     // load model of requested type
-    loadType(type);
+    loadType(type); 
     // ask Ashley for a sentence
     return predictSentence(model, true, 2.5, searchTerm);
   });

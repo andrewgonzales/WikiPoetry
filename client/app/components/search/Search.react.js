@@ -3,9 +3,28 @@ var React = require('react');
 var ReactRouter = require('react-router');
 var $ = require('jquery');
 
+var WikiPoetryStore = require('../../stores/WikiPoetryStore');
+
+function getSearchState() {
+  return {
+    type: WikiPoetryStore.getType(),
+  }
+}
+
 var Search = React.createClass({
   mixins: [ReactRouter.History],
 
+  getInitialState: function () {
+    return getSearchState();
+  },
+
+  componentDidMount: function() {
+    WikiPoetryStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    WikiPoetryStore.removeChangeListener(this._onChange);
+  },
 
   render: function () {
     return (
@@ -20,7 +39,10 @@ var Search = React.createClass({
     event.preventDefault();
     var search = this.refs.search.value.trim();
     //Send value to server before erasing it!
-    var json = {'text': search};
+    var json = {
+      'text': search,
+      'type': this.state.type
+    };
     $.ajax({
       url: '/api/rnn',
       type: 'GET',
@@ -28,7 +50,6 @@ var Search = React.createClass({
       success: function(data) {
         console.log('search term sent');
         this.history.pushState({text: data}, '/Article/' + search, null );
-
       }.bind(this),
       error: function(xhr, status, err) {
         console.log(status) ;
@@ -38,6 +59,10 @@ var Search = React.createClass({
     });
 
     this.refs.search.value = '';
+  },
+
+  _onChange: function() {
+    this.setState(getSearchState());
   }
 
 });
