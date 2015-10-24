@@ -31,9 +31,6 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
   }
 })
 
-
-
-
 WikiPoetryDispatcher.register(function (action) {
   switch(action.actionType) {
     case WikiConstants.PICK_TYPE:
@@ -42,8 +39,5 @@ WikiPoetryDispatcher.register(function (action) {
       break;
   }
 })
-
-
-
 
 module.exports = WikiPoetryStore;
