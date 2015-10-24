@@ -400,7 +400,7 @@ var getPoem = function (type, searchTerm) {
     loadType(type); 
     // ask Ashley for a sentence
     return predictSentence(model, true, 2.5, searchTerm);
-  });
+  // });
 };
 getPoem('shakespeare', 'love');
 exports.getPoem = getPoem;

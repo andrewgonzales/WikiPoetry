@@ -7,20 +7,24 @@ var $ = require('jquery');
 
 var ArticleSubsection = require('./ArticleSubsection.react');
 var ArticleImage = require('./ArticleImage.react');
+var ArticleActions = require('./../../actions/ArticleActions');
+var Store = require('./../../stores/WikiPoetryStore.js'); 
 
 var Article = React.createClass({
 
   getInitialState: function () {
-    return {
-      poemData: {
-        mainTitle: '',
-        summaryPoem: '',
-        subheading1: '',
-        subPoem1: '',
-        subheading2: '',
-        subPoem2: ''
-      }
-    }
+    var articleData = Store.getCurrentArticle();
+    return articleData;
+    // {
+    //   poemData: {
+    //     mainTitle: '',
+    //     summaryPoem: '',
+    //     subheading1: '',
+    //     subPoem1: '',
+    //     subheading2: '',
+    //     subPoem2: ''
+    //   }
+    // }
   },
 
   setPoemState: function () {

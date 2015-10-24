@@ -5,7 +5,8 @@ var keyMirror = require('keymirror');
 module.exports = {
   //Actions used by App will go here
   ActionTypes: keyMirror({
-    PICK_TYPE: null
+    PICK_TYPE: null,
+    GET_ARTICLE: null
   })
 
 };
