@@ -7,6 +7,7 @@ var moment = require('moment');
 var request = require('request');
 var wiki = require('node-wikipedia');
 var htmlToText = require("html-to-text");
+var cheerio = require('cheerio');
 
 // Model parameters 
 var sample_softmax_temperature = Math.pow(10, 0.5); // how peaky model predictions should be
@@ -340,8 +341,41 @@ var getArticle = function(type, searchTerm) {
   // 
 }
 
+var getHomePageSection = function(divTag) {
+  var section = 'table#mp-upper div';
+  return $(section + divTag).first().text().split('\n');
+};
+
 var getHomePage = function() {
-  // get info from the real homepage 
+  var homepage = {
+    featured: {
+      link: '',
+      poem: ''
+    },
+    news: {
+      text: []
+    },
+    day: {
+      text: []
+    },
+    know: {
+      text: []
+    }
+  };
+  // get info from the real homepage
+  wiki.page.data('Main Page', {content: true}, function (response) {
+    $ = cheerio.load(response.text['*']);
+    // get link of featured article 
+    homepage.featured = $('#mp-tfa b a').attr('href');
+    // get text of in the news items 
+    homepage.news.text = getHomePageSection('#mp-itn ul')
+    // get text of on this day 
+    homepage.day.text = getHomePageSection('#mp-otd ul');
+    // get search terms for did you know
+    homepage.know.text = getHomePageSection('#mp-dyk ul');
+    // return homepage object
+    return homepage;
+  });
 }
 
 var loadType = function (type) {
@@ -368,7 +402,7 @@ var getPoem = function (type, searchTerm) {
     return predictSentence(model, true, 2.5, searchTerm);
   });
 };
-getPoem('shakespeare', 'barack obama');
+getPoem('shakespeare', 'love');
 exports.getPoem = getPoem;
 
 
