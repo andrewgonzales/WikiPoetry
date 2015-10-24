@@ -377,6 +377,7 @@ var getHomePage = function() {
     return homepage;
   });
 }
+getHomePage();
 
 var loadType = function (type) {
   // get correct model from output folder
