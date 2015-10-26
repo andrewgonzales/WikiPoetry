@@ -338,9 +338,8 @@ var getHeaders = function(searchTerm) {
   var headers = [];
   wiki.page.data(searchTerm, {content: true}, function(response) {
     $ = cheerio.load(response.text['*']);
-    console.log(response.text['*']);
     $('.toc ul li').slice(0,3).each(function() {
-      titles.push($(this).children().not('ul').find('.toctext').text());
+      headers.push($(this).children().not('ul').find('.toctext').text());
     });
     return headers;
   });
