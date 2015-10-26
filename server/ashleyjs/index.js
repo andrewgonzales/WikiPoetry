@@ -333,9 +333,18 @@ var getPicture = function(searchTerm) {
   });
 }
 
-var getHeaders = function(html) {
-
-}
+var getHeaders = function(searchTerm) {
+  // get first 3 subheadings from wikipedia page 
+  var headers = [];
+  wiki.page.data(searchTerm, {content: true}, function(response) {
+    $ = cheerio.load(response.text['*']);
+    console.log(response.text['*']);
+    $('.toc ul li').slice(0,3).each(function() {
+      titles.push($(this).children().not('ul').find('.toctext').text());
+    });
+    return headers;
+  });
+};
 
 var getArticle = function(type, searchTerm) {
   // 
@@ -393,7 +402,7 @@ var getPoem = function (type, searchTerm) {
     // console.log(response.text);
     text = htmlToText.fromString(response.text['*']);
     // build object to send
-    data.headers = getHeaders(response.text);
+    data.headers = getHeaders(searchTerm);
     // get entities (places, persons,..) from wikipedia page
     entities = getEntities(text, 5);
     // load model of requested type
