@@ -13,7 +13,7 @@ var cheerio = require('cheerio');
 var sample_softmax_temperature = Math.pow(10, 0.5); // how peaky model predictions should be
 // var sample_softmax_temperature = 1.0;
 var generator = 'lstm'; // can also be rnn
-var max_chars_gen = 100; // max length of generated sentences
+var max_chars_gen = 200; // max length of generated sentences
 var epoch_size = -1;
 var input_size = -1;
 var output_size = -1;
@@ -27,9 +27,6 @@ var clipval = 5.0;
 // output params
 var total = ''; 
 var totalSample = '';
-// min: Math.log10(0.01) - 3.0,
-// max: Math.log10(0.01) + 0.05,
-// learning_rate = Math.pow(10, 0.01);
 
 // Global variables
 var letterToIndex = {};
@@ -45,7 +42,7 @@ var tokenizer = new natural.RegexpTokenizer({pattern: /( |\w+|\!|\'|\"|\n)/i});
 var initVocab = function(sents, count_threshold) {
   // go over all words and keep track of all unique ones seen
   // join all the sentences
-  // var fullText = sents.join(''); 
+ 
   var tokens = tokenizer.tokenize(sents);
   // count up all words
   var wordCount = {};
@@ -197,15 +194,14 @@ var forwardIndex = function(G, model, ix, prev) {
 }
 
 var predictSentence = function(model, samplei, temperature, seed) {
-  // console.log('in predict sentence');
   if(typeof samplei === 'undefined') { samplei = false; }
   if(typeof temperature === 'undefined') { temperature = 1.0; }
   var G = new R.Graph(false);
   var s = seed + ' ' || '';
   var prev = {};
-  while(true) {
+  while(s.length < max_chars_gen) {
     var tokens = tokenizer.tokenize(s);
-    var ix = s.length === 0 ? 0 : letterToIndex[tokens[tokens.length - 1]];
+    var ix = (s.length === 0 || letterToIndex[tokens[tokens.length - 1]] === undefined) ? 0 : letterToIndex[tokens[tokens.length - 1]];
     var lh = forwardIndex(G, model, ix, prev);
     prev = lh;
 
@@ -228,10 +224,8 @@ var predictSentence = function(model, samplei, temperature, seed) {
       var ix = R.maxi(probs.w);  
     }
     
-    if(ix === 0) break; // END token predicted, break out
-    if(s.length > max_chars_gen) { break; } // something is wrong
+    if(ix === 0) continue; // END token predicted, break out
     var letter = indexToLetter[ix];
-    // console.log('added', letter, 'endadded');
     s += letter + ' ';
   }
   return s;
@@ -243,7 +237,6 @@ var costfun = function(model, sent) {
   // object which can be used to do backprop
   // adjust constfunc for words 
   var tokens = tokenizer.tokenize(sent);
-  // console.log(sent);
   var n = tokens.length;
   var G = new R.Graph();
   var log2ppl = 0.0;
@@ -280,18 +273,16 @@ function median(values) {
 
 var ppl_list = [];
 var tick_iter = 0;
-// start training your model
-// reinit();
 
 var tick = function() {
 
-  // sample sentence fromd data
-  // split out trainingSet on /n
+  // sample sentence from data
+  // split out trainingSet on \n
   var lines = trainingSet.split('\n');
   var sentix = R.randi(0,lines.length);
-  var sent = lines[sentix + 1] === '' ? lines[sentix] + '\n\n' : lines[sentix] + '\n';
-  // select randon sentence 
+  // select random sentence 
   // add newline at end
+  var sent = lines[sentix + 1] === '' ? lines[sentix] + '\n\n' : lines[sentix] + '\n';
 
   var t0 = +new Date();  // log start timestamp
   // evaluate cost function on a sentence
@@ -303,27 +294,78 @@ var tick = function() {
   var solver_stats = solver.step(model, learning_rate, regc, clipval);
 };
 
-var getEntities = function(text, threshold) {
-  // returns entities (locations, persons, proper nouns) from a text
-  var entities = {};
-  var popularEntities = [];
-  var sent = nlp.pos(text).sentences;
-  for (var i = 20; i < sent.length / 2; i++) {
-    for (var j = 0; j < sent[i].entities().length; j++) {
-      if(entities.hasOwnProperty(sent[i].entities()[j].text)) {
-        entities[sent[i].entities()[j].text]++;
-      } else {
-        entities[sent[i].entities()[j].text] = 1;
+//condense Wikipedia article for entered text into keywords
+var getWikiKeywords = function(text, searchTerm) {
+  var rawWordList = {};
+  var categorizedWords = {
+    nouns: [],
+    adjectives: [],
+    verbs: [],
+    random: []
+  };
+  var articleLength = Math.floor(text.length);
+
+  //adjust threshold for a word to count as significant based on article length 
+  if(articleLength < 50000) {
+    threshold = 2;
+  } else {
+    threshold = 3 + Math.floor(articleLength/100000); //100k ->4 200k ->5 300k -> 6
+  }
+  //only scan first 10% of article
+  var words = nlp.tokenize(text.slice(0, text.length/10));
+
+  //compile words and count occurrences
+  for(var i = 0; i < words.length; i++){
+    for(var j = 0; j < words[i].tokens.length; j++){
+      if(words[i].tokens[j].text[0]!=='[' && words[i].tokens[j].text[0]!=='*'){
+        if(rawWordList.hasOwnProperty(words[i].tokens[j].text)){
+          rawWordList[words[i].tokens[j].text]++;
+        } else {
+          rawWordList[words[i].tokens[j].text] = 1;
+        }
       }
     }
   }
 
-  for(var key in entities) {
-    if(entities[key] > threshold) {
-      popularEntities.push(key);
+  var byFrequency = [];
+  //helper function
+  var swap = function(array, i, j){
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+
+  var searchLower = searchTerm.toLowerCase();
+  var searchWords = searchTerm.split(' ');
+  for(var key in rawWordList){
+    //delete filler words and rare words
+    if (key.length < 5 || rawWordList[key] < threshold || searchWords.indexOf(key.toLowerCase()) !== -1){
+      delete rawWordList[key];
+    } else {
+      //sort by frequency
+      byFrequency.push(key);
+      for(var i = 0; i < byFrequency.length-1; i++){
+        while(rawWordList[byFrequency[i]] < rawWordList[byFrequency[i+1]]){
+          swap(byFrequency, i, i+1);
+        }
+      }
     }
   }
-  return popularEntities
+
+  //categorize parts of speech
+  for(var i = 0; i < byFrequency.length; i++) {
+    var s = nlp.pos(byFrequency[i]);
+    if (s.verbs()[0]){
+      categorizedWords['verbs'].push(s.verbs()[0].text);
+    } else if (s.nouns()[0]){
+      categorizedWords['nouns'].push(s.nouns()[0].text);
+    } else if (s.adjectives()[0]){
+      categorizedWords['adjectives'].push(s.adjectives()[0].text);
+    } else {
+      categorizedWords['random'].push(byFrequency[i]);
+    }
+  }
+  return categorizedWords;
 };
 
 var getPicture = function(searchTerm) {
@@ -409,19 +451,114 @@ var getPoem = function (type, searchTerm) {
   var text = '', plain = '', entities = [], data = {};
   wiki.page.data(searchTerm, { content: true }, function(response) {
     // convert html to text for nlp processing
-    // console.log(response.text);
-    text = htmlToText.fromString(response.text['*']);
-    // build object to send
-    data.headers = getHeaders(searchTerm);
-    // get entities (places, persons,..) from wikipedia page
-    entities = getEntities(text, 5);
+    if (!response) {
+      var errorMsg = 'Sorry, our poet was uninspired by your search term. Please try again.';
+      console.log(errorMsg);
+      return errorMsg;
+    } else {
+      text = htmlToText.fromString(response.text['*']);
+      data.headers = getHeaders(searchTerm);
+    }
+    // get keywords from wikipedia page
+    wikiKeywords = getWikiKeywords(text, searchTerm);
     // load model of requested type
     loadType(type); 
     // ask Ashley for a sentence
-    return predictSentence(model, true, 2.5, searchTerm);
+    var poemDraft1 = predictSentence(model, true, 2.5, searchTerm);
+
+    poemKeywords = getPoemKeywords(poemDraft1, searchTerm);
+    // console.log('poem draft 1: ', poemDraft1);
+    // console.log('--------------------------');
+
+    var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
+    return wikiPoem;
   });
 };
-getPoem('shakespeare', 'love');
+
+
+//helper function to randomly replace words according part of speech
+var replacePoemWordsByPOS = function(poem, numReplace, poemWordsArray, wikiWordsArray){
+  var newPoem = poem;
+  if(numReplace === 0) {
+    return poem;
+  } else {
+    for (var i = 0; i < numReplace; i++) {
+      var randPoemIndex = Math.floor(Math.random()*poemWordsArray.length);
+      var randWikiIndex = Math.floor(Math.random()*wikiWordsArray.length);
+      var poemWord = poemWordsArray[randPoemIndex];
+      var wikiWord = wikiWordsArray[randWikiIndex];
+
+      // var log = 'replaced ' + poemWord + ' with ' + wikiWord + ' !';
+      // console.log(log);
+      if (poem.indexOf(poemWord) !== -1){
+        var newPoem = newPoem.replace(poemWord, wikiWord);
+      }
+    }
+    return newPoem;
+  }
+};
+
+var getPoemKeywords = function(poem, searchTerm) {
+  var categorizedWords = {
+    nouns: [],
+    adjectives: [],
+    verbs: []
+  };
+ 
+  var wordList = [];
+
+  //remove first word/search term
+  var cutPoem = poem.slice(searchTerm.length);
+ 
+  //split poem into words
+  var words = nlp.tokenize(cutPoem);
+
+  for(var i = 0; i < words.length; i++){
+    for(var j = 0; j < words[i].tokens.length; j++){
+      wordList.push(words[i].tokens[j].text);
+    }
+  }
+
+  //categorize poem words
+  for (var i = 0; i < wordList.length; i++) {
+    var s = nlp.pos(wordList[i]);
+   
+    if (s.nouns()[0]) {
+      categorizedWords['nouns'].push(s.nouns()[0].text);
+    } else if (s.adjectives()[0]) {
+      categorizedWords['adjectives'].push(s.adjectives()[0].text);
+    } else if (s.verbs()[0]) {
+      categorizedWords['verbs'].push(s.verbs()[0].text);
+    }
+  }
+  return categorizedWords;
+};
+
+var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) {
+  //remove first word from generated poem (which equals search term)
+  var restOfPoem = poem.slice(searchTerm.length);
+
+  //choose number of words to replace based on poem and wiki keyword counts
+  var numNounsReplace = Math.floor(Math.min(poemKeywordObj['nouns'].length/3, wikiKeywordObj['nouns'].length/3));
+  var numAdjsReplace = Math.floor(Math.min(poemKeywordObj['adjectives'].length/2, wikiKeywordObj['adjectives'].length/2));
+  var numVerbsReplace = Math.floor(Math.min(poemKeywordObj['verbs'].length/4, wikiKeywordObj['verbs'].length/4));
+
+  //insert 
+  var nounsSwapped = replacePoemWordsByPOS(restOfPoem, numNounsReplace, poemKeywordObj['nouns'], wikiKeywordObj['nouns']) || restOfPoem;
+  var adjsSwapped = replacePoemWordsByPOS(nounsSwapped, numAdjsReplace, poemKeywordObj['adjectives'], wikiKeywordObj['adjectives']) || nounsSwapped;
+  var verbsSwapped = replacePoemWordsByPOS(adjsSwapped, numVerbsReplace, poemKeywordObj['verbs'], wikiKeywordObj['verbs']) || adjsSwapped;
+
+  //remove first word
+  var finalPoem = replacePoemWordsByPOS(verbsSwapped, 1, poemKeywordObj['nouns'], [searchTerm]) || verbsSwapped;
+
+  // console.log('--------------------------');
+  // console.log('wikified poem: ', finalPoem);
+  
+  return finalPoem;
+};
+
+getPoem('shakespeare', 'Barack Obama');
+
 exports.getPoem = getPoem;
 
 
