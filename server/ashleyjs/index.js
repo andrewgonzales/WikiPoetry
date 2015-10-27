@@ -413,7 +413,7 @@ var getHomePagePictures = function(divTag) {
   return $(divTag + ' ' + divTag + section).attr('src').slice(2);
 };
 
-var getHomePage = function() {
+var getHomePage = function(callback) {
   var homepage = {
     featured: {
       link: '',
@@ -449,14 +449,14 @@ var getHomePage = function() {
     for(var section in homepage) {
       // get link, text and picture for 'in the news', 'on this day' and 'did you know'
       if(section !== 'featured') {
-        console.log('section', homepage[section]);
+        // console.log('section', homepage[section]);
         homepage[section].link = getHomePageLinks(homepage[section].tag + ' ul')
         homepage[section].text = getHomePageSection(homepage[section].tag + ' ul');
         homepage[section].picture = getHomePagePictures(homepage[section].tag);
       }
     }
     // return homepage object
-    return homepage;
+    callback(homepage);
   });
 };
 

@@ -20,14 +20,15 @@ module.exports = {
   },
 
   getHomePage: function (req, res, next) {
-    var outputString = {
-      Featured: "Featured section",
-      DidYouKnow: "Did you know section",
-      InTheNews: "In the news section",
-      OnThisDay: "On this day section"
-    };
-    // var outputString = ashley.getHomePage();
-    res.status(200).send(outputString).end();
+    // var outputString = {
+    //   Featured: "Featured section",
+    //   DidYouKnow: "Did you know section",
+    //   InTheNews: "In the news section",
+    //   OnThisDay: "On this day section"
+    // };
+    var outputString = ashley.getHomePage(function(homepageData) {
+      res.status(200).send(homepageData).end();
+    });
   },
 
   getHomeWiki: function (req, res, next) {
