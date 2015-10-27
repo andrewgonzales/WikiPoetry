@@ -9,7 +9,7 @@ module.exports = {
 
   pickType: function (value) {
     WikiPoetryDispatcher.dispatch({
-      action: ActionTypes.PICK_TYPE,
+      actionType: ActionTypes.PICK_TYPE,
       type: value
     });
   }
