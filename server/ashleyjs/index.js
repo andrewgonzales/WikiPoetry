@@ -244,7 +244,6 @@ var costfun = function(model, sent) {
   // object which can be used to do backprop
   // adjust constfunc for words 
   var tokens = tokenizer.tokenize(sent);
-  // console.log(sent);
   var n = tokens.length;
   var G = new R.Graph();
   var log2ppl = 0.0;
@@ -305,7 +304,7 @@ var tick = function() {
 };
 
 //condense Wikipedia article for entered text into keywords
-var getWikiKeywords = function(text) {
+var getWikiKeywords = function(text, searchTerm) {
   var rawWordList = {};
   var categorizedWords = {
     nouns: [],
@@ -316,8 +315,11 @@ var getWikiKeywords = function(text) {
   var articleLength = Math.floor(text.length);
 
   //adjust threshold for a word to count as significant based on article length 
-  threshold = 3 + Math.floor(articleLength/100000); //100k ->4 200k ->5 300k -> 6
-
+  if(articleLength < 50000) {
+    threshold = 2;
+  } else {
+    threshold = 3 + Math.floor(articleLength/100000); //100k ->4 200k ->5 300k -> 6
+  }
   //only scan first 10% of article
   var words = nlp.tokenize(text.slice(0, text.length/10));
 
@@ -342,9 +344,11 @@ var getWikiKeywords = function(text) {
     array[j] = temp;
   }
 
+  var searchLower = searchTerm.toLowerCase();
+  var searchWords = searchTerm.split(' ');
   for(var key in rawWordList){
     //delete filler words and rare words
-    if (key.length < 5 || rawWordList[key] < threshold){
+    if (key.length < 5 || rawWordList[key] < threshold || searchWords.indexOf(key.toLowerCase()) !== -1){
       delete rawWordList[key];
     } else {
       //sort by frequency
@@ -356,7 +360,6 @@ var getWikiKeywords = function(text) {
       }
     }
   }
-
 
   //categorize parts of speech
   for(var i = 0; i < byFrequency.length; i++) {
@@ -468,17 +471,24 @@ var getPoem = function (type, searchTerm) {
       data.headers = getHeaders(searchTerm);
     }
     // get keywords from wikipedia page
-    wikiKeywords = getWikiKeywords(text);
-
+    wikiKeywords = getWikiKeywords(text, searchTerm);
     // load model of requested type
     loadType(type); 
 
     // ask Ashley for a sentence
     var poemDraft1 = predictSentence(model, true, 2.5, searchTerm);
+
+
+    /////////////////       HARD CODED POEM
+    //////////////////////////////////////////////////////////
+    var poemDraft1 = 'With every morn their love grew tenderer, \n With every eve deeper and tenderer still; \n He might not in house, field, or garden stir, \n But her full shape would all his seeing fill; \n And his continual voice was pleasanter \n To her, than noise of trees or hidden rill; \n Her lute-string gave an echo of his name, \n She spoilt her half-done broidery with the same.';
+    //////////////////////////////////////////////////////////
+    /////////////////
+
+
     poemKeywords = getPoemKeywords(poemDraft1, searchTerm);
-
     console.log('poem draft 1: ', poemDraft1);
-
+    console.log('--------------------------');
 
     var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
     return wikiPoem;
@@ -492,11 +502,14 @@ var replacePoemWordsByPOS = function(poem, numReplace, poemWordsArray, wikiWords
   if(numReplace === 0) {
     return poem;
   } else {
-    for (var i = 0; i <= numReplace; i++) {
+    for (var i = 0; i < numReplace; i++) {
       var randPoemIndex = Math.floor(Math.random()*poemWordsArray.length);
       var randWikiIndex = Math.floor(Math.random()*wikiWordsArray.length);
       var poemWord = poemWordsArray[randPoemIndex];
       var wikiWord = wikiWordsArray[randWikiIndex];
+
+      var log = 'replaced ' + poemWord + ' with ' + wikiWord + ' !';
+      console.log(log);
       if (poem.indexOf(poemWord) !== -1){
         var newPoem = newPoem.replace(poemWord, wikiWord);
       }
@@ -514,9 +527,21 @@ var getPoemKeywords = function(poem, searchTerm) {
  
   var wordList = [];
 
-  //remove first word
+  //remove first word/search term
   var firstWord = poem.slice(0, searchTerm.length);
-  var cutPoem = poem.slice(searchTerm.length);
+
+  ////////////////  GENERATED POEM
+  //////////////////////////////////////////////////////////
+  // var cutPoem = poem.slice(searchTerm.length);
+  ////////////////
+  //////////////////////////////////////////////////////////
+
+
+  /////////////////   HARD CODED POEM
+  //////////////////////////////////////////////////////////
+  var cutPoem = poem.slice(0);
+  //////////////////////////////////////////////////////////
+  //////////////////
 
   //split poem into words
   var words = nlp.tokenize(cutPoem);
@@ -539,28 +564,31 @@ var getPoemKeywords = function(poem, searchTerm) {
       categorizedWords['verbs'].push(s.verbs()[0].text);
     }
   }
-
   return categorizedWords;
 };
 
 var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) {
-  //save first word and cut out of poem
-  var firstWord = poem.slice(0, searchTerm.length);
-  var restOfPoem = poem.slice(searchTerm.length);
+  
+  /////////////// GENERATED POEM
+  // var restOfPoem = poem.slice(searchTerm.length);
+  ///////////////
+
+  /////////////////////////////   HARD CODED POEM
+  var restOfPoem = poem.slice(0);
+  /////////////////////////////
 
   //choose number of words to replace based on poem and wiki keyword counts
   var numNounsReplace = Math.floor(Math.min(poemKeywordObj['nouns'].length/3, wikiKeywordObj['nouns'].length/3));
-  var numAdjsReplace = Math.floor(Math.min(poemKeywordObj['adjectives'].length/3, wikiKeywordObj['adjectives'].length/3));
-  var numVerbsReplace = Math.floor(Math.min(poemKeywordObj['verbs'].length/3, wikiKeywordObj['verbs'].length/3));
+  var numAdjsReplace = Math.floor(Math.min(poemKeywordObj['adjectives'].length/2, wikiKeywordObj['adjectives'].length/2));
+  var numVerbsReplace = Math.floor(Math.min(poemKeywordObj['verbs'].length/4, wikiKeywordObj['verbs'].length/4));
+
   //insert 
   var nounsSwapped = replacePoemWordsByPOS(restOfPoem, numNounsReplace, poemKeywordObj['nouns'], wikiKeywordObj['nouns']) || restOfPoem;
   var adjsSwapped = replacePoemWordsByPOS(nounsSwapped, numAdjsReplace, poemKeywordObj['adjectives'], wikiKeywordObj['adjectives']) || nounsSwapped;
   var verbsSwapped = replacePoemWordsByPOS(adjsSwapped, numVerbsReplace, poemKeywordObj['verbs'], wikiKeywordObj['verbs']) || adjsSwapped;
-
-  
-
+;  
   //remove first word
-  var finalPoem = replacePoemWordsByPOS(verbsSwapped, 1, poemKeywordObj['nouns'], [firstWord]) || verbsSwapped;
+  var finalPoem = replacePoemWordsByPOS(verbsSwapped, 1, poemKeywordObj['nouns'], [searchTerm]) || verbsSwapped;
 
   console.log('--------------------------');
   console.log('wikified poem: ', finalPoem);
@@ -568,13 +596,13 @@ var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) 
   return finalPoem;
 };
 
-// getPoem('shakespeare', 'Hong Kong');
+getPoem('shakespeare', 'sunset');
 // getPoem('shakespeare', 'Kafka');
 // getPoem('shakespeare', 'Russia');
 // getPoem('shakespeare', 'Barack Obama');
 // getPoem('shakespeare', 'basketball');
 // getPoem('shakespeare', 'insects');
-getPoem('shakespeare', 'Malcom X');
+// getPoem('shakespeare', 'Malcom X');
 // getPoem('shakespeare', 'ptardigrade'); //bad search term
 // getPoem('shakespeare', 'tardigrade');
 
