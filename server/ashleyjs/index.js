@@ -589,4 +589,4 @@ exports.getPicture = getPicture;
 exports.getHeaders = getHeaders;
 exports.getArticle = getArticle;
 exports.getWikiKeywords = getWikiKeywords;
-
+exports.getPoemKeywords = getPoemKeywords;
