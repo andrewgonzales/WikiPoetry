@@ -409,7 +409,6 @@ var getHomePageLinks = function(divTag) {
 
 var getHomePagePictures = function(divTag) {
   var section = '-img a img';
-  console.log(divTag + ' ' + divTag + section);
   return $(divTag + ' ' + divTag + section).attr('src').slice(2);
 };
 
@@ -449,7 +448,6 @@ var getHomePage = function(callback) {
     for(var section in homepage) {
       // get link, text and picture for 'in the news', 'on this day' and 'did you know'
       if(section !== 'featured') {
-        // console.log('section', homepage[section]);
         homepage[section].link = getHomePageLinks(homepage[section].tag + ' ul')
         homepage[section].text = getHomePageSection(homepage[section].tag + ' ul');
         homepage[section].picture = getHomePagePictures(homepage[section].tag);
