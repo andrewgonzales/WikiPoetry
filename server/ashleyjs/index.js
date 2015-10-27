@@ -481,7 +481,7 @@ var getPoem = function (type, searchTerm) {
 
     /////////////////       HARD CODED POEM
     //////////////////////////////////////////////////////////
-    var poemDraft1 = 'With every morn their love grew tenderer, \n With every eve deeper and tenderer still; \n He might not in house, field, or garden stir, \n But her full shape would all his seeing fill; \n And his continual voice was pleasanter \n To her, than noise of trees or hidden rill; \n Her lute-string gave an echo of his name, \n She spoilt her half-done broidery with the same.';
+    // var poemDraft1 = 'With every morn their love grew tenderer, \n With every eve deeper and tenderer still; \n He might not in house, field, or garden stir, \n But her full shape would all his seeing fill; \n And his continual voice was pleasanter \n To her, than noise of trees or hidden rill; \n Her lute-string gave an echo of his name, \n She spoilt her half-done broidery with the same.';
     //////////////////////////////////////////////////////////
     /////////////////
 
@@ -532,14 +532,14 @@ var getPoemKeywords = function(poem, searchTerm) {
 
   ////////////////  GENERATED POEM
   //////////////////////////////////////////////////////////
-  // var cutPoem = poem.slice(searchTerm.length);
+  var cutPoem = poem.slice(searchTerm.length);
   ////////////////
   //////////////////////////////////////////////////////////
 
 
   /////////////////   HARD CODED POEM
   //////////////////////////////////////////////////////////
-  var cutPoem = poem.slice(0);
+  // var cutPoem = poem.slice(0);
   //////////////////////////////////////////////////////////
   //////////////////
 
@@ -570,11 +570,11 @@ var getPoemKeywords = function(poem, searchTerm) {
 var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) {
   
   /////////////// GENERATED POEM
-  // var restOfPoem = poem.slice(searchTerm.length);
+  var restOfPoem = poem.slice(searchTerm.length);
   ///////////////
 
   /////////////////////////////   HARD CODED POEM
-  var restOfPoem = poem.slice(0);
+  // var restOfPoem = poem.slice(0);
   /////////////////////////////
 
   //choose number of words to replace based on poem and wiki keyword counts
