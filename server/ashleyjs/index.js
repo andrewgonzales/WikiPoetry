@@ -333,6 +333,8 @@ var getPicture = function(searchTerm) {
   });
 }
 
+getPicture('Jimi Hendrix');
+
 var getHeaders = function(searchTerm) {
   // get first 3 subheadings from wikipedia page 
   var headers = [];
@@ -358,29 +360,38 @@ var getHomePage = function() {
   var homepage = {
     featured: {
       link: '',
-      poem: ''
+      poem: '',
+      picture: ''
     },
     news: {
-      text: []
+      text: [],
+      picture: ''
     },
     day: {
-      text: []
+      text: [],
+      picture: ''
     },
     know: {
-      text: []
+      text: [],
+      picture: ''
     }
   };
   // get info from the real homepage
   wiki.page.data('Main Page', {content: true}, function (response) {
     $ = cheerio.load(response.text['*']);
     // get link of featured article 
-    homepage.featured = $('#mp-tfa b a').attr('href');
+    homepage.featured.link = $('#mp-tfa b a').attr('title');
+    // homepage.featured.poem = getPoem();
+    homepage.featured.picture = $('#mp-tfa #mp-tfa-img a img').attr('src').slice(2);
     // get text of in the news items 
-    homepage.news.text = getHomePageSection('#mp-itn ul')
+    homepage.news.text = getHomePageSection('#mp-itn ul');
+    homepage.news.picture = $('#mp-itn #mp-itn-img a img').attr('src').slice(2);
     // get text of on this day 
     homepage.day.text = getHomePageSection('#mp-otd ul');
+    homepage.day.picture = $('#mp-otd #mp-otd-img a img').attr('src').slice(2);
     // get search terms for did you know
     homepage.know.text = getHomePageSection('#mp-dyk ul');
+    homepage.know.picture = $('#mp-dyk #mp-dyk-img a img').attr('src').slice(2);
     // return homepage object
     return homepage;
   });
