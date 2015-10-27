@@ -304,7 +304,6 @@ var getWikiKeywords = function(text, searchTerm) {
     random: []
   };
   var articleLength = Math.floor(text.length);
-
   //adjust threshold for a word to count as significant based on article length 
   if(articleLength < 50000) {
     threshold = 2;
@@ -589,3 +588,5 @@ exports.getHomePage = getHomePage;
 exports.getPicture = getPicture;
 exports.getHeaders = getHeaders;
 exports.getArticle = getArticle;
+exports.getWikiKeywords = getWikiKeywords;
+
