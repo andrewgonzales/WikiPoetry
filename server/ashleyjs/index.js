@@ -375,8 +375,6 @@ var getPicture = function(searchTerm) {
   });
 }
 
-getPicture('Jimi Hendrix');
-
 var getHeaders = function(searchTerm) {
   // get first 3 subheadings from wikipedia page 
   var headers = [];
@@ -576,13 +574,10 @@ var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) 
 
   // console.log('--------------------------');
   // console.log('wikified poem: ', finalPoem);
-  
   return finalPoem;
 };
 
-getPoem('shakespeare', 'Barack Obama');
-
 exports.getPoem = getPoem;
 exports.getHomePage = getHomePage;
-
-
+exports.getPicture = getPicture;
+exports.getHeaders = getHeaders;
