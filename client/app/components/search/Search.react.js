@@ -1,7 +1,7 @@
 
 var React = require('react');
 var ReactRouter = require('react-router');
-var $ = require('jquery');
+var API = require('./../../api/wikiApi');
 
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 
@@ -43,21 +43,10 @@ var Search = React.createClass({
       'text': search,
       'type': this.state.type
     };
-    $.ajax({
-      url: '/api/rnn',
-      type: 'GET',
-      data: json,
-      success: function(data) {
-        console.log('search term sent');
-        this.history.pushState({text: data}, '/Article/' + search, null );
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.log(status) ;
-        console.log(err.toString());
-        console.log(xhr)
-      }
-    });
 
+    API.getArticle(json, function(data) {
+      this.history.pushState({text: data}, '/Article/' + search, null );
+    }.bind(this));
     this.refs.search.value = '';
   },
 

@@ -1,24 +1,43 @@
 //Main template of all articles on page
 //Should we serve a random poem when user clicks this link?
-//
 
 var React = require('react');
+var ArticleSubsection = require('./ArticleSubsection.react');
+var ArticleImage = require('./ArticleImage.react');
 
 var Article = React.createClass({
 
-  render: function () {
-    //To handle the direct article link when there is no output
-    var Poem;
-    if (this.props.location.state !== null) {
-      Poem = this.props.location.state.text;
-    } else {
-      Poem = "Please search for a term";
+  getInitialState: function () {
+    return {
+      text: {
+        mainTitle: '',
+        summaryPoem: '',
+        subheading1: '',
+        subheading2: '',
+        subPoem1: '',
+        subPoem2: ''
+      }
     }
+  },
+
+  componentDidMount: function () {
+    var poem = this.props.location.state;
+    this.setState(poem);
+  },
+
+  render: function () {
     return (
-      <div>
-        <h1>Article Main</h1>
-        <div>
-        {Poem}
+      <div className="ten columns">
+        <div className="article-container">
+          <h3 className="article-title">{this.state.text.mainTitle}</h3>
+          <ArticleImage />
+          <p>{this.state.text.summaryPoem}</p>
+          <ArticleSubsection
+            subheading={this.state.text.subheading1}
+            subcontent={this.state.text.subPoem1} />
+          <ArticleSubsection
+            subheading={this.state.text.subheading2}
+            subcontent={this.state.text.subPoem2} />
         </div>
       </div>
     );

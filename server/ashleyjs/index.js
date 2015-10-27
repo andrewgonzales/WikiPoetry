@@ -437,6 +437,7 @@ var getHomePage = function() {
     // return homepage object
     return homepage;
   });
+
 }
 
 var loadType = function (type) {
@@ -560,5 +561,6 @@ var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) 
 getPoem('shakespeare', 'Barack Obama');
 
 exports.getPoem = getPoem;
+exports.getHomePage = getHomePage;
 
 

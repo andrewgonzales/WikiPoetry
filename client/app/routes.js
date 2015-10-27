@@ -11,8 +11,6 @@ var Article = require('./components/article/Article.react');
 var HowItWorks = require('./components/howitworks/HowItWorks.react');
 var AboutUs = require('./components/aboutus/AboutUs.react');
 
-
-
 var routes = (
   <Route path="/" component={WikiPoetryApp}>
     <IndexRoute component={Home} />

@@ -1,5 +1,9 @@
+/************************************
+Common Styles
+************************************/
+
 .column, .columns {
-  margin-left: 2%;
+  margin-left: 4%;
 }
 
 .navbar, .header, .banner {
@@ -24,6 +28,14 @@
 
 .header {
   padding-top: 10px;
+}
+
+/************************************
+Home Styles
+************************************/
+
+.home-container {
+  margin-right: 4%;
 }
 
 .banner {
@@ -66,6 +78,24 @@
   border-color: #A3B0BF;
 }
 
-.searchButton {
+/*.searchButton {
   background-image: url('./../images/searchIcon.png');
+}*/
+
+/************************************
+Article Styles
+************************************/
+
+.article-container {
+  margin-right: 4%;
+}
+.article-title, .subheading {
+  border-bottom: 1px solid #AAA;
+  overflow: hidden;
+}
+
+.imgContainer {
+  margin: 7px 0 18px 20px;
+  padding: 3px;
+  border: 1px solid #CCC;
 }
