@@ -6,6 +6,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 //Default type to shakespeare when page loads
 var _type = 'shakespeare';
+var _home = {};
 var _article = {};
 
 function newType (type) {
@@ -18,9 +19,13 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _type;
   },
 
+  getHome: function () {
+    return _home;
+  },
+
   getArticle: function () {
     return _article;
-  }
+  },
 
   emitChange: function() {
     this.emit(CHANGE_EVENT);
@@ -36,13 +41,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 })
 
 WikiPoetryDispatcher.register(function (action) {
+  console.log(action.actionType);
   switch(action.actionType) {
     case WikiConstants.PICK_TYPE:
       newType(action.type);
-      WikiPoetryStore.emitChange();
-      break;
-    case WikiConstants.GET_ARTICLE:
-      _article = action.article;
       WikiPoetryStore.emitChange();
       break;
   }

@@ -2,11 +2,6 @@
 //Use keyMirror to create values equal to the key
 var keyMirror = require('keymirror');
 
-module.exports = {
-  //Actions used by App will go here
-  ActionTypes: keyMirror({
-    PICK_TYPE: null,
-    GET_ARTICLE: null
-  })
-
-};
+module.exports = keyMirror({
+  PICK_TYPE: null
+});

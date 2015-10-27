@@ -7,7 +7,6 @@ var DidYouKnow = React.createClass({
   },
 
   render: function () {
-    // console.log(this.props.wikiData);
     return (
       <div>
         <h4>Did You Know</h4>
