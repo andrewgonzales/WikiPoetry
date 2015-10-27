@@ -394,51 +394,73 @@ var getArticle = function(type, searchTerm) {
 }
 
 var getHomePageSection = function(divTag) {
-  var section = 'table#mp-upper div';
-  return $(section + divTag).first().text().split('\n');
+  var texts = [], section = 'table#mp-upper div';
+  $(section + divTag).first().children().each(function() {
+    texts.push($(this).text());
+  });
+  return texts;
+};
+
+var getHomePageLinks = function(divTag) {
+  var links = [], section = 'b a';
+  $(divTag).first().children().each(function() {
+    links.push($(this).find(section).text());
+  });
+  return links;
+};
+
+var getHomePagePictures = function(divTag) {
+  var section = '-img a img';
+  console.log(divTag + ' ' + divTag + section);
+  return $(divTag + ' ' + divTag + section).attr('src').slice(2);
 };
 
 var getHomePage = function() {
   var homepage = {
     featured: {
       link: '',
-      poem: '',
+      text: '',
       picture: ''
     },
     news: {
+      link: [],
       text: [],
-      picture: ''
+      picture: [],
+      tag: '#mp-itn'
     },
     day: {
+      link: [],
       text: [],
-      picture: ''
+      picture: '',
+      tag: '#mp-otd'
     },
     know: {
+      link: [],
       text: [],
-      picture: ''
+      picture: '',
+      tag: '#mp-dyk'
     }
   };
   // get info from the real homepage
   wiki.page.data('Main Page', {content: true}, function (response) {
     $ = cheerio.load(response.text['*']);
-    // get link of featured article 
+    // get link and picture for featured article 
     homepage.featured.link = $('#mp-tfa b a').attr('title');
-    // homepage.featured.poem = getPoem();
-    homepage.featured.picture = $('#mp-tfa #mp-tfa-img a img').attr('src').slice(2);
-    // get text of in the news items 
-    homepage.news.text = getHomePageSection('#mp-itn ul');
-    homepage.news.picture = $('#mp-itn #mp-itn-img a img').attr('src').slice(2);
-    // get text of on this day 
-    homepage.day.text = getHomePageSection('#mp-otd ul');
-    homepage.day.picture = $('#mp-otd #mp-otd-img a img').attr('src').slice(2);
-    // get search terms for did you know
-    homepage.know.text = getHomePageSection('#mp-dyk ul');
-    homepage.know.picture = $('#mp-dyk #mp-dyk-img a img').attr('src').slice(2);
+    homepage.featured.picture = getHomePagePictures('#mp-tfa');
+
+    for(var section in homepage) {
+      // get link, text and picture for 'in the news', 'on this day' and 'did you know'
+      if(section !== 'featured') {
+        console.log('section', homepage[section]);
+        homepage[section].link = getHomePageLinks(homepage[section].tag + ' ul')
+        homepage[section].text = getHomePageSection(homepage[section].tag + ' ul');
+        homepage[section].picture = getHomePagePictures(homepage[section].tag);
+      }
+    }
     // return homepage object
     return homepage;
   });
-
-}
+};
 
 var loadType = function (type) {
   // get correct model from output folder
