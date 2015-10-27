@@ -52,7 +52,12 @@ gulp.task('nodemon', function (cb) {
 gulp.task('mocha', function () {
   gulp.src('./tests/server/ServerSpec.js', {read: false})
   .pipe(mocha({reporter: 'nyan'}))
-})
+});
+
+gulp.task('test-api', function () {
+  gulp.src('./tests/server/AshleySpec.js', {read: false})
+  .pipe(mocha({reporter: 'nyan'}))
+});
 
 gulp.task('browser-sync', ['nodemon'], function () {
 
