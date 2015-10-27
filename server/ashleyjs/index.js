@@ -205,7 +205,8 @@ var predictSentence = function(model, samplei, temperature, seed) {
   var prev = {};
   while(true) {
     var tokens = tokenizer.tokenize(s);
-    var ix = s.length === 0 ? 0 : letterToIndex[tokens[tokens.length - 1]];
+    // console.log(letterToIndex);
+    var ix = (s.length === 0 || letterToIndex[tokens[tokens.length - 1]] === undefined) ? 0 : letterToIndex[tokens[tokens.length - 1]];
     var lh = forwardIndex(G, model, ix, prev);
     prev = lh;
 
@@ -303,27 +304,73 @@ var tick = function() {
   var solver_stats = solver.step(model, learning_rate, regc, clipval);
 };
 
-var getEntities = function(text, threshold) {
-  // returns entities (locations, persons, proper nouns) from a text
-  var entities = {};
-  var popularEntities = [];
-  var sent = nlp.pos(text).sentences;
-  for (var i = 20; i < sent.length / 2; i++) {
-    for (var j = 0; j < sent[i].entities().length; j++) {
-      if(entities.hasOwnProperty(sent[i].entities()[j].text)) {
-        entities[sent[i].entities()[j].text]++;
-      } else {
-        entities[sent[i].entities()[j].text] = 1;
+var getKeywords = function(text) {
+  var rawWordList = {};
+  var categorizedWords = {
+    nouns: [],
+    adjectives: [],
+    verbs: [],
+    random: []
+  };
+  var articleLength = Math.floor(text.length);
+
+  //adjust threshold for a word to count as significant based on article length 
+  threshold = 3 + Math.floor(articleLength/100000); //100k ->4 200k ->5 300k -> 6
+
+  //only scan first 10% of article
+  var words = nlp.tokenize(text.slice(0, text.length/10));
+
+  //compile words and count occurrences
+  for(var i = 0; i < words.length; i++){
+    for(var j = 0; j < words[i].tokens.length; j++){
+      if(words[i].tokens[j].text[0]!=='[' && words[i].tokens[j].text[0]!=='*'){
+        if(rawWordList.hasOwnProperty(words[i].tokens[j].text)){
+          rawWordList[words[i].tokens[j].text]++;
+        } else {
+          rawWordList[words[i].tokens[j].text] = 1;
+        }
       }
     }
   }
 
-  for(var key in entities) {
-    if(entities[key] > threshold) {
-      popularEntities.push(key);
+  var byFrequency = [];
+  var swap = function(array, i, j){
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+
+  for(var key in rawWordList){
+    //delete filler words and rare words
+    if (key.length < 5 || rawWordList[key] < threshold){
+      delete rawWordList[key];
+    } else {
+      //sort by frequency
+      byFrequency.push(key);
+      for(var i = 0; i < byFrequency.length-1; i++){
+        while(rawWordList[byFrequency[i]] < rawWordList[byFrequency[i+1]]){
+          swap(byFrequency, i, i+1);
+        }
+      }
     }
   }
-  return popularEntities
+
+  //categorize parts of speech
+  for(var i = 0; i < byFrequency.length; i++) {
+    var s = nlp.pos(byFrequency[i]);
+    if (s.verbs()[0]){
+      categorizedWords['verbs'].push(s.verbs()[0].text);
+    } else if (s.nouns()[0]){
+      categorizedWords['nouns'].push(s.nouns()[0].text);
+    } else if (s.adjectives()[0]){
+      categorizedWords['adjectives'].push(s.adjectives()[0].text);
+    } else {
+      categorizedWords['random'].push(byFrequency[i]);
+    }
+  }
+
+  
+  return categorizedWords;
 };
 
 var getPicture = function(searchTerm) {
@@ -409,19 +456,38 @@ var getPoem = function (type, searchTerm) {
   var text = '', plain = '', entities = [], data = {};
   wiki.page.data(searchTerm, { content: true }, function(response) {
     // convert html to text for nlp processing
-    // console.log(response.text);
-    text = htmlToText.fromString(response.text['*']);
-    // build object to send
-    data.headers = getHeaders(searchTerm);
+
+    if (!response) {
+      var errorMsg = 'Sorry, our poet was uninspired by your search term. Please try again.';
+      console.log(errorMsg);
+      return errorMsg;
+    } else {
+      text = htmlToText.fromString(response.text['*']);
+      data.headers = getHeaders(searchTerm);
+    }
     // get entities (places, persons,..) from wikipedia page
-    entities = getEntities(text, 5);
+    keywords = getKeywords(text);
     // load model of requested type
     loadType(type); 
     // ask Ashley for a sentence
+    var poemDraft = predictSentence(model, true, 2.5, searchTerm);
+    console.log(poemDraft);
     return predictSentence(model, true, 2.5, searchTerm);
   });
 };
-getPoem('shakespeare', 'love');
+
+
+getPoem('shakespeare', 'Kafka');
+// getPoem('shakespeare', 'Russia');
+// getPoem('shakespeare', 'basketball');
+// getPoem('shakespeare', 'insects');
+// getPoem('shakespeare', 'Malcom X');
+// getPoem('shakespeare', 'ptardigrade'); //bad search term
+// getPoem('shakespeare', 'tardigrade');
+
+
+
+
 exports.getPoem = getPoem;
 
 
