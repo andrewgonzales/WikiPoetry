@@ -155,7 +155,15 @@ describe('Keyword Tests', function () {
   });
 
   describe('get Poem', function () {
-
+    var searchTerm = 'Russia';
+    it('should return a machine-generated poem containing the search term', function (done) {
+      this.timeout(3000);
+      var generatedPoem = ashley.getPoem('shakespeare', searchTerm, function (result){
+        expect(result.length).to.be.above(0);
+        expect(result.indexOf(searchTerm)).to.not.equal(-1);
+        done();
+      });
+    }); 
   });
 
 

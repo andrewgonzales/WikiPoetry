@@ -473,7 +473,7 @@ var loadType = function (type) {
   tick();
 };
 
-var getPoem = function (type, searchTerm) {
+var getPoem = function (type, searchTerm, cb) {
   // make ajax request
   var text = '', plain = '', entities = [], data = {};
   wiki.page.data(searchTerm, { content: true }, function(response) {
@@ -498,7 +498,7 @@ var getPoem = function (type, searchTerm) {
     // console.log('--------------------------');
 
     var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
-    return wikiPoem;
+    cb(wikiPoem);
   });
 };
 
