@@ -8,4 +8,9 @@ require('./database.js');
 if(!module.parent){ 
  app.listen(port);
 }
+
+app.use('/test', function(req, res) {
+  res.send('This is it');
+});
+
 module.exports = app;
