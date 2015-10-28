@@ -8,7 +8,7 @@ module.exports = function (app, express) {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   console.log(__dirname + '/../../client');
-  console.log(__dirname + '/../../dist'));
+  console.log(__dirname + '/../../dist');
   app.use(express.static(__dirname + '/../../dist'));
 
   app.use('/api/rnn', rnnRouter);
