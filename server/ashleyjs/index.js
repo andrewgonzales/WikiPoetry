@@ -304,7 +304,6 @@ var getWikiKeywords = function(text, searchTerm) {
     random: []
   };
   var articleLength = Math.floor(text.length);
-
   //adjust threshold for a word to count as significant based on article length 
   if(articleLength < 50000) {
     threshold = 2;
@@ -474,18 +473,17 @@ var loadType = function (type) {
   tick();
 };
 
-var getPoem = function (type, searchTerm) {
+var getPoem = function (type, searchTerm, cb) {
   // make ajax request
   var text = '', plain = '', entities = [], data = {};
   wiki.page.data(searchTerm, { content: true }, function(response) {
     // convert html to text for nlp processing
     if (!response) {
       var errorMsg = 'Sorry, our poet was uninspired by your search term. Please try again.';
-      console.log(errorMsg);
-      return errorMsg;
+      cb(errorMsg);
     } else {
       text = htmlToText.fromString(response.text['*']);
-      data.headers = getHeaders(searchTerm);
+      // data.headers = getHeaders(searchTerm, function());
     }
     // get keywords from wikipedia page
     wikiKeywords = getWikiKeywords(text, searchTerm);
@@ -495,11 +493,9 @@ var getPoem = function (type, searchTerm) {
     var poemDraft1 = predictSentence(model, true, 2.5, searchTerm);
 
     poemKeywords = getPoemKeywords(poemDraft1, searchTerm);
-    // console.log('poem draft 1: ', poemDraft1);
-    // console.log('--------------------------');
 
     var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
-    return wikiPoem;
+    cb(wikiPoem);
   });
 };
 
@@ -517,7 +513,6 @@ var replacePoemWordsByPOS = function(poem, numReplace, poemWordsArray, wikiWords
       var wikiWord = wikiWordsArray[randWikiIndex];
 
       // var log = 'replaced ' + poemWord + ' with ' + wikiWord + ' !';
-      // console.log(log);
       if (poem.indexOf(poemWord) !== -1){
         var newPoem = newPoem.replace(poemWord, wikiWord);
       }
@@ -579,8 +574,6 @@ var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) 
   //remove first word
   var finalPoem = replacePoemWordsByPOS(verbsSwapped, 1, poemKeywordObj['nouns'], [searchTerm]) || verbsSwapped;
 
-  // console.log('--------------------------');
-  // console.log('wikified poem: ', finalPoem);
   return finalPoem;
 };
 
@@ -589,3 +582,7 @@ exports.getHomePage = getHomePage;
 exports.getPicture = getPicture;
 exports.getHeaders = getHeaders;
 exports.getArticle = getArticle;
+exports.getWikiKeywords = getWikiKeywords;
+exports.getPoemKeywords = getPoemKeywords;
+exports.replacePoemWords = replacePoemWordsByPOS;
+exports.insertKeywords = insertKeywords;
