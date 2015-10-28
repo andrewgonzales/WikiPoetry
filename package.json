@@ -2,7 +2,9 @@
   "name": "wikipoetry",
   "version": "0.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "start": "server/server.js" 
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MischievousBoys/WikiPoetry.git"
