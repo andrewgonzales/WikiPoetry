@@ -473,6 +473,7 @@ var loadType = function (type) {
   tick();
 };
 
+
 var getPoem = function (type, searchTerm, cb) {
   // make ajax request
   var text = '', plain = '', entities = [], data = {};
