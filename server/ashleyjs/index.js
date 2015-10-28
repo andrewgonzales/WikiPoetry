@@ -368,28 +368,37 @@ var getWikiKeywords = function(text, searchTerm) {
   return categorizedWords;
 };
 
-var getPicture = function(searchTerm, cb) {
-  // gets the main picture from the wikipedia arcticle
-  wiki.page.image(searchTerm, function(pictureUrl) {
-    cb(pictureUrl.slice(2));
-  });
+var getPicture = function(cb) {
+  var image = $(".infobox img").attr('src') || $("tr td a img").attr('src') || $(".thumb.tright .thumbinner a img").attr('src');
+  cb(image.slice(2));
 }
 
-var getHeaders = function(searchTerm, cb) {
+var getHeaders = function(cb) {
   // get first 3 subheadings from wikipedia page 
   var headers = [];
-  wiki.page.data(searchTerm, {content: true}, function(response) {
-    $ = cheerio.load(response.text['*']);
-    $('.toc ul li').slice(0, 3).each(function() {
-      headers.push($(this).children().not('ul').find('.toctext').text());
-    });
-    cb(headers);
+  $('.toc ul li').slice(0, 3).each(function() {
+    headers.push($(this).children().not('ul').find('.toctext').text());
   });
+  cb(headers);
 };
 
-var getArticle = function(type, searchTerm) {
-  // 
-}
+var getArticle = function(searchTerm, cb) {
+  // get picture and 3 subheadings of article 
+  var article = {
+    headings: [],
+    picture: ''
+  };
+  wiki.page.data(searchTerm, {content: true}, function(response) {
+    $ = cheerio.load(response.text['*']);
+    getHeaders(function(headings) {
+      article.headings = headings;
+      getPicture(function(picture) {
+        article.picture = picture;
+        cb(article);
+      });
+    });
+  });
+};
 
 var getHomePageSection = function(divTag) {
   var texts = [], section = 'table#mp-upper div';
