@@ -9,8 +9,10 @@ if(!module.parent){
  app.listen(port);
 }
 
-app.use('/test', function(req, res) {
-  res.send('This is it');
-});
+// app.use('/test', function(req, res) {
+//   res.send('This is it');
+// });
+
+app.use(express.static(__dirname + '/../../dist'));
 
 module.exports = app;
