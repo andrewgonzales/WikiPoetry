@@ -22,8 +22,10 @@ exports.getHomePage = function (type, callback) {
     type: 'GET',
     data: {type: type},
     success: function(data) {
-      console.log('Wiki request sent');
-      callback(data);
+      exports.getArticle({type: type, text: data.featured.link}, function(poem) {
+        data.featured.text = poem;
+        callback(data);
+      });
     },
     error: function(xhr, status, err) {
       console.log(status) ;
