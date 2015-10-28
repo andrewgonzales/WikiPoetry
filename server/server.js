@@ -13,6 +13,6 @@ if(!module.parent){
 //   res.send('This is it');
 // });
 
-app.use(express.static(__dirname + '/../../dist'));
+app.use('/', express.static(__dirname + '/../../dist'));
 
 module.exports = app;
