@@ -480,11 +480,10 @@ var getPoem = function (type, searchTerm, cb) {
     // convert html to text for nlp processing
     if (!response) {
       var errorMsg = 'Sorry, our poet was uninspired by your search term. Please try again.';
-      // console.log(errorMsg);
       cb(errorMsg);
     } else {
       text = htmlToText.fromString(response.text['*']);
-      data.headers = getHeaders(searchTerm);
+      // data.headers = getHeaders(searchTerm, function());
     }
     // get keywords from wikipedia page
     wikiKeywords = getWikiKeywords(text, searchTerm);
@@ -494,8 +493,6 @@ var getPoem = function (type, searchTerm, cb) {
     var poemDraft1 = predictSentence(model, true, 2.5, searchTerm);
 
     poemKeywords = getPoemKeywords(poemDraft1, searchTerm);
-    // console.log('poem draft 1: ', poemDraft1);
-    // console.log('--------------------------');
 
     var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
     cb(wikiPoem);
@@ -516,7 +513,6 @@ var replacePoemWordsByPOS = function(poem, numReplace, poemWordsArray, wikiWords
       var wikiWord = wikiWordsArray[randWikiIndex];
 
       // var log = 'replaced ' + poemWord + ' with ' + wikiWord + ' !';
-      // console.log(log);
       if (poem.indexOf(poemWord) !== -1){
         var newPoem = newPoem.replace(poemWord, wikiWord);
       }
@@ -578,8 +574,6 @@ var insertKeywords = function(poem, searchTerm, poemKeywordObj, wikiKeywordObj) 
   //remove first word
   var finalPoem = replacePoemWordsByPOS(verbsSwapped, 1, poemKeywordObj['nouns'], [searchTerm]) || verbsSwapped;
 
-  // console.log('--------------------------');
-  // console.log('wikified poem: ', finalPoem);
   return finalPoem;
 };
 
