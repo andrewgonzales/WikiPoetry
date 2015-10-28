@@ -7,6 +7,8 @@ var source = require('vinyl-source-stream'); // Use conventional text streams wi
 var lint = require('gulp-eslint');
 var concat = require('gulp-concat');
 var mocha = require('gulp-mocha');
+var jest = require('gulp-jest');
+var exec = require('child_process').exec;
 
 var config = {
   port: 8888,
@@ -20,11 +22,16 @@ var config = {
       './client/styles/styles.css'
     ],
     images: './client/images/*',
-    server: './server/config/*.js',
+    server: './server/server.js',
     dist: './dist',
     mainJs: './client/app/main.js'
   }
 };
+
+gulp.task('mocha', function () {
+  gulp.src('./tests/server/ServerSpec.js', {read: false})
+  .pipe(mocha({reporter: 'nyan'}))
+});
 
 var BROWSER_SYNC_RELOAD_DELAY = 50;
 
@@ -49,9 +56,14 @@ gulp.task('nodemon', function (cb) {
     });
 });
 
-gulp.task('mocha', function () {
-  gulp.src('./tests/server/ServerSpec.js', {read: false})
-  .pipe(mocha({reporter: 'nyan'}))
+
+
+gulp.task('jest', function (cb) {
+  exec('jest', function (err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
 });
 
 gulp.task('test-api', function () {
@@ -118,7 +130,8 @@ gulp.task('bs-reload', function () {
 
 gulp.task('watch', function () {
   gulp.watch(config.paths.html, ['html', 'bs-reload']);
-  gulp.watch(config.paths.js, ['js', 'lint', browserSync.reload]);
+  gulp.watch(config.paths.js, ['js', 'jest', browserSync.reload]);
+  gulp.watch(config.paths.server, ['nodemon']);
 });
 
-gulp.task('default', ['mocha','html', 'js', 'css', 'images', 'lint', 'browser-sync', 'watch']);
+gulp.task('default', ['mocha','html', 'js', 'css', 'images', 'jest','browser-sync', 'watch']);
