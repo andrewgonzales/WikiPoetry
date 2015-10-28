@@ -11,7 +11,7 @@ describe('Server Tests', function () {
 
     it('Sends seed to RNN and receives output', function(done) {
       request(server)
-        .get('/api/rnn')
+        .get('/api/rnn/?text=home&type=shakespeare')
         .expect(200)
         .expect(function(res) {
           expect(res.text).to.be.a('string');
