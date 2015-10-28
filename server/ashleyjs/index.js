@@ -480,8 +480,8 @@ var getPoem = function (type, searchTerm, cb) {
     // convert html to text for nlp processing
     if (!response) {
       var errorMsg = 'Sorry, our poet was uninspired by your search term. Please try again.';
-      console.log(errorMsg);
-      return errorMsg;
+      // console.log(errorMsg);
+      cb(errorMsg);
     } else {
       text = htmlToText.fromString(response.text['*']);
       data.headers = getHeaders(searchTerm);

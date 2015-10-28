@@ -154,8 +154,9 @@ describe('Keyword Tests', function () {
 
   });
 
-  describe('get Poem', function () {
+  describe('getPoem', function () {
     var searchTerm = 'Russia';
+    var badSearchTerm = 'ptardigrade';
     it('should return a machine-generated poem containing the search term', function (done) {
       this.timeout(3000);
       var generatedPoem = ashley.getPoem('shakespeare', searchTerm, function (result){
@@ -164,6 +165,14 @@ describe('Keyword Tests', function () {
         done();
       });
     }); 
+
+    it('should do return error message if the search term is not found on Wikipedia', function (done) {
+      this.timeout(3000);
+      var generatedPoem = ashley.getPoem('shakespeare', badSearchTerm, function (result){
+        expect(result).to.equal('Sorry, our poet was uninspired by your search term. Please try again.');
+        done();
+      });
+    });
   });
 
 
