@@ -11,11 +11,11 @@ describe('WikiPoetryStore', function () {
     var WikiPoetryStore;
     var callback;
 
-    //mock actions
-    // var actionWikiPickType = {
-    //   actionType: WikiConstants.PICK_TYPE,
-    //   type: 'test'
-    // };
+    // mock actions
+    var actionWikiPickType = {
+      actionType: WikiConstants.PICK_TYPE,
+      type: 'test'
+    };
 
     beforeEach(function() {
       WikiPoetryDispatcher = require('../../dispatcher/WikiPoetryDispatcher');
