@@ -1,13 +1,13 @@
-var nlp = require("node_modules/nlp_compromise");
+var nlp = require('./node_modules/nlp_compromise');
 var R = require('./src/recurrent.js');
 var Rvis = require('./src/vis.js');
-var fs = require('node_modules/fs');
-var natural = require('node_modules/natural');
-var moment = require('node_modules/moment');
-var request = require('node_modules/request');
-var wiki = require('node_modules/node-wikipedia');
-var htmlToText = require('node_modules/html-to-text');
-var cheerio = require('node_modules/cheerio');
+var fs = require('./node_modules/fs');
+var natural = require('./node_modules/natural');
+var moment = require('./node_modules/moment');
+var request = require('./node_modules/request');
+var wiki = require('./node_modules/node-wikipedia');
+var htmlToText = require('./node_modules/html-to-text');
+var cheerio = require('./node_modules/cheerio');
 
 // Model parameters 
 var sample_softmax_temperature = Math.pow(10, 0.5); // how peaky model predictions should be
