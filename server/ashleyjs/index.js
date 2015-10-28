@@ -495,6 +495,7 @@ var getPoem = function (type, searchTerm, cb) {
     poemKeywords = getPoemKeywords(poemDraft1, searchTerm);
 
     var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
+
     cb(wikiPoem);
   });
 };

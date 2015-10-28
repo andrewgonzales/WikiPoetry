@@ -6,26 +6,13 @@ module.exports = {
   getSearch: function (req, res, next) {
     var searchTerm = req.query.text;
     var searchType = req.query.type;
-    var outputString = {
-      mainTitle: 'Love',
-      summaryPoem: 'Lorem',
-      subheading1: 'Introduction',
-      subPoem1: 'Ipsum',
-      subheading2: 'History',
-      subPoem2: 'Dalor'
-    };
-    // var outputString = ashley.getPoem(searchType, searchTerm);
-    res.status(200).send(outputString).end();
 
+    ashley.getPoem(searchType, searchTerm, function(poem) {
+      res.status(200).send(poem).end();
+    });
   },
 
   getHomePage: function (req, res, next) {
-    // var outputString = {
-    //   Featured: "Featured section",
-    //   DidYouKnow: "Did you know section",
-    //   InTheNews: "In the news section",
-    //   OnThisDay: "On this day section"
-    // };
     var outputString = ashley.getHomePage(function(homepageData) {
       res.status(200).send(homepageData).end();
     });
