@@ -369,7 +369,7 @@ var getWikiKeywords = function(text, searchTerm) {
 };
 
 var getPicture = function(cb) {
-  var image = $(".infobox img").attr('src') || $("tr td a img").attr('src') || $(".thumb.tright .thumbinner a img").attr('src');
+  var image = $(".infobox img").attr('src') || $(".thumb.tright .thumbinner a img").attr('src') || $("tr td a img").attr('src');
   cb(image.slice(2));
 }
 
@@ -588,3 +588,4 @@ exports.getPoem = getPoem;
 exports.getHomePage = getHomePage;
 exports.getPicture = getPicture;
 exports.getHeaders = getHeaders;
+exports.getArticle = getArticle;
