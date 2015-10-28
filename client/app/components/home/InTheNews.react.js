@@ -1,18 +1,35 @@
 var React = require('react');
+var BulletPoint = require('./BulletPoint.react');
+var HomeImage = require('./HomeImage.react');
 
 var InTheNews = React.createClass({
-  propTypes: {
-    wikiData: React.PropTypes.string
-  },
+  // propTypes: {
+  //   wikiData: React.PropTypes.string
+  // },
 
   render: function () {
-    // console.log(this.props.wikiData);
+
+    var text = this.props.text;
+    var links = this.props.link;
+    var picture = this.props.picture;
+
     return (
       <div>
         <h4>In The News</h4>
-        <p>
-        {this.props.wikiData}
-        </p>
+        <div className="homeSectionContent">
+          <HomeImage picture={picture}/>
+          <ul>
+            {text.map(function(point, i) {
+              return (//<li key={'point' + i}>{point}</li>
+                <div key={'point' + i}>
+                  <BulletPoint
+                    blurb={point}
+                    link={links[i]} />
+                </div>
+              )
+            })}
+          </ul>
+        </div>
       </div>
     );
   }

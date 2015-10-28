@@ -7,7 +7,33 @@ var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var API = require('./../../api/wikiApi');
 
 function getHomeState() {
-  return {type: WikiPoetryStore.getType()};
+  return {
+    type: WikiPoetryStore.getType(),
+    featured: {
+      link: [],
+      picture: '',
+      text: ''
+    },
+    know: {
+      link: [],
+      picture: '',
+      tag: '',
+      text: [],
+    },
+    news: {
+      link: [],
+      picture: '',
+      tag: '',
+      text: [],
+    },
+    day: {
+      link: [],
+      picture: '',
+      tag: '',
+      text: [],
+    }
+
+  };
 }
 
 var HomeContent = React.createClass({
@@ -33,18 +59,30 @@ var HomeContent = React.createClass({
       <div className="main-container">
         <section className="leftarticlegroup six columns">
           <article className="homearticle featured">
-            <Featured wikiData={this.state.Featured}/>
+            <Featured
+              text={this.state.featured.text}
+              link={this.state.featured.link}
+              picture={this.state.featured.picture} />
           </article>
           <article className="homearticle inthenews">
-            <DidYouKnow wikiData={this.state.DidYouKnow}/>
+            <DidYouKnow
+              text={this.state.know.text}
+              link={this.state.know.link}
+              picture={this.state.know.picture} />
           </article>
         </section>
         <section className="rightarticlegroup row six columns">
           <article className="homearticle didyouknow">
-            <InTheNews wikiData={this.state.InTheNews}/>
+            <InTheNews
+              text={this.state.news.text}
+              link={this.state.news.link}
+              picture={this.state.news.picture} />
           </article>
           <article className="homearticle onthisday">
-            <OnThisDay wikiData={this.state.OnThisDay}/>
+            <OnThisDay
+              text={this.state.day.text}
+              link={this.state.day.link}
+              picture={this.state.day.picture} />
           </article>
         </section>
       </div>
