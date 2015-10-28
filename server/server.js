@@ -5,7 +5,7 @@ var port = process.env.PORT || 8080;
 require('./config/middleware.js')(app, express);
 require('./database.js');
 
-app.listen(port);
-console.log('Making magic happen on port ' + port);
-
+if(!module.parent){ 
+ app.listen(port);
+}
 module.exports = app;
