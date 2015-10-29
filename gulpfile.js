@@ -22,8 +22,8 @@ var config = {
       './client/styles/styles.css'
     ],
     images: './client/images/*',
-    server: './server/server.js',
-    dist: './dist',
+    server: './server/config/*.js',
+    dist: './server/dist',
     mainJs: './client/app/main.js'
   }
 };

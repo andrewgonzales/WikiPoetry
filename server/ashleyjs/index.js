@@ -1,4 +1,4 @@
-var nlp = require("nlp_compromise");
+var nlp = require('nlp_compromise');
 var R = require('./src/recurrent.js');
 var Rvis = require('./src/vis.js');
 var fs = require('fs');
@@ -6,7 +6,7 @@ var natural = require('natural');
 var moment = require('moment');
 var request = require('request');
 var wiki = require('node-wikipedia');
-var htmlToText = require("html-to-text");
+var htmlToText = require('html-to-text');
 var cheerio = require('cheerio');
 
 // Model parameters 
