@@ -41,7 +41,6 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 })
 
 WikiPoetryDispatcher.register(function (action) {
-  console.log(action.actionType);
   switch(action.actionType) {
     case WikiConstants.PICK_TYPE:
       newType(action.type);

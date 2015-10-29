@@ -1,12 +1,15 @@
 var $ = require('jquery');
 
-exports.getArticlePage = function (type, seed) {
+exports.getArticlePage = function (type, term, callback) {
   $.ajax({
-    url: 'api/rnn/article/',
+    url: 'api/rnn/article',
     type: 'GET',
-    data: {type: type, seed: seed},
+    data: {type: type, term: term},
     success: function(data) {
-      return data;
+      exports.getArticle({type: type, term: term}, function (poem) {
+        data.poem = poem;
+        callback(data);
+      })
     },
     error: function(xhr, status, err) {
       console.log(status) ;
@@ -22,7 +25,7 @@ exports.getHomePage = function (type, callback) {
     type: 'GET',
     data: {type: type},
     success: function(data) {
-      exports.getArticle({type: type, text: data.featured.link}, function(poem) {
+      exports.getArticle({type: type, term: data.featured.link}, function(poem) {
         data.featured.text = poem;
         callback(data);
       });
