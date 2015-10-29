@@ -6,7 +6,7 @@ require('./config/middleware.js')(app, express);
 // require('./database.js');
 process.env.PWD = process.cwd();
 console.log(process.env.PWD + '/dist');
-app.use(express.static(process.env.PWD + '/dist'));
+app.use(express.static('app/server/dist'));
 
 // if(!module.parent){ 
  app.listen(port);
