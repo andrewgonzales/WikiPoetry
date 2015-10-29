@@ -23,7 +23,6 @@ var trainingSet = '';
 var solver = new R.Solver(); // should be class because it needs memory for step caches
 
 var model = {};
-// var tokenizer = new natural.RegexpTokenizer({pattern: /( |\w+|\!|\'|\"|\n)/i});
 
 var loadModel = function(j) {
   hidden_sizes = j.hidden_sizes;
@@ -89,6 +88,7 @@ var predictSentence = function(model, samplei, temperature, seed) {
     }
 
     var probs = R.softmax(logprobs);
+
     if(samplei) {
       var ix = R.samplei(probs.w);
     } else {
@@ -336,7 +336,6 @@ var getPoem = function (type, searchTerm, cb) {
     // load model of requested type
     loadType(type); 
     // ask Ashley for a sentence
-    console.log('temp: ', sample_softmax_temperature);
     var poemDraft1 = '';
     for (var i = 0; i < 5; i++) {
       if (i === 0) {//seed model with search term
@@ -375,7 +374,6 @@ var replacePoemWordsByPOS = function(poem, numReplace, poemWordsArray, wikiWords
       var poemWord = poemWordsArray[randPoemIndex];
       var wikiWord = wikiWordsArray[randWikiIndex];
 
-      // var log = 'replaced ' + poemWord + ' with ' + wikiWord + ' !';
       if (poem.indexOf(poemWord) !== -1){
         var newPoem = newPoem.replace(poemWord, wikiWord);
       }
