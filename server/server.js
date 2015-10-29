@@ -4,9 +4,9 @@ var port = process.env.PORT || 8080;
 
 require('./config/middleware.js')(app, express);
 // require('./database.js');
-process.env.PWD = process.cwd();
+// process.env.PWD = process.cwd();
 console.log(process.env.PWD + '/dist');
-app.use(express.static('app/server/dist'));
+app.use(express.static(__dirname + '../dist'));
 
 // if(!module.parent){ 
  app.listen(port);
