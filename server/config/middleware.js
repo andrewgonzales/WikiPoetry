@@ -11,6 +11,7 @@ module.exports = function (app, express) {
   console.log(__dirname + '/../../dist');
   // app.use(express.static(__dirname + '/../../dist'));
   process.env.PWD = process.cwd();
+  console.log(process.env.PWD + '/../../dist');
   app.use(express.static(process.env.PWD + '/../../dist'));
 
   app.use('/api/rnn', rnnRouter);
