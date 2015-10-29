@@ -475,6 +475,10 @@ var loadType = function (type) {
 
 
 var getPoem = function (type, searchTerm, cb) {
+  var poemInfo = {
+    replaced: [],
+    poem: ''
+  }
   // make ajax request
   var text = '', plain = '', entities = [], data = {};
   wiki.page.data(searchTerm, { content: true }, function(response) {
@@ -488,16 +492,25 @@ var getPoem = function (type, searchTerm, cb) {
     }
     // get keywords from wikipedia page
     wikiKeywords = getWikiKeywords(text, searchTerm);
+
     // load model of requested type
     loadType(type); 
     // ask Ashley for a sentence
     var poemDraft1 = predictSentence(model, true, 2.5, searchTerm);
 
     poemKeywords = getPoemKeywords(poemDraft1, searchTerm);
-
+    //replace poem keywords with wiki keywords
     var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
-
-    cb(wikiPoem);
+    //keep record of replaced words
+    for (var pos in wikiKeywords) {
+      for (var i = 0; i < wikiKeywords[pos].length; i++) {
+        if (wikiPoem.indexOf(wikiKeywords[pos][i]) !== -1){
+          poemInfo.replaced.push(wikiKeywords[pos][i]);
+        }
+      }
+    }
+    poemInfo.poem = wikiPoem;
+    cb(poemInfo);
   });
 };
 
