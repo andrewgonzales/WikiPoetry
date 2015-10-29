@@ -13,6 +13,7 @@ module.exports = function (app, express) {
   process.env.PWD = process.cwd();
   console.log(process.env.PWD + '/../../dist');
   app.use(express.static(process.env.PWD + '/../../dist'));
+  app.use('/img', express.static(process.env.PWD + '/../../dist/images/wp_logo.png'));
 
   app.use('/api/rnn', rnnRouter);
 
