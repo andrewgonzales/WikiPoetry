@@ -34,6 +34,7 @@ var Article = React.createClass({
 
   render: function () {
     var newInfo = this.props.location.state;
+    console.log(newInfo)
     
     return (
       <div className="ten columns" id="article">
@@ -42,13 +43,13 @@ var Article = React.createClass({
           <ArticleImage picture={newInfo.picture} />
           <p>{newInfo.poem}</p>
           <ArticleSubsection
-            subheading={this.state.text.subheading1}
+            subheading={newInfo.headings[0]}
             subcontent={this.state.text.subPoem1} />
           <ArticleSubsection
-            subheading={this.state.text.subheading2}
+            subheading={newInfo.headings[1]}
             subcontent={this.state.text.subPoem2} />
           <ArticleSubsection
-            subheading={this.state.text.subheading3}
+            subheading={newInfo.headings[2]}
             subcontent={this.state.text.subPoem3} />
         </div>
       </div>
