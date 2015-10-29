@@ -24,17 +24,9 @@ var Article = React.createClass({
     }
   },
 
-  componentDidMount: function () {
-    API.getArticle({type: this.state.type, term: this.state.term}, function (data) {
-      this.setState({text: {
-        summaryPoem: data
-      }});
-    }.bind(this));  
-  },
-
   render: function () {
     var newInfo = this.props.location.state;
-    console.log(newInfo)
+    var searchTerm = this.state.term;
     
     return (
       <div className="ten columns" id="article">
@@ -42,15 +34,14 @@ var Article = React.createClass({
           <h3 className="article-title">{newInfo.term}</h3>
           <ArticleImage picture={newInfo.picture} />
           <p>{newInfo.poem}</p>
-          <ArticleSubsection
-            subheading={newInfo.headings[0]}
-            subcontent={this.state.text.subPoem1} />
-          <ArticleSubsection
-            subheading={newInfo.headings[1]}
-            subcontent={this.state.text.subPoem2} />
-          <ArticleSubsection
-            subheading={newInfo.headings[2]}
-            subcontent={this.state.text.subPoem3} />
+          {newInfo.headings.map(function (heading, i) {
+            return (
+              <ArticleSubsection
+                key={'heading' + i}
+                subheading={heading} 
+                term={searchTerm} />
+            );
+          })}
         </div>
       </div>
     );
