@@ -12,14 +12,6 @@ var Article = React.createClass({
   getInitialState: function () {
     return {
       term: this.props.routeParams.term,
-      text: {
-        mainTitle: '',
-        summaryPoem: '',
-        subheading1: '',
-        subheading2: '',
-        subPoem1: '',
-        subPoem2: ''
-      },
       type: WikiPoetryStore.getType()
     }
   },

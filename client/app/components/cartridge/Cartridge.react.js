@@ -11,14 +11,12 @@ var Cartridge = React.createClass({
           <label htmlFor="shakespeare" name="cartridge">Shakespeare</label>
         <input type="radio" name="cartridge" value="bobdylan" id="bobDylan" onChange={this._onCartridgeChange}/>
           <label htmlFor="bobDylan" name="cartridge">Bob Dylan</label>
-        <input type="radio" name="cartridge" value="tseliot" id="tsEliot" onChange={this._onCartridgeChange}/>
-          <label htmlFor="tsEliot" name="cartridge">T.S. Eliot</label>
+        <input type="radio" name="cartridge" value="keats" id="keats" onChange={this._onCartridgeChange}/>
+          <label htmlFor="tsEliot" name="cartridge">John Keats</label>
         <input type="radio" name="cartridge" value="sappho" id="sappho" onChange={this._onCartridgeChange}/>
           <label htmlFor="sappho" name="cartridge">Sappho</label>
         <input type="radio" name="cartridge" value="johnmilton" id="johnMilton" onChange={this._onCartridgeChange}/>
           <label htmlFor="johnMilton" name="cartridge">John Milton</label>
-        <input type="radio" name="cartridge" value="johnkeats" id="johnKeats" onChange={this._onCartridgeChange}/>
-          <label htmlFor="johnKeats" name="cartridge">John Keats</label>
         <input type="radio" name="cartridge" value="beatles" id="beatles" onChange={this._onCartridgeChange}/>
           <label htmlFor="beatles" name="cartridge">Beatles</label>
       </form>

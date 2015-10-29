@@ -2,8 +2,6 @@ var React = require('react');
 
 var ArticleImage = React.createClass({
 
-
-
   render: function () {
 
     var picture = this.props.picture;
