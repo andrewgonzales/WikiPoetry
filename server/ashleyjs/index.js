@@ -15,10 +15,6 @@ var generator = 'lstm'; // can also be rnn
 var max_chars_gen = 200; // max length of generated sentences
 var letter_size = 5;
 
-// var regc = 0.000001; // L2 regularization strength
-// var learning_rate = 0.01; // learning rate
-// var clipval = 5.0;
-
 // Global variables
 var letterToIndex = {};
 var indexToLetter = {};
@@ -70,6 +66,7 @@ var forwardIndex = function(G, model, ix, prev) {
 var predictSentence = function(model, samplei, temperature, seed) {
   if(typeof samplei === 'undefined') { samplei = false; }
   if(typeof temperature === 'undefined') { temperature = 0.4; }
+  if(seed === undefined) { seed = ''};
   var G = new R.Graph(false);
   var s = seed + ' ' || '';
   var prev = {};
@@ -137,26 +134,6 @@ var costfun = function(model, sent) {
   var ppl = Math.pow(2, log2ppl / (n - 1));
   return {'G':G, 'ppl':ppl, 'cost':cost};
 }
-
-// var tick = function() {
-
-//   // sample sentence from data
-//   // split out trainingSet on \n
-//   var lines = trainingSet.split('\n');
-//   var sentix = R.randi(0,lines.length);
-//   // select random sentence 
-//   // add newline at end
-//   var sent = lines[sentix + 1] === '' ? lines[sentix] + '\n\n' : lines[sentix] + '\n';
-
-//   var t0 = +new Date();  // log start timestamp
-//   // evaluate cost function on a sentence
-//   var cost_struct = costfun(model, sent);
-  
-//   // use built up graph to compute backprop (set .dw fields in mats)
-//   cost_struct.G.backward();
-//   // perform param update
-//   var solver_stats = solver.step(model, learning_rate, regc, clipval);
-// };
 
 //condense Wikipedia article for entered text into keywords
 var getWikiKeywords = function(text, searchTerm) {
@@ -334,7 +311,6 @@ var loadType = function (type) {
   // get correct model from output folder
   var modelRaw = JSON.parse(fs.readFileSync(__dirname + '/output/' + type + '.txt', 'utf8'));
   loadModel(modelRaw);
-  // tick();
 };
 
 
@@ -361,9 +337,15 @@ var getPoem = function (type, searchTerm, cb) {
     loadType(type); 
     // ask Ashley for a sentence
     console.log('temp: ', sample_softmax_temperature);
-    var poemDraft1 = predictSentence(model, true, sample_softmax_temperature, searchTerm);
-    console.log('Poem draft 1: ', poemDraft1);
-    console.log('-------------------');
+    var poemDraft1 = '';
+    for (var i = 0; i < 5; i++) {
+      if (i === 0) {//seed model with search term
+        poemDraft1 += predictSentence(model, true, sample_softmax_temperature, searchTerm);
+      } else {
+        poemDraft1 += predictSentence(model, true, sample_softmax_temperature);
+      }
+      
+    }
     poemKeywords = getPoemKeywords(poemDraft1, searchTerm);
     //replace poem keywords with wiki keywords
     var wikiPoem = insertKeywords(poemDraft1, searchTerm, poemKeywords, wikiKeywords);
