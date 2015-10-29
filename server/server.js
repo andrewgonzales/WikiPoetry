@@ -6,8 +6,10 @@ require('./config/middleware.js')(app, express);
 // serve up statis files
 app.use(express.static(__dirname + '/dist'));
 
-if(!module.parent){ 
- app.listen(port);
+if (!module.parent) {
+  app.listen(port);
 }
+
+console.log('Making magic happen on port ' + port);
 
 module.exports = app;
