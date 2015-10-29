@@ -10,7 +10,12 @@ require('./config/middleware.js')(app, express);
 //   res.send('This is it');
 // });
 
-app.use('/', express.static(__dirname + '/../../dist'));
+// app.use(express.static(__dirname + '/../../dist'));
+
+app.use('/', function(req, res) {
+  res.send('this is it');
+});
+
 if(!module.parent){ 
  app.listen(port);
 }
