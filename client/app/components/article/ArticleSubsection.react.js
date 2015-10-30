@@ -27,10 +27,6 @@ var ArticleSubsection = React.createClass({
     }.bind(this)); 
   },
 
-  componentWillUnmount: function () {
-    console.log('unmount');
-  },
-
   componentWillReceiveProps: function (nextProps) {
     //To erase page before AJAX request enters new poem
     this.setState({
