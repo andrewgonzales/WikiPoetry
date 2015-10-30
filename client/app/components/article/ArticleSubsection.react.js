@@ -2,6 +2,12 @@ var React = require('react');
 var API = require('../../api/wikiApi');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 
+function getSearchTerm () {
+  return { 
+    term: WikiPoetryStore.getTerm()
+  }
+};
+
 var ArticleSubsection = React.createClass({
 
   getInitialState: function () {
@@ -13,7 +19,6 @@ var ArticleSubsection = React.createClass({
   },
 
   componentDidMount: function () {
-    WikiPoetryStore.addSubmitListener(this._onSubmit);
     API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
       this.setState({
         subContent: data.poem,
@@ -23,7 +28,21 @@ var ArticleSubsection = React.createClass({
   },
 
   componentWillUnmount: function () {
-    WikiPoetryStore.removeChangeListener(this._onSubmit);
+    console.log('unmount');
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    //To erase page before AJAX request enters new poem
+    this.setState({
+      subContent: ''
+    });
+
+    API.getArticle({type: this.state.type, term: getSearchTerm().term}, function (data) {
+      this.setState({
+        subContent: data.poem,
+        replaced: data.replaced
+      });
+    }.bind(this));
   },
 
   render: function () {
@@ -35,16 +54,6 @@ var ArticleSubsection = React.createClass({
       </div>
     );
   },
-
-  _onSubmit: function () {
-    console.log('submit');
-    API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this));
-  }
 });
 
 module.exports = ArticleSubsection;

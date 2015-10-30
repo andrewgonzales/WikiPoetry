@@ -7,6 +7,10 @@ var ArticleImage = require('./ArticleImage.react');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var API = require('../../api/wikiApi');
 
+function getSearchTerm () {
+  return WikiPoetryStore.getTerm();
+};
+
 var Article = React.createClass({
 
   getInitialState: function () {
@@ -37,7 +41,7 @@ var Article = React.createClass({
         </div>
       </div>
     );
-  }
+  },
 });
 
 module.exports = Article;

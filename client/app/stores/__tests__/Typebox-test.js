@@ -11,9 +11,12 @@ describe('WikiPoetryStore', function () {
     var WikiPoetryStore;
     var callback;
 
+    var ActionTypes = WikiConstants
+    console.log(ActionTypes);
+
     // mock actions
     var actionWikiPickType = {
-      actionType: WikiConstants.PICK_TYPE,
+      actionType: ActionTypes.PICK_TYPE,
       type: 'test'
     };
 

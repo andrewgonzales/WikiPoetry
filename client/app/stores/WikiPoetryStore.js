@@ -9,10 +9,17 @@ var SUBMIT_EVENT = 'submitted';
 var _type = 'keats';
 var _home = {};
 var _article = {};
+var _term = '';
 
 function newType (type) {
   _type = type;
+};
+
+function newTerm (term) {
+  _term = term;
 }
+
+
 
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
@@ -26,6 +33,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   getArticle: function () {
     return _article;
+  },
+
+  getTerm: function () {
+    return _term;
   },
 
   emitChange: function() {
@@ -54,16 +65,14 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 })
 
 WikiPoetryDispatcher.register(function (action) {
-  console.log(action);
   switch(action.actionType) {
     case WikiConstants.ActionTypes.PICK_TYPE:
-      console.log('picktypestore');
       newType(action.type);
       WikiPoetryStore.emitChange();
       break;
 
     case WikiConstants.ActionTypes.SUBMIT_SEARCH:
-      console.log('submitsearchstore');
+      newTerm(action.term);
       WikiPoetryStore.emitSubmit();
       break;
 

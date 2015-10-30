@@ -16,9 +16,10 @@ module.exports = {
     });
   },
 
-  submitSearch: function () {
+  submitSearch: function (term) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.SUBMIT_SEARCH,
+      term: term
     });
   }
 }
@@ -183,6 +184,10 @@ var ArticleImage = require('./ArticleImage.react');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var API = require('../../api/wikiApi');
 
+function getSearchTerm () {
+  return WikiPoetryStore.getTerm();
+};
+
 var Article = React.createClass({displayName: "Article",
 
   getInitialState: function () {
@@ -213,7 +218,7 @@ var Article = React.createClass({displayName: "Article",
         )
       )
     );
-  }
+  },
 });
 
 module.exports = Article;
@@ -241,6 +246,12 @@ var React = require('react');
 var API = require('../../api/wikiApi');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 
+function getSearchTerm () {
+  return { 
+    term: WikiPoetryStore.getTerm()
+  }
+};
+
 var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
 
   getInitialState: function () {
@@ -252,7 +263,6 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
   },
 
   componentDidMount: function () {
-    WikiPoetryStore.addSubmitListener(this._onSubmit);
     API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
       this.setState({
         subContent: data.poem,
@@ -262,7 +272,21 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
   },
 
   componentWillUnmount: function () {
-    WikiPoetryStore.removeChangeListener(this._onSubmit);
+    console.log('unmount');
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    //To erase page before AJAX request enters new poem
+    this.setState({
+      subContent: ''
+    });
+
+    API.getArticle({type: this.state.type, term: getSearchTerm().term}, function (data) {
+      this.setState({
+        subContent: data.poem,
+        replaced: data.replaced
+      });
+    }.bind(this));
   },
 
   render: function () {
@@ -274,16 +298,6 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
       )
     );
   },
-
-  _onSubmit: function () {
-    console.log('submit');
-    API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this));
-  }
 });
 
 module.exports = ArticleSubsection;
@@ -613,7 +627,11 @@ var HomeContent = React.createClass({displayName: "HomeContent",
   },
 
   _onChange: function() {
+    console.log('is it this?');
     this.setState(getHomeState());
+    API.getHomePage(WikiPoetryStore.getType(), function (data) {
+      this.setState(data);
+    }.bind(this));
   }
 });
 
@@ -810,7 +828,7 @@ var Search = React.createClass({displayName: "Search",
       this.history.pushState(data, '/Article/' + search, null );
     }.bind(this));
     
-    WikiPoetryActionCreators.submitSearch();
+    WikiPoetryActionCreators.submitSearch(search);
 
     this.refs.search.value = '';
   },
@@ -901,10 +919,17 @@ var SUBMIT_EVENT = 'submitted';
 var _type = 'keats';
 var _home = {};
 var _article = {};
+var _term = '';
 
 function newType (type) {
   _type = type;
+};
+
+function newTerm (term) {
+  _term = term;
 }
+
+
 
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
@@ -918,6 +943,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   getArticle: function () {
     return _article;
+  },
+
+  getTerm: function () {
+    return _term;
   },
 
   emitChange: function() {
@@ -946,16 +975,14 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 })
 
 WikiPoetryDispatcher.register(function (action) {
-  console.log(action);
   switch(action.actionType) {
     case WikiConstants.ActionTypes.PICK_TYPE:
-      console.log('picktypestore');
       newType(action.type);
       WikiPoetryStore.emitChange();
       break;
 
     case WikiConstants.ActionTypes.SUBMIT_SEARCH:
-      console.log('submitsearchstore');
+      newTerm(action.term);
       WikiPoetryStore.emitSubmit();
       break;
 
@@ -34019,4 +34046,3 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":105}]},{},[24]);
-

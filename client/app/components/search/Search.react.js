@@ -47,7 +47,7 @@ var Search = React.createClass({
       this.history.pushState(data, '/Article/' + search, null );
     }.bind(this));
     
-    WikiPoetryActionCreators.submitSearch();
+    WikiPoetryActionCreators.submitSearch(search);
 
     this.refs.search.value = '';
   },

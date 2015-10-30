@@ -15,9 +15,10 @@ module.exports = {
     });
   },
 
-  submitSearch: function () {
+  submitSearch: function (term) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.SUBMIT_SEARCH,
+      term: term
     });
   }
 }

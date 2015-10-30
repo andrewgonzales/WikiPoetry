@@ -90,7 +90,11 @@ var HomeContent = React.createClass({
   },
 
   _onChange: function() {
+    console.log('is it this?');
     this.setState(getHomeState());
+    API.getHomePage(WikiPoetryStore.getType(), function (data) {
+      this.setState(data);
+    }.bind(this));
   }
 });
 
