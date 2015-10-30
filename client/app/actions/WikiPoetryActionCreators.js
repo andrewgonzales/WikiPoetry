@@ -8,7 +8,6 @@ var ActionTypes = WikiConstants.ActionTypes;
 module.exports = {
 
   pickType: function (value) {
-    console.log(value);
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.PICK_TYPE,
       type: value

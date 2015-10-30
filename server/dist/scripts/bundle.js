@@ -9,7 +9,6 @@ var ActionTypes = WikiConstants.ActionTypes;
 module.exports = {
 
   pickType: function (value) {
-    console.log(value);
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.PICK_TYPE,
       type: value
@@ -627,7 +626,6 @@ var HomeContent = React.createClass({displayName: "HomeContent",
   },
 
   _onChange: function() {
-    console.log('is it this?');
     this.setState(getHomeState());
     API.getHomePage(WikiPoetryStore.getType(), function (data) {
       this.setState(data);
@@ -10949,6 +10947,7 @@ var keyMirror = function(obj) {
     ret[key] = key;
   }
   return ret;
+
 };
 
 module.exports = keyMirror;

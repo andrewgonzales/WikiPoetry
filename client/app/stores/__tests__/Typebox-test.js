@@ -2,6 +2,7 @@ jest.dontMock('../../constants/WikiConstants');
 jest.dontMock('../../components/cartridge/Cartridge.react');
 jest.dontMock('../WikiPoetryStore');
 jest.dontMock('object-assign');
+jest.dontMock('keymirror');
 
 
 describe('WikiPoetryStore', function () {
@@ -11,8 +12,7 @@ describe('WikiPoetryStore', function () {
     var WikiPoetryStore;
     var callback;
 
-    var ActionTypes = WikiConstants
-    console.log(ActionTypes);
+    var ActionTypes = WikiConstants.ActionTypes;
 
     // mock actions
     var actionWikiPickType = {
