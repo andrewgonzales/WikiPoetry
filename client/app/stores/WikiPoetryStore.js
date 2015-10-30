@@ -4,8 +4,9 @@ var WikiConstants = require('../constants/WikiConstants');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
+var SUBMIT_EVENT = 'submitted';
 //Default type to shakespeare when page loads
-var _type = 'shakespeare';
+var _type = 'keats';
 var _home = {};
 var _article = {};
 
@@ -31,21 +32,42 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  addChangeListener: function(callback) {
+  emitSubmit: function() {
+    this.emit(SUBMIT_EVENT);
+  },
+
+  addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
+  },
+
+  addSubmitListener: function (callback) {
+    this.on(SUBMIT_EVENT, callback);
+  },
+
+  removeChangeListener: function(callback) {
+    this.removeListener(SUBMIT_EVENT, callback);
   }
 })
 
 WikiPoetryDispatcher.register(function (action) {
+  console.log(action);
   switch(action.actionType) {
-    case WikiConstants.PICK_TYPE:
+    case WikiConstants.ActionTypes.PICK_TYPE:
+      console.log('picktypestore');
       newType(action.type);
       WikiPoetryStore.emitChange();
       break;
+
+    case WikiConstants.ActionTypes.SUBMIT_SEARCH:
+      console.log('submitsearchstore');
+      WikiPoetryStore.emitSubmit();
+      break;
+
+    default: 
   }
 })
 

@@ -4,6 +4,7 @@ var keyMirror = require('keymirror');
 
 module.exports = {
   ActionTypes: keyMirror({
-    PICK_TYPE: null
+    PICK_TYPE: null,
+    SUBMIT_SEARCH: null
   })
 };

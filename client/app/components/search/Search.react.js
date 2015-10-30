@@ -5,6 +5,8 @@ var ReactDOM = require('react-dom');
 var API = require('./../../api/wikiApi');
 
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
+var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
+var ArticleSubsection = require('../article/ArticleSubsection.react');
 
 function getSearchState() {
   return {
@@ -40,12 +42,13 @@ var Search = React.createClass({
     event.preventDefault();
     var search = this.refs.search.value.trim();
     //Send value to server before erasing it!
-  
     API.getArticlePage(this.state.type, search, function (data) {
       data.term = search;
       this.history.pushState(data, '/Article/' + search, null );
     }.bind(this));
     
+    WikiPoetryActionCreators.submitSearch();
+
     this.refs.search.value = '';
   },
 

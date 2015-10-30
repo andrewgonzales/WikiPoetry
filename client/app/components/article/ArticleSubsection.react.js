@@ -7,17 +7,23 @@ var ArticleSubsection = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      text: ''
+      subContent: '',
+      replaced: []
     }
   },
 
   componentDidMount: function () {
+    WikiPoetryStore.addSubmitListener(this._onSubmit);
     API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
-      console.log(data);
-      this.setState({text: {
-        subContent: data
-      }});
+      this.setState({
+        subContent: data.poem,
+        replaced: data.replaced
+      });
     }.bind(this)); 
+  },
+
+  componentWillUnmount: function () {
+    WikiPoetryStore.removeChangeListener(this._onSubmit);
   },
 
   render: function () {
@@ -25,9 +31,19 @@ var ArticleSubsection = React.createClass({
       <div className="subsection">
         <div className="input">{this.props.error}</div>
         <h4 className="subheading">{this.props.subheading}</h4>
-        <p className="subcontent">{this.state.text.subContent}</p>
+        <p className="subcontent">{this.state.subContent}</p>
       </div>
     );
+  },
+
+  _onSubmit: function () {
+    console.log('submit');
+    API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
+      this.setState({
+        subContent: data.poem,
+        replaced: data.replaced
+      });
+    }.bind(this));
   }
 });
 

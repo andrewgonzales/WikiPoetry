@@ -29,7 +29,7 @@ describe('WikiPoetryStore', function () {
 
     it('should return the current Type', function () {
       var type = WikiPoetryStore.getType();
-      expect(type).toEqual('shakespeare');
+      expect(type).toEqual('keats');
       callback(actionWikiPickType);
       var type = WikiPoetryStore.getType();
       expect(type).toEqual('test');
