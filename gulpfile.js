@@ -134,4 +134,4 @@ gulp.task('watch', function () {
   gulp.watch(config.paths.server, ['nodemon']);
 });
 
-gulp.task('default', ['mocha','html', 'js', 'css', 'images', 'jest','browser-sync', 'watch']);
+gulp.task('default', ['mocha', 'test-api', 'html', 'js', 'css', 'images', 'jest','browser-sync', 'watch']);

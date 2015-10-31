@@ -143,16 +143,16 @@ describe('Poem creation', function () {
     var badSearchTerm = 'ptardigrade';
     it('should return a machine-generated poem containing the search term', function (done) {
       this.timeout(3000);
-      var generatedPoem = ashley.getPoem('shakespeare', searchTerm, function (result){
-        expect(result.length).to.be.above(0);
-        expect(result.indexOf(searchTerm)).to.not.equal(-1);
+      var generatedPoem = ashley.getPoem('keats', searchTerm, function (result){
+        expect(result.poem.length).to.be.above(0);
+        expect(result.poem.indexOf(searchTerm)).to.not.equal(-1);
         done();
       });
     });
 
     it('should do return error message if the search term is not found on Wikipedia', function (done) {
       this.timeout(3000);
-      var generatedPoem = ashley.getPoem('shakespeare', badSearchTerm, function (result) {
+      var generatedPoem = ashley.getPoem('keats', badSearchTerm, function (result) {
         expect(result).to.equal('Sorry, our poet was uninspired by your search term. Please try again.');
         done();
       });
