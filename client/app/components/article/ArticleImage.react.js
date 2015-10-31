@@ -4,9 +4,10 @@ var ArticleImage = React.createClass({
 
   render: function () {
 
+    var picture = this.props.picture;
     return (
       <div className="imgContainer u-pull-right">
-        <img src="https://pbs.twimg.com/profile_images/585897673544376320/-5fUjpSL.jpg"/>
+        <img src={'http://' + picture}/>
       </div>
     );
   }

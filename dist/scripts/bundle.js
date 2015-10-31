@@ -13,30 +13,19 @@ module.exports = {
       actionType: ActionTypes.PICK_TYPE,
       type: value
     });
-  },
-
-  submitSearch: function (term) {
-    WikiPoetryDispatcher.dispatch({
-      actionType: ActionTypes.SUBMIT_SEARCH,
-      term: term
-    });
   }
 }
 
 },{"../constants/WikiConstants":22,"../dispatcher/WikiPoetryDispatcher":23}],2:[function(require,module,exports){
 var $ = require('jquery');
 
-exports.getArticlePage = function (type, term, callback) {
+exports.getArticlePage = function (type, seed) {
   $.ajax({
-    url: 'api/rnn/article',
+    url: 'api/rnn/article/',
     type: 'GET',
-    data: {type: type, term: term},
+    data: {type: type, seed: seed},
     success: function(data) {
-      exports.getArticle({type: type, term: term}, function (articleData) {
-        data.poem = articleData.poem;
-        data.replaced = articleData.replaced;
-        callback(data);
-      })
+      return data;
     },
     error: function(xhr, status, err) {
       console.log(status) ;
@@ -52,8 +41,8 @@ exports.getHomePage = function (type, callback) {
     type: 'GET',
     data: {type: type},
     success: function(data) {
-      exports.getArticle({type: type, term: data.featured.link}, function(articleData) {
-        data.featured.text = articleData.poem;
+      exports.getArticle({type: type, text: data.featured.link}, function(poem) {
+        data.featured.text = poem;
         callback(data);
       });
     },
@@ -116,6 +105,7 @@ var Navbar = React.createClass({displayName: "Navbar",
         React.createElement("ul", null, 
           React.createElement("li", null, React.createElement(Link, {to: "/", activeClassName: "link-active"}, React.createElement("img", {src: "images/wp_logo.jpg"}))), 
           React.createElement("li", null, React.createElement(Link, {to: "/", activeClassName: "link-active"}, "Home")), 
+          React.createElement("li", null, React.createElement(Link, {to: `/Article/${term}`, activeClassName: "link-active"}, "Article")), 
           React.createElement("li", null, React.createElement(Link, {to: "/HowItWorks", activeClassName: "link-active"}, "How It Works")), 
           React.createElement("li", null, React.createElement(Link, {to: "/AboutUs", activeClassName: "link-active"}, "About Us"))
         ), 
@@ -180,59 +170,58 @@ module.exports = AboutUs;
 var React = require('react');
 var ArticleSubsection = require('./ArticleSubsection.react');
 var ArticleImage = require('./ArticleImage.react');
-var WikiPoetryStore = require('../../stores/WikiPoetryStore');
-var API = require('../../api/wikiApi');
-
-function getSearchTerm () {
-  return WikiPoetryStore.getTerm();
-};
 
 var Article = React.createClass({displayName: "Article",
 
   getInitialState: function () {
     return {
-      term: this.props.routeParams.term,
-      type: WikiPoetryStore.getType()
+      text: {
+        mainTitle: '',
+        summaryPoem: '',
+        subheading1: '',
+        subheading2: '',
+        subPoem1: '',
+        subPoem2: ''
+      }
     }
   },
 
+  componentDidMount: function () {
+    var poem = this.props.location.state;
+    this.setState(poem);
+  },
+
   render: function () {
-    var newInfo = this.props.location.state;
-    var searchTerm = this.state.term;
-    
     return (
-      React.createElement("div", {className: "ten columns", id: "article"}, 
+      React.createElement("div", {className: "ten columns"}, 
         React.createElement("div", {className: "article-container"}, 
-          React.createElement("h3", {className: "article-title"}, newInfo.term), 
-          React.createElement(ArticleImage, {picture: newInfo.picture}), 
-          React.createElement("p", null, newInfo.poem), 
-          newInfo.headings.map(function (heading, i) {
-            return (
-              React.createElement(ArticleSubsection, {
-                key: 'heading' + i, 
-                subheading: heading, 
-                term: searchTerm})
-            );
-          })
+          React.createElement("h3", {className: "article-title"}, this.state.text.mainTitle), 
+          React.createElement(ArticleImage, null), 
+          React.createElement("p", null, this.state.text.summaryPoem), 
+          React.createElement(ArticleSubsection, {
+            subheading: this.state.text.subheading1, 
+            subcontent: this.state.text.subPoem1}), 
+          React.createElement(ArticleSubsection, {
+            subheading: this.state.text.subheading2, 
+            subcontent: this.state.text.subPoem2})
         )
       )
     );
-  },
+  }
 });
 
 module.exports = Article;
 
-},{"../../api/wikiApi":2,"../../stores/WikiPoetryStore":26,"./ArticleImage.react":8,"./ArticleSubsection.react":9,"react":236}],8:[function(require,module,exports){
+},{"./ArticleImage.react":8,"./ArticleSubsection.react":9,"react":236}],8:[function(require,module,exports){
 var React = require('react');
 
 var ArticleImage = React.createClass({displayName: "ArticleImage",
 
   render: function () {
 
-    var picture = this.props.picture;
     return (
       React.createElement("div", {className: "imgContainer u-pull-right"}, 
-        React.createElement("img", {src: 'http://' + picture})
+        React.createElement("img", {src: "https://pbs.twimg.com/profile_images/585897673544376320/-5fUjpSL.jpg"})
       )
     );
   }
@@ -242,66 +231,23 @@ module.exports = ArticleImage;
 
 },{"react":236}],9:[function(require,module,exports){
 var React = require('react');
-var API = require('../../api/wikiApi');
-var WikiPoetryStore = require('../../stores/WikiPoetryStore');
-
-function getSearchTerm () {
-  return { 
-    term: WikiPoetryStore.getTerm()
-  }
-};
 
 var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
-
-  getInitialState: function () {
-    return {
-      type: WikiPoetryStore.getType(),
-      subContent: '',
-      replaced: []
-    }
-  },
-
-  componentDidMount: function () {
-    API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this)); 
-  },
-
-  componentWillUnmount: function () {
-    console.log('unmount');
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    //To erase page before AJAX request enters new poem
-    this.setState({
-      subContent: ''
-    });
-
-    API.getArticle({type: this.state.type, term: getSearchTerm().term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this));
-  },
 
   render: function () {
     return (
       React.createElement("div", {className: "subsection"}, 
         React.createElement("div", {className: "input"}, this.props.error), 
         React.createElement("h4", {className: "subheading"}, this.props.subheading), 
-        React.createElement("p", {className: "subcontent"}, this.state.subContent)
+        React.createElement("p", {className: "subcontent"}, this.props.subcontent)
       )
     );
-  },
+  }
 });
 
 module.exports = ArticleSubsection;
 
-},{"../../api/wikiApi":2,"../../stores/WikiPoetryStore":26,"react":236}],10:[function(require,module,exports){
+},{"react":236}],10:[function(require,module,exports){
 var React = require('react');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 
@@ -311,16 +257,18 @@ var Cartridge = React.createClass({displayName: "Cartridge",
 
     return (
       React.createElement("form", null, 
-        React.createElement("input", {type: "radio", name: "cartridge", value: "keats", id: "keats", onChange: this._onCartridgeChange, defaultChecked: true}), 
-          React.createElement("label", {htmlFor: "keats", name: "cartridge"}, "John Keats"), 
-        React.createElement("input", {type: "radio", name: "cartridge", value: "shakespeare", id: "shakespeare", onChange: this._onCartridgeChange}), 
+        React.createElement("input", {type: "radio", name: "cartridge", value: "shakespeare", id: "shakespeare", onChange: this._onCartridgeChange, defaultChecked: true}), 
           React.createElement("label", {htmlFor: "shakespeare", name: "cartridge"}, "Shakespeare"), 
         React.createElement("input", {type: "radio", name: "cartridge", value: "bobdylan", id: "bobDylan", onChange: this._onCartridgeChange}), 
           React.createElement("label", {htmlFor: "bobDylan", name: "cartridge"}, "Bob Dylan"), 
+        React.createElement("input", {type: "radio", name: "cartridge", value: "tseliot", id: "tsEliot", onChange: this._onCartridgeChange}), 
+          React.createElement("label", {htmlFor: "tsEliot", name: "cartridge"}, "T.S. Eliot"), 
         React.createElement("input", {type: "radio", name: "cartridge", value: "sappho", id: "sappho", onChange: this._onCartridgeChange}), 
           React.createElement("label", {htmlFor: "sappho", name: "cartridge"}, "Sappho"), 
         React.createElement("input", {type: "radio", name: "cartridge", value: "johnmilton", id: "johnMilton", onChange: this._onCartridgeChange}), 
           React.createElement("label", {htmlFor: "johnMilton", name: "cartridge"}, "John Milton"), 
+        React.createElement("input", {type: "radio", name: "cartridge", value: "johnkeats", id: "johnKeats", onChange: this._onCartridgeChange}), 
+          React.createElement("label", {htmlFor: "johnKeats", name: "cartridge"}, "John Keats"), 
         React.createElement("input", {type: "radio", name: "cartridge", value: "beatles", id: "beatles", onChange: this._onCartridgeChange}), 
           React.createElement("label", {htmlFor: "beatles", name: "cartridge"}, "Beatles")
       )
@@ -354,17 +302,8 @@ module.exports = Banner;
 var React = require('react');
 var ReactRouter = require('react-router');
 var Link = ReactRouter.Link;
-var API = require('./../../api/wikiApi');
-var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 
 var BulletPoint = React.createClass({displayName: "BulletPoint",
-  mixins: [ReactRouter.History],
-
-  getInitialState: function () {
-    return {
-      type: WikiPoetryStore.getType()
-    }
-  },
 
   makeBulletPoint: function(blurb, linkedWord) {
     var length = linkedWord.length;
@@ -374,17 +313,7 @@ var BulletPoint = React.createClass({displayName: "BulletPoint",
     return [before, after];
   },
 
-  handleClick: function () {
-    var search = this.props.link;
-
-    API.getArticlePage(this.state.type, search, function (data) {
-      data.term = search;
-      this.history.pushState(data, '/Article/' + search, null );
-    }.bind(this));
-  },
-
   render: function () {
-
     var blurb = this.props.blurb;
     var link = this.props.link;
     var linkedWord = link;
@@ -395,10 +324,7 @@ var BulletPoint = React.createClass({displayName: "BulletPoint",
 
     return (
       React.createElement("li", null, 
-        React.createElement("p", null, [beforeLink, 
-          React.createElement("a", {key: 1, onClick: this.handleClick, href: "#", activeClassName: "link-active"}, linkedWord),
-           afterLink]
-        )
+        React.createElement("p", null, [beforeLink, React.createElement(Link, {key: 1, to: `/Article/${linkedWord}`, activeClassName: "link-active"}, linkedWord), afterLink])
       )
     );
   }
@@ -406,7 +332,7 @@ var BulletPoint = React.createClass({displayName: "BulletPoint",
 
 module.exports = BulletPoint;
 
-},{"../../stores/WikiPoetryStore":26,"./../../api/wikiApi":2,"react":236,"react-router":55}],13:[function(require,module,exports){
+},{"react":236,"react-router":55}],13:[function(require,module,exports){
 var React = require('react');
 var BulletPoint = require('./BulletPoint.react');
 var HomeImage = require('./HomeImage.react');
@@ -452,20 +378,12 @@ var React = require('react');
 var HomeImage = require('./HomeImage.react');
 var ReactRouter = require('react-router');
 var Link = ReactRouter.Link;
-var API = require('./../../api/wikiApi');
-var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 
 var Featured = React.createClass({displayName: "Featured",
-  mixins: [ReactRouter.History],
+
   // propTypes: {
   //   wikiData: React.PropTypes.string
   // },
-
-  getInitialState: function () {
-    return {
-      type: WikiPoetryStore.getType()
-    }
-  },
 
   split: function(blurb, linkedWord) {
     var length = linkedWord.length;
@@ -473,15 +391,6 @@ var Featured = React.createClass({displayName: "Featured",
     before = blurb.slice(0, linkedWordIndex);
     after = blurb.slice(linkedWordIndex + length);
     return [before, after];
-  },
-
-  handleClick: function () {
-    var search = this.props.link;
-
-    API.getArticlePage(this.state.type, search, function (data) {
-      data.term = search;
-      this.history.pushState(data, '/Article/' + search, null );
-    }.bind(this));
   },
 
   render: function () {
@@ -499,7 +408,7 @@ var Featured = React.createClass({displayName: "Featured",
         React.createElement("div", {className: "homeSectionContent"}, 
           React.createElement(HomeImage, {picture: picture}), 
           React.createElement("p", null, 
-          [beforeLink, React.createElement("a", {key: 1, onClick: this.handleClick, href: "#", activeClassName: "link-active"}, link),afterLink]
+          [beforeLink, React.createElement(Link, {key: 1, to: `/Article/${link}`, activeClassName: "link-active"}, link),afterLink]
           )
         )
       )
@@ -509,7 +418,7 @@ var Featured = React.createClass({displayName: "Featured",
 
 module.exports = Featured;
 
-},{"../../stores/WikiPoetryStore":26,"./../../api/wikiApi":2,"./HomeImage.react":17,"react":236,"react-router":55}],15:[function(require,module,exports){
+},{"./HomeImage.react":17,"react":236,"react-router":55}],15:[function(require,module,exports){
 var React = require('react');
 var Banner = require('./Banner.react');
 var HomeContent = require('./HomeContent.react');
@@ -627,9 +536,6 @@ var HomeContent = React.createClass({displayName: "HomeContent",
 
   _onChange: function() {
     this.setState(getHomeState());
-    API.getHomePage(WikiPoetryStore.getType(), function (data) {
-      this.setState(data);
-    }.bind(this));
   }
 });
 
@@ -780,12 +686,9 @@ module.exports = HowItWorks;
 
 var React = require('react');
 var ReactRouter = require('react-router');
-var ReactDOM = require('react-dom');
 var API = require('./../../api/wikiApi');
 
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
-var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
-var ArticleSubsection = require('../article/ArticleSubsection.react');
 
 function getSearchState() {
   return {
@@ -821,13 +724,14 @@ var Search = React.createClass({displayName: "Search",
     event.preventDefault();
     var search = this.refs.search.value.trim();
     //Send value to server before erasing it!
-    API.getArticlePage(this.state.type, search, function (data) {
-      data.term = search;
-      this.history.pushState(data, '/Article/' + search, null );
-    }.bind(this));
-    
-    WikiPoetryActionCreators.submitSearch(search);
+    var json = {
+      'text': search,
+      'type': this.state.type
+    };
 
+    API.getArticle(json, function(data) {
+      this.history.pushState({text: data}, '/Article/' + search, null );
+    }.bind(this));
     this.refs.search.value = '';
   },
 
@@ -839,15 +743,14 @@ var Search = React.createClass({displayName: "Search",
 
 module.exports = Search;
 
-},{"../../actions/WikiPoetryActionCreators":1,"../../stores/WikiPoetryStore":26,"../article/ArticleSubsection.react":9,"./../../api/wikiApi":2,"react":236,"react-dom":35,"react-router":55}],22:[function(require,module,exports){
+},{"../../stores/WikiPoetryStore":26,"./../../api/wikiApi":2,"react":236,"react-router":55}],22:[function(require,module,exports){
 
 //Use keyMirror to create values equal to the key
 var keyMirror = require('keymirror');
 
 module.exports = {
   ActionTypes: keyMirror({
-    PICK_TYPE: null,
-    SUBMIT_SEARCH: null
+    PICK_TYPE: null
   })
 };
 
@@ -912,22 +815,14 @@ var WikiConstants = require('../constants/WikiConstants');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
-var SUBMIT_EVENT = 'submitted';
 //Default type to shakespeare when page loads
-var _type = 'keats';
+var _type = 'shakespeare';
 var _home = {};
 var _article = {};
-var _term = '';
 
 function newType (type) {
   _type = type;
-};
-
-function newTerm (term) {
-  _term = term;
 }
-
-
 
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
@@ -943,48 +838,26 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _article;
   },
 
-  getTerm: function () {
-    return _term;
-  },
-
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
 
-  emitSubmit: function() {
-    this.emit(SUBMIT_EVENT);
-  },
-
-  addChangeListener: function (callback) {
+  addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
-  },
-
-  addSubmitListener: function (callback) {
-    this.on(SUBMIT_EVENT, callback);
-  },
-
-  removeChangeListener: function(callback) {
-    this.removeListener(SUBMIT_EVENT, callback);
   }
 })
 
 WikiPoetryDispatcher.register(function (action) {
+  console.log(action.actionType);
   switch(action.actionType) {
-    case WikiConstants.ActionTypes.PICK_TYPE:
+    case WikiConstants.PICK_TYPE:
       newType(action.type);
       WikiPoetryStore.emitChange();
       break;
-
-    case WikiConstants.ActionTypes.SUBMIT_SEARCH:
-      newTerm(action.term);
-      WikiPoetryStore.emitSubmit();
-      break;
-
-    default: 
   }
 })
 
@@ -10947,7 +10820,6 @@ var keyMirror = function(obj) {
     ret[key] = key;
   }
   return ret;
-
 };
 
 module.exports = keyMirror;

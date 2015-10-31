@@ -228,6 +228,7 @@ var getArticle = function(searchTerm, cb) {
     headings: [],
     picture: ''
   };
+  console.log(searchTerm);
   wiki.page.data(searchTerm, {content: true}, function(response) {
     $ = cheerio.load(response.text['*']);
     getHeaders(function(headings) {

@@ -2,6 +2,7 @@ jest.dontMock('../../constants/WikiConstants');
 jest.dontMock('../../components/cartridge/Cartridge.react');
 jest.dontMock('../WikiPoetryStore');
 jest.dontMock('object-assign');
+jest.dontMock('keymirror');
 
 
 describe('WikiPoetryStore', function () {
@@ -11,9 +12,11 @@ describe('WikiPoetryStore', function () {
     var WikiPoetryStore;
     var callback;
 
+    var ActionTypes = WikiConstants.ActionTypes;
+
     // mock actions
     var actionWikiPickType = {
-      actionType: WikiConstants.PICK_TYPE,
+      actionType: ActionTypes.PICK_TYPE,
       type: 'test'
     };
 
@@ -29,7 +32,7 @@ describe('WikiPoetryStore', function () {
 
     it('should return the current Type', function () {
       var type = WikiPoetryStore.getType();
-      expect(type).toEqual('shakespeare');
+      expect(type).toEqual('keats');
       callback(actionWikiPickType);
       var type = WikiPoetryStore.getType();
       expect(type).toEqual('test');

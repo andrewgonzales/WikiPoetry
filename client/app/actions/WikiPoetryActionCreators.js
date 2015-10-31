@@ -12,5 +12,12 @@ module.exports = {
       actionType: ActionTypes.PICK_TYPE,
       type: value
     });
+  },
+
+  submitSearch: function (term) {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.SUBMIT_SEARCH,
+      term: term
+    });
   }
 }
