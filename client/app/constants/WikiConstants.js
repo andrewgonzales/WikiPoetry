@@ -6,5 +6,6 @@ module.exports = {
   ActionTypes: keyMirror({
     PICK_TYPE: null,
     SUBMIT_SEARCH: null
+    LOGIN: null
   })
 };

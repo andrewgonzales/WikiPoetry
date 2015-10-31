@@ -62,7 +62,11 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(SUBMIT_EVENT, callback);
   }
-})
+});
+
+var loginStore = assign({}. EventEmitter.prototype, {
+
+});
 
 WikiPoetryDispatcher.register(function (action) {
   switch(action.actionType) {
