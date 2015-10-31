@@ -1,5 +1,6 @@
 var React = require('react');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
+var API = require('./../../api/wikiApi');
 
 var Cartridge = React.createClass({
 
@@ -11,8 +12,8 @@ var Cartridge = React.createClass({
           <label htmlFor="keats" name="cartridge">John Keats</label>
         <input type="radio" name="cartridge" value="shakespeare" id="shakespeare" onChange={this._onCartridgeChange} />
           <label htmlFor="shakespeare" name="cartridge">Shakespeare</label>
-        <input type="radio" name="cartridge" value="bobdylan" id="bobDylan" onChange={this._onCartridgeChange}/>
-          <label htmlFor="bobDylan" name="cartridge">Bob Dylan</label>
+        <input type="radio" name="cartridge" value="dylan" id="Dylan" onChange={this._onCartridgeChange}/>
+          <label htmlFor="Dylan" name="cartridge">Bob Dylan</label>
         <input type="radio" name="cartridge" value="sappho" id="sappho" onChange={this._onCartridgeChange}/>
           <label htmlFor="sappho" name="cartridge">Sappho</label>
         <input type="radio" name="cartridge" value="johnmilton" id="johnMilton" onChange={this._onCartridgeChange}/>

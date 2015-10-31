@@ -8,7 +8,7 @@ function getSearchTerm () {
   }
 };
 
-var ArticleSubsection = React.createClass({
+var ArticleIntro = React.createClass({
 
   getInitialState: function () {
     return {
@@ -42,14 +42,13 @@ var ArticleSubsection = React.createClass({
   },
 
   render: function () {
+
     return (
-      <div className="subsection">
-        <div className="input">{this.props.error}</div>
-        <h4 className="subheading">{this.props.subheading}</h4>
-        <p className="subcontent">{this.state.subContent}</p>
-      </div>
+      <p>
+        {this.state.subContent}
+      </p>
     );
-  },
+  }
 });
 
-module.exports = ArticleSubsection;
+module.exports = ArticleIntro;
