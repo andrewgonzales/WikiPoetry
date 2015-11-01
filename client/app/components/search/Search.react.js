@@ -52,7 +52,7 @@ var Search = React.createClass({
     this.refs.search.value = '';
   },
 
-  _onChange: function() {
+  _onChange: function(event) {
     this.setState(getSearchState());
   }
 

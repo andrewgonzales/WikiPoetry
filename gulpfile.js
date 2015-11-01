@@ -68,7 +68,7 @@ gulp.task('jest', function (cb) {
 
 gulp.task('test-api', function () {
   gulp.src('./tests/server/AshleySpec.js', {read: false})
-  .pipe(mocha({reporter: 'nyan', timeout: 4000}))
+  .pipe(mocha({reporter: 'nyan', timeout: 5000}))
 });
 
 gulp.task('browser-sync', ['nodemon'], function () {
