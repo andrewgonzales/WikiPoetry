@@ -2,21 +2,20 @@
 //Should we serve a random poem when user clicks this link?
 
 var React = require('react');
+var ReactRouter = require('react-router');
 var ArticleSubsection = require('./ArticleSubsection.react');
 var ArticleImage = require('./ArticleImage.react');
 var ArticleIntro = require('./ArticleIntro.react');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var API = require('../../api/wikiApi');
 
-function getSearchTerm () {
-  return WikiPoetryStore.getTerm();
-};
-
 var Article = React.createClass({
+
+  mixins: [ReactRouter.History],
 
   getInitialState: function () {
     return {
-      term: getSearchTerm(),
+      term: WikiPoetryStore.getTerm(),
       type: WikiPoetryStore.getType()
     }
   },
@@ -31,7 +30,6 @@ var Article = React.createClass({
 
   render: function () {
     var newInfo = this.props.location.state;
-    var searchTerm = this.props.routeParams.term;
     var articleType = this.state.type;
     
     return (
@@ -39,13 +37,13 @@ var Article = React.createClass({
         <div className="article-container">
           <h3 className="article-title">{newInfo.term}</h3>
           <ArticleImage picture={newInfo.picture} />
-          <ArticleIntro term={searchTerm} type={articleType}/>
+          <ArticleIntro term={newInfo.term} type={articleType}/>
           {newInfo.headings.map(function (heading, i) {
             return (
               <ArticleSubsection
                 key={'heading' + i}
                 subheading={heading} 
-                term={searchTerm} 
+                term={newInfo.term} 
                 type={articleType}/>
             );
           })}

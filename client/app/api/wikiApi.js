@@ -45,7 +45,6 @@ exports.getArticle = function (json, callback) {
     type: 'GET',
     data: json,
     success: function(data) {
-      console.log('search term sent');
       callback(data);
     },
     error: function(xhr, status, err) {

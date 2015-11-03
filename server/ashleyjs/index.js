@@ -228,7 +228,6 @@ var getArticle = function(searchTerm, cb) {
     headings: [],
     picture: ''
   };
-  console.log(searchTerm);
   wiki.page.data(searchTerm, {content: true}, function(response) {
     $ = cheerio.load(response.text['*']);
     getHeaders(function(headings) {
@@ -326,7 +325,8 @@ var getPoem = function (type, searchTerm, cb) {
     // convert html to text for nlp processing
     if (!response) {
       var errorMsg = 'Sorry, our poet was uninspired by your search term. Please try again.';
-      cb(errorMsg);
+      poemInfo.poem = errorMsg;
+      cb(poemInfo);
     } else {
       text = htmlToText.fromString(response.text['*']);
       // data.headers = getHeaders(searchTerm, function());

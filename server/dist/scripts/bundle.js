@@ -71,7 +71,6 @@ exports.getArticle = function (json, callback) {
     type: 'GET',
     data: json,
     success: function(data) {
-      console.log('search term sent');
       callback(data);
     },
     error: function(xhr, status, err) {
@@ -178,22 +177,21 @@ module.exports = AboutUs;
 //Should we serve a random poem when user clicks this link?
 
 var React = require('react');
+var ReactRouter = require('react-router');
 var ArticleSubsection = require('./ArticleSubsection.react');
 var ArticleImage = require('./ArticleImage.react');
 var ArticleIntro = require('./ArticleIntro.react');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var API = require('../../api/wikiApi');
 
-function getSearchTerm () {
-  return WikiPoetryStore.getTerm();
-};
-
 var Article = React.createClass({displayName: "Article",
+
+  mixins: [ReactRouter.History],
 
   getInitialState: function () {
     return {
-      term: getSearchTerm(),
-      type: WikiPoetryStore.getType()
+      term: WikiPoetryStore.getTerm(),
+      type: WikiPoetryStore.getType(),
     }
   },
 
@@ -207,7 +205,6 @@ var Article = React.createClass({displayName: "Article",
 
   render: function () {
     var newInfo = this.props.location.state;
-    var searchTerm = this.props.routeParams.term;
     var articleType = this.state.type;
     
     return (
@@ -215,13 +212,13 @@ var Article = React.createClass({displayName: "Article",
         React.createElement("div", {className: "article-container"}, 
           React.createElement("h3", {className: "article-title"}, newInfo.term), 
           React.createElement(ArticleImage, {picture: newInfo.picture}), 
-          React.createElement(ArticleIntro, {term: searchTerm, type: articleType}), 
+          React.createElement(ArticleIntro, {term: newInfo.term, type: articleType}), 
           newInfo.headings.map(function (heading, i) {
             return (
               React.createElement(ArticleSubsection, {
                 key: 'heading' + i, 
                 subheading: heading, 
-                term: searchTerm, 
+                term: newInfo.term, 
                 type: articleType})
             );
           })
@@ -239,7 +236,7 @@ var Article = React.createClass({displayName: "Article",
 
 module.exports = Article;
 
-},{"../../api/wikiApi":2,"../../stores/WikiPoetryStore":27,"./ArticleImage.react":8,"./ArticleIntro.react":9,"./ArticleSubsection.react":10,"react":237}],8:[function(require,module,exports){
+},{"../../api/wikiApi":2,"../../stores/WikiPoetryStore":27,"./ArticleImage.react":8,"./ArticleIntro.react":9,"./ArticleSubsection.react":10,"react":237,"react-router":56}],8:[function(require,module,exports){
 var React = require('react');
 
 var ArticleImage = React.createClass({displayName: "ArticleImage",
@@ -261,6 +258,8 @@ module.exports = ArticleImage;
 var React = require('react');
 var API = require('../../api/wikiApi');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
+var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
+var ReactRouter = require('react-router');
 
 function getSearchTerm () {
   return { 
@@ -270,6 +269,8 @@ function getSearchTerm () {
 
 var ArticleIntro = React.createClass({displayName: "ArticleIntro",
 
+  mixins:[ReactRouter.History],
+
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
@@ -279,7 +280,7 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
   },
 
   componentDidMount: function () {
-    API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
+    API.getArticle({type: this.props.type, term: this.props.term}, function (data) {
       this.setState({
         subContent: data.poem,
         replaced: data.replaced
@@ -301,11 +302,43 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
     }.bind(this));
   },
 
+  handleClick: function (event, word) {
+    event.preventDefault();
+    WikiPoetryActionCreators.submitSearch(word);
+    API.getArticlePage(this.state.type, word, function (data) {
+      data.term = word;
+      this.history.pushState(data, '/Article/' + word, null );
+    }.bind(this));
+  },
+
+  linkifyArticle: function (content, links) {
+    var words = content.split(' ');
+    var index;
+    var spaced = [];
+    var linkedArray = words.map(function(word, i) {
+      if (links.indexOf(word) !== -1) {
+        index = links.indexOf(word);
+        var linkedWord = React.createElement("a", {key: i, href: '#', onClick: function(e){this.handleClick(e, word)}.bind(this), activeClassName: "link-active"}, word);
+        return linkedWord;
+      } else {
+        return word;
+      }
+    }.bind(this));
+    linkedArray.forEach(function(strOrObj) {
+      spaced.push(strOrObj);
+      spaced.push(' ');
+    });
+    return spaced;
+  },
+
   render: function () {
+    var content = this.state.subContent;
+    var links = this.state.replaced;
+    var linkedPoem = this.linkifyArticle(content, links);
 
     return (
       React.createElement("p", null, 
-        this.state.subContent
+        linkedPoem
       )
     );
   }
@@ -313,18 +346,16 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
 
 module.exports = ArticleIntro;
 
-},{"../../api/wikiApi":2,"../../stores/WikiPoetryStore":27,"react":237}],10:[function(require,module,exports){
+},{"../../actions/WikiPoetryActionCreators":1,"../../api/wikiApi":2,"../../stores/WikiPoetryStore":27,"react":237,"react-router":56}],10:[function(require,module,exports){
 var React = require('react');
 var API = require('../../api/wikiApi');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
-
-function getSearchTerm () {
-  return { 
-    term: WikiPoetryStore.getTerm()
-  }
-};
+var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
+var ReactRouter = require('react-router');
 
 var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
+
+  mixins: [ReactRouter.History],
 
   getInitialState: function () {
     return {
@@ -345,6 +376,7 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
 
   componentWillReceiveProps: function (nextProps) {
     //To erase page before AJAX request enters new poem
+    
     this.setState({
       subContent: ''
     });
@@ -357,12 +389,48 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
     }.bind(this));
   },
 
+  handleClick: function (event, word) {
+    event.preventDefault();
+    WikiPoetryActionCreators.submitSearch(word);
+    API.getArticlePage(this.state.type, word, function (data) {
+      data.term = word;
+      this.history.pushState(data, '/Article/' + word, null );
+    }.bind(this));
+  },
+
+  linkifyArticle: function (content, links) {
+    var words = content.split(' ');
+    var index;
+    var spaced = [];
+    var linkedArray = words.map(function(word, i) {
+      if (links.indexOf(word) !== -1) {
+        index = links.indexOf(word);
+        var linkedWord = React.createElement("a", {key: i, href: '#', onClick: function(e){this.handleClick(e, word)}.bind(this), activeClassName: "link-active"}, word);
+        return linkedWord;
+      } else {
+        return word;
+      }
+    }.bind(this));
+    linkedArray.forEach(function(strOrObj) {
+      spaced.push(strOrObj);
+      spaced.push(' ');
+    });
+    return spaced;
+  },
+
   render: function () {
+    var content = this.state.subContent;
+    var links = this.state.replaced;
+    var linkedArticle;
+    if (content) {
+      linkedArticle = this.linkifyArticle(content, links);
+    }
+
     return (
       React.createElement("div", {className: "subsection"}, 
         React.createElement("div", {className: "input"}, this.props.error), 
         React.createElement("h4", {className: "subheading"}, this.props.subheading), 
-        React.createElement("p", {className: "subcontent"}, this.state.subContent)
+        React.createElement("p", {className: "subcontent"}, linkedArticle)
       )
     );
   },
@@ -370,7 +438,7 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
 
 module.exports = ArticleSubsection;
 
-},{"../../api/wikiApi":2,"../../stores/WikiPoetryStore":27,"react":237}],11:[function(require,module,exports){
+},{"../../actions/WikiPoetryActionCreators":1,"../../api/wikiApi":2,"../../stores/WikiPoetryStore":27,"react":237,"react-router":56}],11:[function(require,module,exports){
 var React = require('react');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var API = require('./../../api/wikiApi');
@@ -696,7 +764,6 @@ var HomeContent = React.createClass({displayName: "HomeContent",
   },
 
   _onChange: function() {
-    console.log('homeContent');
     this.setState(getHomeState());
     API.getHomePage(WikiPoetryStore.getType(), function (data) {
       this.setState(data);
@@ -11018,7 +11085,6 @@ var keyMirror = function(obj) {
     ret[key] = key;
   }
   return ret;
-
 };
 
 module.exports = keyMirror;
