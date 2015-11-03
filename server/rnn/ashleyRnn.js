@@ -18,20 +18,13 @@ module.exports = {
     });
   },
 
-  getHomeWiki: function (req, res, next) {
-    var searchType = req.query.type;
-    var testString = ashley.getPoem(searchType, 'home');
-    res.status(200).send(testString).end();
-  },
-
   getArticlePage: function (req, res, next) {
     var searchTerm = req.query.term;
+
     var outputString = ashley.getArticle(searchTerm, function(articleData) {
       res.status(200).send(articleData).end();
     })
-
   }
-
 }
 
 
