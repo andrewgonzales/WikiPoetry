@@ -228,7 +228,6 @@ var getArticle = function(searchTerm, cb) {
     headings: [],
     picture: ''
   };
-  console.log(searchTerm);
   wiki.page.data(searchTerm, {content: true}, function(response) {
     $ = cheerio.load(response.text['*']);
     getHeaders(function(headings) {
@@ -359,7 +358,6 @@ var getPoem = function (type, searchTerm, cb) {
       }
     }
     poemInfo.poem = wikiPoem;
-    console.log('poemInfo', poemInfo);
     cb(poemInfo);
   });
 };
