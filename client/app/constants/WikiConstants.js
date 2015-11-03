@@ -8,5 +8,6 @@ module.exports = {
     SUBMIT_SEARCH: null,
     LOGIN: null
     GET_HOME: null
+    GET_ARTICLE: null
   })
 };

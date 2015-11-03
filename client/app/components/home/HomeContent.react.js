@@ -46,7 +46,7 @@ var HomeContent = React.createClass({
   //Let components render first then perform AJAX request
   componentDidMount: function () {
     WikiPoetryStore.addChangeListener(this._onChange);
-    WikiPoetryActionCreator.getHomeContent(this.state.type);
+    WikiPoetryActionCreators.getHomeContent(this.state.type);
   },
 
   componentWillUnmount: function() {
@@ -57,9 +57,6 @@ var HomeContent = React.createClass({
     this.setState(getHomeState());
     var homeContent = WikiPoetryStore.getHome();
     this.setState(homeContent);
-    // API.getHomeContent(WikiPoetryStore.getType(), function (data) {
-    //   this.setState(data);
-    // }.bind(this));
   },
 
   render: function () {

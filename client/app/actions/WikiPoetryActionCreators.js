@@ -39,6 +39,16 @@ module.exports = {
         actionType: ActionTypes.GET_HOME,
         content: data
       });
-    }.bind(this));
+    });
+  },
+
+  getArticleContent: function (type, term, cb) {
+    API.getArticlePage(type, term, function (data) {
+      WikiPoetryDispatcher.dispatch({
+        actionType: ActionTypes.GET_ARTICLE,
+        content: data
+      });
+    });
+    cb;
   }
 }
