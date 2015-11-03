@@ -7,14 +7,14 @@ var ashley = require('../../server/ashleyjs/index.js');
 
 describe('getArticle function', function () {
   
-  it('should get main picture from a wikipedia page about a person', function(done) {
+  xit('should get main picture from a wikipedia page about a person', function(done) {
     ashley.getArticle('Eddy Merckx', function(result) {
       expect(result.picture).to.equal('upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Eddy_Merckx_Molteni_1973.jpg/220px-Eddy_Merckx_Molteni_1973.jpg');
       done();
     });
   });
   
-  it('should get main picture from a wikipedia page about a general subject', function (done) {
+  xit('should get main picture from a wikipedia page about a general subject', function (done) {
     
     ashley.getArticle('Love', function (result) {
       expect(result.picture).to.equal('upload.wikimedia.org/wikipedia/commons/thumb/a/a3/DickseeRomeoandJuliet.jpg/220px-DickseeRomeoandJuliet.jpg');
@@ -32,7 +32,7 @@ describe('getArticle function', function () {
 
 describe('getHomepage function', function () {
 
-  it('should have a featured key with all necessary attributes', function(done) {
+  xit('should have a featured key with all necessary attributes', function(done) {
     ashley.getHomePage(function (result) {
       var linkLength = result.featured.link.length;
       var pictureLength = result.featured.picture.length;
@@ -141,7 +141,7 @@ describe('Poem creation', function () {
   describe('getPoem', function () {
     var searchTerm = 'Russia';
     var badSearchTerm = 'ptardigrade';
-    it('should return a machine-generated poem containing the search term', function (done) {
+    xit('should return a machine-generated poem containing the search term', function (done) {
       this.timeout(3000);
       var generatedPoem = ashley.getPoem('keats', searchTerm, function (result){
         expect(result.poem.length).to.be.above(0);
@@ -150,7 +150,7 @@ describe('Poem creation', function () {
       });
     });
 
-    it('should do return error message if the search term is not found on Wikipedia', function (done) {
+    xit('should do return error message if the search term is not found on Wikipedia', function (done) {
       this.timeout(3000);
       var generatedPoem = ashley.getPoem('keats', badSearchTerm, function (result) {
         expect(result).to.equal('Sorry, our poet was uninspired by your search term. Please try again.');

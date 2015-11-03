@@ -7,7 +7,11 @@ module.exports = {
     var searchTerm = req.query.term;
     var searchType = req.query.type;
 
+    console.log('Inside getSearch in ashleyRNN has searchTerm:', searchTerm);
+    console.log('Inside getSearch in ashleyRNN has searchType:', searchType);
+    console.log('Calling getPoem in AshleyJS index.js');
     ashley.getPoem(searchType, searchTerm, function(poem) {
+      console.log('AshleyJS getPoem returned:', poem);
       res.status(200).send(poem).end();
     });
   },

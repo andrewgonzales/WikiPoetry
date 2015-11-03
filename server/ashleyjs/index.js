@@ -326,7 +326,8 @@ var getPoem = function (type, searchTerm, cb) {
     // convert html to text for nlp processing
     if (!response) {
       var errorMsg = 'Sorry, our poet was uninspired by your search term. Please try again.';
-      cb(errorMsg);
+      poemInfo.poem = errorMsg;
+      cb(poemInfo);
     } else {
       text = htmlToText.fromString(response.text['*']);
       // data.headers = getHeaders(searchTerm, function());
@@ -358,6 +359,7 @@ var getPoem = function (type, searchTerm, cb) {
       }
     }
     poemInfo.poem = wikiPoem;
+    console.log('poemInfo', poemInfo);
     cb(poemInfo);
   });
 };
