@@ -29,11 +29,8 @@ var Article = React.createClass({
   },
 
   render: function () {
-    console.log('render in Article called');
     var newInfo = this.props.location.state;
     var articleType = this.state.type;
-    console.log('newInfo in render in Article is:', newInfo);
-    console.log('articleType in render in Article is:', articleType);
     
     return (
       <div className="ten columns" id="article">

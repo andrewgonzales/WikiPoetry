@@ -27,13 +27,11 @@ module.exports = {
 var $ = require('jquery');
 
 exports.getArticlePage = function (type, term, callback) {
-  console.log('API.getArticlePage was given type:', type, 'and word:', term);
   $.ajax({
     url: 'api/rnn/article',
     type: 'GET',
     data: {type: type, term: term},
     success: function(data) {
-      console.log('getArticlePage in wikiAPI successfully returns data:', data);
       exports.getArticle({type: type, term: term}, function (articleData) {
         data.poem = articleData.poem;
         data.replaced = articleData.replaced;
@@ -49,7 +47,6 @@ exports.getArticlePage = function (type, term, callback) {
 };
 
 exports.getHomePage = function (type, callback) {
-  console.log('In wikiApi getHomePage ajax request about to be sent with type:', type);
   $.ajax({
     url: '/api/rnn/home',
     type: 'GET',
@@ -69,13 +66,11 @@ exports.getHomePage = function (type, callback) {
 };
 
 exports.getArticle = function (json, callback) {
-  console.log('In wikiApi getArticle ajax request about to be sent using json:', json);
   $.ajax({
     url: '/api/rnn',
     type: 'GET',
     data: json,
     success: function(data) {
-      console.log('getArticle success with data:', data);
       callback(data);
     },
     error: function(xhr, status, err) {
@@ -197,7 +192,6 @@ var Article = React.createClass({displayName: "Article",
     return {
       term: WikiPoetryStore.getTerm(),
       type: WikiPoetryStore.getType(),
-      poem: ''
     }
   },
 
@@ -210,11 +204,8 @@ var Article = React.createClass({displayName: "Article",
   },
 
   render: function () {
-    console.log('render in Article called');
     var newInfo = this.props.location.state;
     var articleType = this.state.type;
-    console.log('newInfo in render in Article is:', newInfo);
-    console.log('articleType in render in Article is:', articleType);
     
     return (
       React.createElement("div", {className: "ten columns", id: "article"}, 
@@ -271,7 +262,6 @@ var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators')
 var ReactRouter = require('react-router');
 
 function getSearchTerm () {
-  console.log('In ArticleIntro in getSearchTerm');
   return { 
     term: WikiPoetryStore.getTerm()
   }
@@ -290,8 +280,6 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
   },
 
   componentDidMount: function () {
-    console.log('In ArticleIntro in componentDidMount this.prop.term is', this.props.term);
-    console.log('In ArticleIntro in componentDidMount this.props.type is', this.props.type);
     API.getArticle({type: this.props.type, term: this.props.term}, function (data) {
       this.setState({
         subContent: data.poem,
@@ -306,9 +294,7 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
       subContent: ''
     });
 
-    console.log('In ArticleIntro in componentWillReceiveProps term is', getSearchTerm().term);
-
-    API.getArticle({type: nextProps.type, term: getSearchTerm().term}, function (data) {
+    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
       this.setState({
         subContent: data.poem,
         replaced: data.replaced
@@ -318,20 +304,14 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
 
   handleClick: function (event, word) {
     event.preventDefault();
-    console.log('handleClick called in articleSubsection passing in:', word);
     WikiPoetryActionCreators.submitSearch(word);
     API.getArticlePage(this.state.type, word, function (data) {
-      console.log('In handleClick API.getArticlePage returns', data);
       data.term = word;
       this.history.pushState(data, '/Article/' + word, null );
-      console.log('this.history.pushState called')
     }.bind(this));
   },
 
   linkifyArticle: function (content, links) {
-    console.log('linkifyArticle called in ArticleSubsection');
-    console.log('content passed into linkifyArticle are:', content);
-    console.log('links passed into linkifyArticle are:', links);
     var words = content.split(' ');
     var index;
     var spaced = [];
@@ -352,7 +332,6 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
   },
 
   render: function () {
-    console.log('In ArticleIntro in render this.state.subContent', this.state.subContent);
     var content = this.state.subContent;
     var links = this.state.replaced;
     var linkedPoem = this.linkifyArticle(content, links);
@@ -374,19 +353,11 @@ var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var ReactRouter = require('react-router');
 
-function getSearchTerm () {
-  console.log('get search term');
-  return { 
-    term: WikiPoetryStore.getTerm()
-  }
-};
-
 var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
 
   mixins: [ReactRouter.History],
 
   getInitialState: function () {
-    console.log('getInitialState called in ArticleSubsection');
     return {
       type: WikiPoetryStore.getType(),
       subContent: '',
@@ -395,10 +366,7 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
   },
 
   componentDidMount: function () {
-    console.log('componentDidMount called in articleSubsection');
-    console.log('calling API.getArticle with an object containing')
     API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
-      console.log('data.replaced', data.replaced);
       this.setState({
         subContent: data.poem,
         replaced: data.replaced
@@ -409,12 +377,11 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
   componentWillReceiveProps: function (nextProps) {
     //To erase page before AJAX request enters new poem
     
-    console.log('componentWillReceiveProps called in articleSubsection');
     this.setState({
       subContent: ''
     });
 
-    API.getArticle({type: nextProps.type, term: getSearchTerm().term}, function (data) {
+    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
       this.setState({
         subContent: data.poem,
         replaced: data.replaced
@@ -424,20 +391,14 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
 
   handleClick: function (event, word) {
     event.preventDefault();
-    console.log('handleClick called in articleSubsection passing in:', word);
     WikiPoetryActionCreators.submitSearch(word);
     API.getArticlePage(this.state.type, word, function (data) {
-      console.log('In handleClick API.getArticlePage returns', data);
       data.term = word;
       this.history.pushState(data, '/Article/' + word, null );
-      console.log('this.history.pushState called')
     }.bind(this));
   },
 
   linkifyArticle: function (content, links) {
-    console.log('linkifyArticle called in ArticleSubsection');
-    console.log('content passed into linkifyArticle are:', content);
-    console.log('links passed into linkifyArticle are:', links);
     var words = content.split(' ');
     var index;
     var spaced = [];
@@ -458,10 +419,8 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
   },
 
   render: function () {
-    console.log('render called in ArticleSubsection');
     var content = this.state.subContent;
     var links = this.state.replaced;
-    console.log('links in render', links);
     var linkedArticle;
     if (content) {
       linkedArticle = this.linkifyArticle(content, links);

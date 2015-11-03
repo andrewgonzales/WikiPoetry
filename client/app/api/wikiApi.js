@@ -1,13 +1,11 @@
 var $ = require('jquery');
 
 exports.getArticlePage = function (type, term, callback) {
-  console.log('API.getArticlePage was given type:', type, 'and word:', term);
   $.ajax({
     url: 'api/rnn/article',
     type: 'GET',
     data: {type: type, term: term},
     success: function(data) {
-      console.log('getArticlePage in wikiAPI successfully returns data:', data);
       exports.getArticle({type: type, term: term}, function (articleData) {
         data.poem = articleData.poem;
         data.replaced = articleData.replaced;
@@ -23,7 +21,6 @@ exports.getArticlePage = function (type, term, callback) {
 };
 
 exports.getHomePage = function (type, callback) {
-  console.log('In wikiApi getHomePage ajax request about to be sent with type:', type);
   $.ajax({
     url: '/api/rnn/home',
     type: 'GET',
@@ -43,13 +40,11 @@ exports.getHomePage = function (type, callback) {
 };
 
 exports.getArticle = function (json, callback) {
-  console.log('In wikiApi getArticle ajax request about to be sent using json:', json);
   $.ajax({
     url: '/api/rnn',
     type: 'GET',
     data: json,
     success: function(data) {
-      console.log('getArticle success with data:', data);
       callback(data);
     },
     error: function(xhr, status, err) {
