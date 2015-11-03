@@ -9,7 +9,7 @@ var ArticleImage = React.createClass({
     return (
       <div className="imgContainer u-pull-right">
         <img src={'http://' + picture}/>
-        <span>{caption}</span>
+        <p className='caption'>{caption}</p>
       </div>
     );
   }

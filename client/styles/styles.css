@@ -108,3 +108,15 @@ Article Styles
   padding: 3px;
   border: 1px solid #CCC;
 }
+
+.imgContainer img {
+  display: table;
+}
+.caption {
+  display: table-caption;
+  caption-side: bottom;
+  width: 300%;
+  font-size: 0.9em
+  margin: 3px;
+  padding: 3px;
+}
