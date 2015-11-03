@@ -20,6 +20,10 @@ function newTerm (term) {
   _term = term;
 }
 
+function newHomeContent (home) {
+  _home = home;
+}
+
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   getType: function () {
@@ -67,6 +71,11 @@ WikiPoetryDispatcher.register(function (action) {
   switch(action.actionType) {
     case WikiConstants.ActionTypes.PICK_TYPE:
       newType(action.type);
+      WikiPoetryStore.emitChange();
+      break;
+
+    case WikiConstants.ActionTypes.GET_HOME:
+      newHomeContent(action.content);
       WikiPoetryStore.emitChange();
       break;
 

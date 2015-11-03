@@ -2,6 +2,7 @@
 
 var WikiPoetryDispatcher = require('../dispatcher/WikiPoetryDispatcher');
 var WikiConstants = require('../constants/WikiConstants');
+var API = require('./../api/wikiApi');
 
 var ActionTypes = WikiConstants.ActionTypes;
 
@@ -19,6 +20,7 @@ module.exports = {
       term: term
     });
   },
+
   login: function (jwt) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.LOGIN,
@@ -30,5 +32,13 @@ module.exports = {
       actionType: ActionTypes.LOGIN,
       jwt: jwt  
     });
+
+  getHomeContent: function (type) {
+    API.getHomeContent(type, function (data) {
+      WikiPoetryDispatcher.dispatch({
+        actionType: ActionTypes.GET_HOME,
+        content: data
+      });
+    }.bind(this));
   }
 }

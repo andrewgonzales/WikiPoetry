@@ -7,5 +7,6 @@ module.exports = {
     PICK_TYPE: null,
     SUBMIT_SEARCH: null,
     LOGIN: null
+    GET_HOME: null
   })
 };

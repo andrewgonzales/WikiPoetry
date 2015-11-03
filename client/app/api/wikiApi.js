@@ -20,7 +20,7 @@ exports.getArticlePage = function (type, term, callback) {
   });
 };
 
-exports.getHomePage = function (type, callback) {
+exports.getHomeContent = function (type, callback) {
   $.ajax({
     url: '/api/rnn/home',
     type: 'GET',
