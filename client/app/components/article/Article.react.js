@@ -17,8 +17,7 @@ var Article = React.createClass({
   getInitialState: function () {
     return {
       term: getSearchTerm(),
-      type: WikiPoetryStore.getType(),
-      poem: ''
+      type: WikiPoetryStore.getType()
     }
   },
 

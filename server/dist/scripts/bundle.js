@@ -193,8 +193,7 @@ var Article = React.createClass({displayName: "Article",
   getInitialState: function () {
     return {
       term: getSearchTerm(),
-      type: WikiPoetryStore.getType(),
-      poem: ''
+      type: WikiPoetryStore.getType()
     }
   },
 
@@ -294,7 +293,7 @@ var ArticleIntro = React.createClass({displayName: "ArticleIntro",
       subContent: ''
     });
 
-    API.getArticle({type: nextProps.type, term: getSearchTerm().term}, function (data) {
+    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
       this.setState({
         subContent: data.poem,
         replaced: data.replaced
@@ -350,7 +349,7 @@ var ArticleSubsection = React.createClass({displayName: "ArticleSubsection",
       subContent: ''
     });
 
-    API.getArticle({type: nextProps.type, term: getSearchTerm().term}, function (data) {
+    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
       this.setState({
         subContent: data.poem,
         replaced: data.replaced
@@ -697,6 +696,7 @@ var HomeContent = React.createClass({displayName: "HomeContent",
   },
 
   _onChange: function() {
+    console.log('homeContent');
     this.setState(getHomeState());
     API.getHomePage(WikiPoetryStore.getType(), function (data) {
       this.setState(data);

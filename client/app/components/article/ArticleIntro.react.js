@@ -33,7 +33,7 @@ var ArticleIntro = React.createClass({
       subContent: ''
     });
 
-    API.getArticle({type: nextProps.type, term: getSearchTerm().term}, function (data) {
+    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
       this.setState({
         subContent: data.poem,
         replaced: data.replaced
