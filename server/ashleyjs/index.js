@@ -210,6 +210,7 @@ var getWikiKeywords = function(text, searchTerm) {
 
 var getPicture = function(cb) {
   var image = $(".infobox img").attr('src') || $(".thumb.tright .thumbinner a img").attr('src') || $("tr td a img").attr('src');
+  image = image || '//upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Shakespeare.jpg/250px-Shakespeare.jpg';
   cb(image.slice(2));
 }
 
