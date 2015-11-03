@@ -3,6 +3,7 @@ var API = require('../../api/wikiApi');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var ReactRouter = require('react-router');
+var Edit = require('../edit/Edit.react');
 
 function getArticleContent() {
   return WikiPoetryStore.getArticle();
@@ -63,7 +64,10 @@ var ArticleSubsection = React.createClass({
     return (
       <div className="subsection">
         <div className="input">{this.props.error}</div>
-        <h4 className="subheading">{this.props.subheading}</h4>
+        <h4 className="subheading">
+          {this.props.subheading}
+          <Edit/>
+        </h4>
         <p className="subcontent">{linkedArticle}</p>
       </div>
     );
