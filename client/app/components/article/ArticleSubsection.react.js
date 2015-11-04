@@ -4,6 +4,10 @@ var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var ReactRouter = require('react-router');
 
+function getArticleContent() {
+  return WikiPoetryStore.getArticle();
+}
+
 var ArticleSubsection = React.createClass({
 
   mixins: [ReactRouter.History],
@@ -14,13 +18,18 @@ var ArticleSubsection = React.createClass({
     }
   },
 
+  componentDidMount: function () {
+    WikiPoetryStore.addArticleListener(this._onChange);
+  },
+
+  componentWillUnMount: function () {
+    WikiPoetryStore.removeArticleListener(this._onChange);
+  },
+
   handleClick: function (event, word) {
     event.preventDefault();
     WikiPoetryActionCreators.submitSearch(word);
-    API.getArticlePage(this.state.type, word, function (data) {
-      data.term = word;
-      this.history.pushState(data, '/Article/' + word, null );
-    }.bind(this));
+    WikiPoetryActionCreators.getArticleContent(this.state.type, word);
   },
 
   linkifyArticle: function (content, links) {
@@ -58,6 +67,12 @@ var ArticleSubsection = React.createClass({
         <p className="subcontent">{linkedArticle}</p>
       </div>
     );
+  },
+
+  _onChange: function () {
+    if (this.state.term) {
+      this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
+    }
   }
 });
 

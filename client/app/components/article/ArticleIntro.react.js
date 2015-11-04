@@ -10,6 +10,10 @@ function getSearchTerm () {
   }
 };
 
+function getArticleContent() {
+  return WikiPoetryStore.getArticle();
+}
+
 var ArticleIntro = React.createClass({
 
   mixins:[ReactRouter.History],
@@ -20,13 +24,18 @@ var ArticleIntro = React.createClass({
     }
   },
 
+  componentDidMount: function () {
+    WikiPoetryStore.addArticleListener(this._onChange);
+  },
+
+  componentWillUnMount: function () {
+    WikiPoetryStore.removeArticleListener(this._onChange);
+  },
+
   handleClick: function (event, word) {
     event.preventDefault();
     WikiPoetryActionCreators.submitSearch(word);
-    API.getArticlePage(this.state.type, word, function (data) {
-      data.term = word;
-      this.history.pushState(data, '/Article/' + word, null );
-    }.bind(this));
+    WikiPoetryActionCreators.getArticleContent(this.state.type, word);
   },
 
   linkifyArticle: function (content, links) {
@@ -59,6 +68,13 @@ var ArticleIntro = React.createClass({
         {linkedPoem}
       </p>
     );
+  },
+
+  _onChange: function () {
+    this.setState(getArticleContent());
+    if (this.state.term) {
+      this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
+    }
   }
 });
 
