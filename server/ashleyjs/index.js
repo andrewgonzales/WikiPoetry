@@ -227,7 +227,7 @@ var getArticle = function(searchTerm, cb) {
   var article = {
     headings: [],
     picture: '',
-    pictureCaption: predictSentence(model, true, sample_softmax_temperature, searchTerm)
+    pictureCaption: predictSentence(model, true, sample_softmax_temperature, searchTerm),
     text: ''
   };
   wiki.page.data(searchTerm, {content: true, redirects: true}, function(response) {
