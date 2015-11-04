@@ -10,6 +10,8 @@ var Home = require('./components/home/Home.react');
 var Article = require('./components/article/Article.react');
 var HowItWorks = require('./components/howitworks/HowItWorks.react');
 var AboutUs = require('./components/aboutus/AboutUs.react');
+var Login = require('./components/auth/Login.react');
+var Signup = require('./components/auth/Signup.react');
 
 var routes = (
   <Route path="/" component={WikiPoetryApp}>
@@ -17,6 +19,8 @@ var routes = (
     <Route path="Article/:term" component={Article} />
     <Route path="HowItWorks" component={HowItWorks} />
     <Route path="AboutUs" component={AboutUs} />
+    <Route path="Login" component={Login} />
+    <Route path="Signup" component={Signup} />
     <Redirect from="*" to="/" />
   </Route>
 );

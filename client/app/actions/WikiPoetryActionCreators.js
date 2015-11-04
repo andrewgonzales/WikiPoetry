@@ -13,11 +13,22 @@ module.exports = {
       type: value
     });
   },
-
   submitSearch: function (term) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.SUBMIT_SEARCH,
       term: term
+    });
+  },
+  login: function (jwt) {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.LOGIN,
+      jwt: jwt  
+    });
+  },
+  signup: function (jwt) {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.LOGIN,
+      jwt: jwt  
     });
   }
 }

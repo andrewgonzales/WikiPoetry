@@ -5,6 +5,7 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 var SUBMIT_EVENT = 'submitted';
+var LOGIN_EVENT = 'login';
 //Default type to shakespeare when page loads
 var _type = 'keats';
 var _home = {};
@@ -18,8 +19,6 @@ function newType (type) {
 function newTerm (term) {
   _term = term;
 }
-
-
 
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
@@ -62,7 +61,7 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(SUBMIT_EVENT, callback);
   }
-})
+});
 
 WikiPoetryDispatcher.register(function (action) {
   switch(action.actionType) {
@@ -79,5 +78,4 @@ WikiPoetryDispatcher.register(function (action) {
     default: 
   }
 })
-
 module.exports = WikiPoetryStore;
