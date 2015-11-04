@@ -20,7 +20,8 @@ module.exports.login = function (req, res, next) {
   User.findOne({username: user}, function (err, person) {
     if(err) {
       console.log(err);
-    } else if(person) { 
+    } else if(person
+      ) { 
       bcrypt.compare(pass, person.hash, function(err, result) {
         // compare person.hash with our password 
         console.log('on bcrypt compare');

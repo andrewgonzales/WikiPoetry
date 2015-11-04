@@ -23,7 +23,6 @@ var Login = React.createClass({
       // put jwt in localStorage
       window.localStorage.setItem('user', jwt);
       // redirect to homepage
-      console.log(this);
       this.history.pushState(null, '/', null );
       // call login actions 
       WikiPoetryActionCreators.login(jwt);
