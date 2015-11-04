@@ -57,8 +57,14 @@ var ArticleSubsection = React.createClass({
     var content = this.props.poem ? this.props.poem.poem : 'Please wait';
     var links = this.props.poem ? this.props.poem.replaced : [];
     var linkedArticle;
-    if (content) {
+    var editArticle;
+    var editable = this.state.editable;
+    if (content && !editable) {
       linkedArticle = this.linkifyArticle(content, links);
+    }
+
+    if (editable) {
+      editArticle = <textarea name="userPoem" placeholder={content}></textarea>
     }
 
     return (
@@ -69,6 +75,7 @@ var ArticleSubsection = React.createClass({
           <Edit/>
         </h4>
         <p className="subcontent">{linkedArticle}</p>
+        <div>{editArticle}</div>
       </div>
     );
   },

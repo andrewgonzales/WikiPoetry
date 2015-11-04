@@ -20,6 +20,8 @@ var Cartridge = React.createClass({
           <label htmlFor="johnMilton" name="cartridge">John Milton</label>
         <input type="radio" name="cartridge" value="beatles" id="beatles" onChange={this._onCartridgeChange}/>
           <label htmlFor="beatles" name="cartridge">Beatles</label>
+        <input type="radio" name="cartridge" value="user" id="user" onChange={this._onCartridgeChange}/>
+          <label htmlFor="user" name="cartridge">User</label>
       </form>
     );
   },
