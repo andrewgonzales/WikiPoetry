@@ -19,9 +19,16 @@ module.exports = {
       term: term
     });
   },
-  login: function (user, pass) {
-    actionType: ActionTypes.LOGIN,
-    username: user, 
-    password: pass
+  login: function (jwt) {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.LOGIN,
+      jwt: jwt  
+    });
+  },
+  signup: function (jwt) {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.LOGIN,
+      jwt: jwt  
+    });
   }
 }

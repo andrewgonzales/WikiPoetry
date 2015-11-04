@@ -3,7 +3,7 @@ var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators')
 var ReactRouter = require('react-router');
 var API = require('./../../api/login');
 
-var Login = React.createClass({
+var Signup = React.createClass({
   mixins: [ReactRouter.History],
 
   getInitialState: function() {
@@ -19,20 +19,20 @@ var Login = React.createClass({
     e.preventDefault();
     // make password into hash 
     // call action creators
-    API.login({user: this.state.user, pass: this.state.pass}, function(jwt) {
+    API.signup({user: this.state.user, pass: this.state.pass}, function(jwt) {
       // put jwt in localStorage
       window.localStorage.setItem('user', jwt);
       // redirect to homepage
-      console.log(this);
       this.history.pushState(null, '/', null );
       // call login actions 
-      WikiPoetryActionCreators.login(jwt);
+      WikiPoetryActionCreators.signup(jwt);
     }.bind(this)); 
   },
+
   render: function () {
     return (
-      <div class="login">
-        <h1>Login</h1>
+      <div class="signup">
+        <h1>Become a Poet</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
             <input onChange={this.onChangeUser} value={this.state.user} type="text" name="login" placeholder="Username or Email"></input>
@@ -40,11 +40,11 @@ var Login = React.createClass({
           <p>
             <input onChange={this.onChangePass} type="password" name="password" value={this.state.pass} placeholder="Password"></input>
           </p>
-          <p class="submit"><input type="submit" name="commit" value="Login"></input></p>
+          <p class="submit"><input type="submit" name="commit" value="Signup"></input></p>
         </form>
       </div>
     );
   }
 });
 
-module.exports = Login;
+module.exports = Signup;
