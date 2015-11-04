@@ -179,7 +179,7 @@ var getWikiKeywords = function(text, searchTerm) {
   var searchWords = searchTerm.split(' ');
   for(var key in rawWordList){
     //delete filler words and rare words
-    if (key.length < 5 || rawWordList[key] < threshold || searchWords.indexOf(key.toLowerCase()) !== -1){
+    if (key.length < 5 || rawWordList[key] < threshold || searchWords.indexOf(key.toLowerCase()) !== -1 || key.indexOf('disambiguation') !== -1 || key.indexOf('article') !== -1){
       delete rawWordList[key];
     } else {
       //sort by frequency
@@ -210,6 +210,7 @@ var getWikiKeywords = function(text, searchTerm) {
 
 var getPicture = function(cb) {
   var image = $(".infobox img").attr('src') || $(".thumb.tright .thumbinner a img").attr('src') || $("tr td a img").attr('src');
+  image = image || '//upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Shakespeare.jpg/250px-Shakespeare.jpg';
   cb(image.slice(2));
 }
 
@@ -333,7 +334,6 @@ var getPoem = function (type, searchTerm, cb) {
     }
     // get keywords from wikipedia page
     wikiKeywords = getWikiKeywords(text, searchTerm);
-
     // load model of requested type
     loadType(type); 
     // ask Ashley for a sentence
