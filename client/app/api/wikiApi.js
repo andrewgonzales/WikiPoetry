@@ -6,10 +6,14 @@ exports.getArticlePage = function (type, term, callback) {
     type: 'GET',
     data: {type: type, term: term},
     success: function(data) {
-      exports.getArticle({type: type, term: term, amount: data.headings.length + 1}, function (poemData) {
-        data.poemData = poemData;
+      if (data.text) {
         callback(data);
-      })
+      } else {
+        exports.getArticle({type: type, term: term, amount: data.headings.length + 1}, function (poemData) {
+          data.poemData = poemData;
+          callback(data);
+        });
+      }
     },
     error: function(xhr, status, err) {
       console.log(status) ;
@@ -49,7 +53,7 @@ exports.getArticle = function (json, callback) {
     error: function(xhr, status, err) {
       console.log(status) ;
       console.log(err.toString());
-      console.log(xhr)
+      console.log(xhr);
     }
   });
 };

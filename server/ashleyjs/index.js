@@ -228,16 +228,22 @@ var getArticle = function(searchTerm, cb) {
     headings: [],
     picture: '',
     pictureCaption: predictSentence(model, true, sample_softmax_temperature, searchTerm)
+    text: ''
   };
-  wiki.page.data(searchTerm, {content: true}, function(response) {
-    $ = cheerio.load(response.text['*']);
-    getHeaders(function(headings) {
-      article.headings = headings;
-      getPicture(function(picture) {
-        article.picture = picture;
-        cb(article);
+  wiki.page.data(searchTerm, {content: true, redirects: true}, function(response) {
+    if (response === undefined) {
+      article.text = 'Page "' + searchTerm + '" does not exist.'
+      cb(article);
+    } else {
+      $ = cheerio.load(response.text['*']);
+      getHeaders(function(headings) {
+        article.headings = headings;
+        getPicture(function(picture) {
+          article.picture = picture;
+          cb(article);
+        });
       });
-    });
+    }
   });
 };
 
