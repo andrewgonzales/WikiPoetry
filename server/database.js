@@ -1,13 +1,16 @@
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/wikipoetry');
-// create user schema
-var userSchema = new mongoose.Schema({
-  username: 'string',
-  hash: 'string',
-  email: 'string',
-  firstName: 'string',
-  lastName: 'string'
+mongoURI = process.env.CUSTOMCONNSTR_MONGOLAB_URI || 'mongodb://localhost/wikipoetry';
+mongoose.connect(mongoURI);
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+ console.log('Mongodb connection open');
 });
 
-var User = mongoose.model('User', userSchema);
+// User.login = function(user, pass, cb) {
+//   mongoose 
+// };
+
+module.exports = db;
