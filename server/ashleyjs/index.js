@@ -227,7 +227,8 @@ var getArticle = function(searchTerm, cb) {
   // get picture and 3 subheadings of article 
   var article = {
     headings: [],
-    picture: ''
+    picture: '',
+    pictureCaption: predictSentence(model, true, sample_softmax_temperature, searchTerm)
   };
   wiki.page.data(searchTerm, {content: true}, function(response) {
     $ = cheerio.load(response.text['*']);

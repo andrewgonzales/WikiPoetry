@@ -36,7 +36,7 @@ var Article = React.createClass({
       <div className="ten columns" id="article">
         <div className="article-container">
           <h3 className="article-title">{newInfo.term}</h3>
-          <ArticleImage picture={newInfo.picture} />
+          <ArticleImage picture={newInfo.picture} pictureCaption={newInfo.pictureCaption}/>
           <ArticleIntro term={newInfo.term} type={articleType}/>
           {newInfo.headings.map(function (heading, i) {
             return (
