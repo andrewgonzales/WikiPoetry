@@ -26,6 +26,20 @@ var ArticleSubsection = React.createClass({
 
   componentWillUnMount: function () {
     WikiPoetryStore.removeArticleListener(this._onChange);
+    //set up listener
+    WikiPoetryStore.addEditListener(this._onEdit);
+  },
+
+  componentWillUnmount: function () {
+    WikiPoetryStore.removeEditListener(this._onEdit);
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    //To erase page before AJAX request enters new poem
+    
+    this.setState({
+      subContent: ''
+    });
   },
 
   handleClick: function (event, word) {
@@ -33,12 +47,6 @@ var ArticleSubsection = React.createClass({
     WikiPoetryActionCreators.submitSearch(word);
     WikiPoetryActionCreators.getArticleContent(this.state.type, word);
   },
-
-  // editArticle: function () {
-  //   console.log('edit');
-  //   // event.preventDefault();
-  //   this.setState({editing: !this.state.editing});
-  // },
 
   linkifyArticle: function (content, links) {
     var words = content.split(' ');
@@ -66,16 +74,15 @@ var ArticleSubsection = React.createClass({
     var linkedArticle;
     var userText;
     var button;
-    var editing = this.state.editMode;
+    var editing = this.state.editMode.editing;
     if (content && !editing) {
       linkedArticle = this.linkifyArticle(content, links);
     }
-
     if (editing) {
       userText = <textarea name="userPoem" placeholder={content}></textarea>
       button = <Save/>
     } else {
-      button = <Edit/>
+      button = <Edit keyIndex={this.props.keyIndex}/>
     }
 
     return (
@@ -94,6 +101,12 @@ var ArticleSubsection = React.createClass({
   _onChange: function () {
     if (this.state.term) {
       this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
+
+  _onEdit: function () {
+    if (this.state.editMode.key === this.props.keyIndex) {
+      this.setState({
+        editMode: WikiPoetryStore.getMode()
+      });
     }
   }
 });

@@ -34,10 +34,13 @@ module.exports = {
       actionType: ActionTypes.LOGIN,
       jwt: jwt  
 
-  editMode: function (bool) {
+  editMode: function (bool, key) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.EDIT_SECTION,
-      mode: bool
+      mode: {
+        editing: bool,
+        key: key
+      }
     });
   },
 

@@ -7,13 +7,17 @@ var CHANGE_EVENT = 'change';
 var SUBMIT_EVENT = 'submitted';
 var LOGIN_EVENT = 'login';
 var ARTICLE_EVENT = 'article change';
+var EDIT_EVENT = 'edit';
 //Default type to shakespeare when page loads
 var _type = 'keats';
 var _home = {};
 var _article = {};
 var _term = '';
 var _poems = [];
-var _editMode = false;
+var _editMode = {
+  editing: false,
+  key: ''
+};
 
 function newType (type) {
   _type = type;
@@ -39,8 +43,9 @@ function newPoem (poem) {
 function clearPoems () {
   _poems = [];
 
-function newMode (bool) {
-  _editMode = bool;
+function newMode (editObj) {
+  _editMode.editing = editObj.editing;
+  _editMode.key = editObj.key;
 }
 
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
@@ -61,25 +66,26 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _term;
   },
 
-<<<<<<< HEAD
   getPoems: function () {
     return _poems;
-=======
+
   getMode: function () {
     return _editMode;
->>>>>>> (feat) Adds textarea when edit button clicked
   },
 
-  emitChange: function() {
+  emitChange: function () {
     this.emit(CHANGE_EVENT);
   },
 
-  emitSubmit: function() {
+  emitSubmit: function () {
     this.emit(SUBMIT_EVENT);
   },
 
   emitArticleChange: function() {
     this.emit(ARTICLE_EVENT);
+
+  emitEdit: function () {
+    this.emit(EDIT_EVENT);
   },
 
   addChangeListener: function (callback) {
@@ -104,6 +110,13 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   removeArticleListener: function (callback) {
     this.removeListener(ARTICLE_EVENT, callback);
+
+  addEditListener: function (callback) {
+    this.on(EDIT_EVENT, callback);
+  },
+
+  removeEditListener: function(callback) {
+    this.removeListener(EDIT_EVENT, callback);
   }
 });
 
@@ -139,7 +152,7 @@ WikiPoetryDispatcher.register(function (action) {
 
     case WikiConstants.ActionTypes.EDIT_SECTION:
       newMode(action.mode);
-      WikiPoetryStore.emitChange();
+      WikiPoetryStore.emitEdit();
       break;
 
     default: 

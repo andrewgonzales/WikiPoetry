@@ -53,9 +53,15 @@ var Article = React.createClass({
             return (
               <ArticleSubsection
                 key={'heading' + i}
+<<<<<<< HEAD
                 subheading={heading}
                 poem={newInfo.poemData[i + 1]}
                 term={newInfo.term}
+=======
+                keyIndex={'subsection' + i}
+                subheading={heading} 
+                term={newInfo.term} 
+>>>>>>> (feat) Targets edit button click event to parent component
                 type={articleType}/>
             );
           })}

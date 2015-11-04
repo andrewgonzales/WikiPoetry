@@ -16,9 +16,8 @@ var Edit = React.createClass({
   editArticle: function () {
     event.preventDefault();
     this.setState({editMode: !this.state.editMode});
-    console.log('editMode: ', this.state.editMode);
     //call action creator
-    WikiPoetryActionCreators.editMode(this.state.editMode);
+    WikiPoetryActionCreators.editMode(this.state.editMode, this.props.keyIndex);
   },
 
   render: function () {
@@ -28,13 +27,6 @@ var Edit = React.createClass({
       </div>
     );
   }, 
-
-   _onSubmit: function(event) {
-    event.preventDefault();
-    //TODO
-    //WikiPoetryActionCreators.edit
-  },
-
 
 });
 
