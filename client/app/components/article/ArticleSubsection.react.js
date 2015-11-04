@@ -4,6 +4,7 @@ var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var ReactRouter = require('react-router');
 var Edit = require('../edit/Edit.react');
+var Save = require('../edit/Save.react');
 
 function getArticleContent() {
   return WikiPoetryStore.getArticle();
@@ -33,6 +34,12 @@ var ArticleSubsection = React.createClass({
     WikiPoetryActionCreators.getArticleContent(this.state.type, word);
   },
 
+  // editArticle: function () {
+  //   console.log('edit');
+  //   // event.preventDefault();
+  //   this.setState({editing: !this.state.editing});
+  // },
+
   linkifyArticle: function (content, links) {
     var words = content.split(' ');
     var index;
@@ -57,14 +64,18 @@ var ArticleSubsection = React.createClass({
     var content = this.props.poem ? this.props.poem.poem : 'Please wait';
     var links = this.props.poem ? this.props.poem.replaced : [];
     var linkedArticle;
-    var editArticle;
-    var editable = this.state.editable;
-    if (content && !editable) {
+    var userText;
+    var button;
+    var editing = this.state.editMode;
+    if (content && !editing) {
       linkedArticle = this.linkifyArticle(content, links);
     }
 
-    if (editable) {
-      editArticle = <textarea name="userPoem" placeholder={content}></textarea>
+    if (editing) {
+      userText = <textarea name="userPoem" placeholder={content}></textarea>
+      button = <Save/>
+    } else {
+      button = <Edit/>
     }
 
     return (
@@ -72,10 +83,10 @@ var ArticleSubsection = React.createClass({
         <div className="input">{this.props.error}</div>
         <h4 className="subheading">
           {this.props.subheading}
-          <Edit/>
+          {button}
         </h4>
         <p className="subcontent">{linkedArticle}</p>
-        <div>{editArticle}</div>
+        <div>{userText}</div>
       </div>
     );
   },
@@ -88,3 +99,4 @@ var ArticleSubsection = React.createClass({
 });
 
 module.exports = ArticleSubsection;
+

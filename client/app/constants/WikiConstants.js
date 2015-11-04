@@ -10,5 +10,6 @@ module.exports = {
     GET_HOME: null,
     GET_ARTICLE: null,
     GET_POEMS: null
+    EDIT_SECTION: null
   })
 };

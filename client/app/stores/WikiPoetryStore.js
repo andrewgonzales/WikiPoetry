@@ -13,6 +13,7 @@ var _home = {};
 var _article = {};
 var _term = '';
 var _poems = [];
+var _editMode = false;
 
 function newType (type) {
   _type = type;
@@ -37,6 +38,9 @@ function newPoem (poem) {
 
 function clearPoems () {
   _poems = [];
+
+function newMode (bool) {
+  _editMode = bool;
 }
 
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
@@ -57,8 +61,13 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _term;
   },
 
+<<<<<<< HEAD
   getPoems: function () {
     return _poems;
+=======
+  getMode: function () {
+    return _editMode;
+>>>>>>> (feat) Adds textarea when edit button clicked
   },
 
   emitChange: function() {
@@ -127,6 +136,11 @@ WikiPoetryDispatcher.register(function (action) {
 
     case WikiConstants.ActionTypes.CLEAR_POEMS:
       clearPoems();
+
+    case WikiConstants.ActionTypes.EDIT_SECTION:
+      newMode(action.mode);
+      WikiPoetryStore.emitChange();
+      break;
 
     default: 
   }

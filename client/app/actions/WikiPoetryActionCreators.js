@@ -31,6 +31,13 @@ module.exports = {
   logout: function () {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.LOGOUT
+      actionType: ActionTypes.LOGIN,
+      jwt: jwt  
+
+  editMode: function (bool) {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.EDIT_SECTION,
+      mode: bool
     });
   },
 
