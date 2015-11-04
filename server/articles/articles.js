@@ -45,13 +45,13 @@ module.exports.save = function (req, res, next) {
       text: req.body.fourth.text
     }
   };
-    // check if person is in database 
-  Articles.findOne({first: {title: user}}, function (err, result) {
+    // check if article is in database 
+  Articles.findOne({first: {title: article.first.title}}, function (err, result) {
     if(err) {
       console.log(err);
     } else if(result) { 
       // article found, update it 
-      Articles.update({first: {title: result.first.title}}, article, function (err, result) {
+      Articles.update({first: {title: article.first.title}}, article, function (err, result) {
         if(result) {
           res.send('updated');
         } else if(err) {
