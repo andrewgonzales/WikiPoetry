@@ -6,9 +6,8 @@ exports.getArticlePage = function (type, term, callback) {
     type: 'GET',
     data: {type: type, term: term},
     success: function(data) {
-      exports.getArticle({type: type, term: term}, function (articleData) {
-        data.poem = articleData.poem;
-        data.replaced = articleData.replaced;
+      exports.getArticle({type: type, term: term, amount: data.headings.length + 1}, function (poemData) {
+        data.poemData = poemData;
         callback(data);
       })
     },
@@ -27,7 +26,7 @@ exports.getHomeContent = function (type, callback) {
     data: {type: type},
     success: function(data) {
       exports.getArticle({type: type, term: data.featured.link}, function(articleData) {
-        data.featured.text = articleData.poem;
+        data.featured.text = articleData[0].poem;
         callback(data);
       });
     },

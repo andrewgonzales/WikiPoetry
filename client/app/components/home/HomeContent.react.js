@@ -10,6 +10,7 @@ var API = require('./../../api/wikiApi');
 function getHomeState() {
   return {
     type: WikiPoetryStore.getType(),
+    term: WikiPoetryStore.getTerm(),
     featured: {
       link: [],
       picture: '',

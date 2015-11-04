@@ -11,33 +11,7 @@ var ArticleSubsection = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      subContent: '',
-      replaced: []
     }
-  },
-
-  componentDidMount: function () {
-    API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this)); 
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    //To erase page before AJAX request enters new poem
-    
-    this.setState({
-      subContent: ''
-    });
-
-    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this));
   },
 
   handleClick: function (event, word) {
@@ -70,8 +44,8 @@ var ArticleSubsection = React.createClass({
   },
 
   render: function () {
-    var content = this.state.subContent;
-    var links = this.state.replaced;
+    var content = this.props.poem ? this.props.poem.poem : 'Please wait';
+    var links = this.props.poem ? this.props.poem.replaced : [];
     var linkedArticle;
     if (content) {
       linkedArticle = this.linkifyArticle(content, links);
@@ -84,7 +58,7 @@ var ArticleSubsection = React.createClass({
         <p className="subcontent">{linkedArticle}</p>
       </div>
     );
-  },
+  }
 });
 
 module.exports = ArticleSubsection;

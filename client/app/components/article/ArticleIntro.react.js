@@ -17,32 +17,7 @@ var ArticleIntro = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      subContent: '',
-      replaced: []
     }
-  },
-
-  componentDidMount: function () {
-    API.getArticle({type: this.props.type, term: this.props.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this)); 
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    //To erase page before AJAX request enters new poem
-    this.setState({
-      subContent: ''
-    });
-
-    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this));
   },
 
   handleClick: function (event, word) {
@@ -75,8 +50,8 @@ var ArticleIntro = React.createClass({
   },
 
   render: function () {
-    var content = this.state.subContent;
-    var links = this.state.replaced;
+    var content = this.props.poem;
+    var links = this.props.links;
     var linkedPoem = this.linkifyArticle(content, links);
 
     return (

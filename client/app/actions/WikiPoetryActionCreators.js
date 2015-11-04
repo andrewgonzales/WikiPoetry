@@ -42,13 +42,30 @@ module.exports = {
     });
   },
 
-  getArticleContent: function (type, term, cb) {
+  getArticleContent: function (type, term) {
     API.getArticlePage(type, term, function (data) {
+      data.term = term;
       WikiPoetryDispatcher.dispatch({
         actionType: ActionTypes.GET_ARTICLE,
         content: data
       });
     });
-    cb;
+  },
+
+  getNewPoems: function(type, term, amount) {
+    var params = {type: type, term: term, amount: amount};
+    API.getArticle(params, function (poemData) {
+      console.log('POEMDATA', poemData);
+      WikiPoetryDispatcher.dispatch({
+        actionType: ActionTypes.GET_POEMS,
+        content: poemData
+      });
+    });
+  },
+
+  clearPoems: function() {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.CLEAR_POEM
+    });
   }
 }

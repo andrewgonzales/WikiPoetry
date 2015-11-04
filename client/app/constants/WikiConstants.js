@@ -9,5 +9,6 @@ module.exports = {
     LOGIN: null
     GET_HOME: null
     GET_ARTICLE: null
+    GET_POEMS: null
   })
 };

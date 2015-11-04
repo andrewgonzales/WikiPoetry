@@ -10,7 +10,12 @@ var ArticleSubsection = require('../article/ArticleSubsection.react');
 function getSearchState() {
   return {
     type: WikiPoetryStore.getType(),
+    term: WikiPoetryStore.getTerm()
   }
+}
+
+function getArticleContent() {
+  return WikiPoetryStore.getArticle();
 }
 
 var Search = React.createClass({
@@ -22,10 +27,12 @@ var Search = React.createClass({
 
   componentDidMount: function() {
     WikiPoetryStore.addChangeListener(this._onChange);
+    WikiPoetryStore.addArticleListener(this._onArticleChange);
   },
 
   componentWillUnmount: function() {
     WikiPoetryStore.removeChangeListener(this._onChange);
+    WikiPoetryStore.removeArticleListener(this._onArticleChange);
   },
 
   render: function () {
@@ -40,21 +47,25 @@ var Search = React.createClass({
   _onSubmit: function(event) {
     event.preventDefault();
     var search = this.refs.search.value.trim();
-    //Send value to server before erasing it!
-    API.getArticlePage(this.state.type, search, function (data) {
-      data.term = search;
-      this.history.pushState(data, '/Article/' + search, null );
-    }.bind(this));
     
+    //Send value to server before erasing it!
     WikiPoetryActionCreators.submitSearch(search);
+    WikiPoetryActionCreators.getArticleContent(this.state.type, search);
 
     this.refs.search.value = '';
+  },
+
+  _onArticleChange: function () {
+    this.setState(getArticleContent());
+    this.setState(getSearchState());
+    if (this.state.term) {
+      this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
+    }
   },
 
   _onChange: function(event) {
     this.setState(getSearchState());
   }
-
 });
 
 module.exports = Search;
