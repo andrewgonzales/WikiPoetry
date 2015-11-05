@@ -7,6 +7,7 @@ var ArticleSubsection = require('./ArticleSubsection.react');
 var ArticleImage = require('./ArticleImage.react');
 var ArticleIntro = require('./ArticleIntro.react');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
+var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var API = require('../../api/wikiApi');
 
 var Article = React.createClass({
@@ -15,8 +16,8 @@ var Article = React.createClass({
 
   getInitialState: function () {
     return {
-      term: WikiPoetryStore.getTerm(),
-      type: WikiPoetryStore.getType()
+      type: WikiPoetryStore.getType(),
+      poems: WikiPoetryStore.getPoems()
     }
   },
 
@@ -31,19 +32,20 @@ var Article = React.createClass({
   render: function () {
     var newInfo = this.props.location.state;
     var articleType = this.state.type;
-    
+    var poems = this.state.poems[0] ? this.state.poems : [{poem: 'Please wait'}];
     return (
       <div className="ten columns" id="article">
         <div className="article-container">
-          <h3 className="article-title">{newInfo.term}</h3>
-          <ArticleImage picture={newInfo.picture} pictureCaption={newInfo.pictureCaption}/>
-          <ArticleIntro term={newInfo.term} type={articleType}/>
+          <h3 className="article-title">{this.props.location.state.term}</h3>
+          <ArticleImage picture={newInfo.picture}  pictureCaption={newInfo.pictureCaption} />
+          <ArticleIntro poem={newInfo.poemData[0].poem} links={newInfo.poemData[0].replaced } type={articleType} />
           {newInfo.headings.map(function (heading, i) {
             return (
               <ArticleSubsection
                 key={'heading' + i}
-                subheading={heading} 
-                term={newInfo.term} 
+                subheading={heading}
+                poem={newInfo.poemData[i + 1]}
+                term={newInfo.term}
                 type={articleType}/>
             );
           })}
@@ -54,8 +56,10 @@ var Article = React.createClass({
 
   _onChange: function () {
     this.setState({
-      type: WikiPoetryStore.getType()
-    })
+      type: WikiPoetryStore.getType(),
+      term: WikiPoetryStore.getTerm(),
+      poems: WikiPoetryStore.getPoems()
+    });
   }
 });
 

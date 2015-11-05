@@ -10,6 +10,10 @@ function getSearchTerm () {
   }
 };
 
+function getArticleContent() {
+  return WikiPoetryStore.getArticle();
+}
+
 var ArticleIntro = React.createClass({
 
   mixins:[ReactRouter.History],
@@ -17,41 +21,21 @@ var ArticleIntro = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      subContent: '',
-      replaced: []
     }
   },
 
   componentDidMount: function () {
-    API.getArticle({type: this.props.type, term: this.props.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this)); 
+    WikiPoetryStore.addArticleListener(this._onChange);
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    //To erase page before AJAX request enters new poem
-    this.setState({
-      subContent: ''
-    });
-
-    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this));
+  componentWillUnMount: function () {
+    WikiPoetryStore.removeArticleListener(this._onChange);
   },
 
   handleClick: function (event, word) {
     event.preventDefault();
     WikiPoetryActionCreators.submitSearch(word);
-    API.getArticlePage(this.state.type, word, function (data) {
-      data.term = word;
-      this.history.pushState(data, '/Article/' + word, null );
-    }.bind(this));
+    WikiPoetryActionCreators.getArticleContent(this.state.type, word);
   },
 
   linkifyArticle: function (content, links) {
@@ -75,8 +59,8 @@ var ArticleIntro = React.createClass({
   },
 
   render: function () {
-    var content = this.state.subContent;
-    var links = this.state.replaced;
+    var content = this.props.poem;
+    var links = this.props.links;
     var linkedPoem = this.linkifyArticle(content, links);
 
     return (
@@ -84,6 +68,13 @@ var ArticleIntro = React.createClass({
         {linkedPoem}
       </p>
     );
+  },
+
+  _onChange: function () {
+    this.setState(getArticleContent());
+    if (this.state.term) {
+      this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
+    }
   }
 });
 

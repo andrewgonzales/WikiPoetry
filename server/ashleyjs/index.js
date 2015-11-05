@@ -174,7 +174,6 @@ var getWikiKeywords = function(text, searchTerm) {
     array[i] = array[j];
     array[j] = temp;
   }
-
   var searchLower = searchTerm.toLowerCase();
   var searchWords = searchTerm.split(' ');
   for(var key in rawWordList){

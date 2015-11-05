@@ -1,4 +1,5 @@
 var React = require('react');
+var WikiPoetryActionCreators = require('./../../actions/WikiPoetryActionCreators')
 var Featured = require('./Featured.react');
 var InTheNews = require('./InTheNews.react');
 var DidYouKnow = require('./DidYouKnow.react');
@@ -9,6 +10,7 @@ var API = require('./../../api/wikiApi');
 function getHomeState() {
   return {
     type: WikiPoetryStore.getType(),
+    term: WikiPoetryStore.getTerm(),
     featured: {
       link: [],
       picture: '',
@@ -45,13 +47,17 @@ var HomeContent = React.createClass({
   //Let components render first then perform AJAX request
   componentDidMount: function () {
     WikiPoetryStore.addChangeListener(this._onChange);
-    API.getHomePage(this.state.type, function (data) {
-      this.setState(data);
-    }.bind(this));
+    WikiPoetryActionCreators.getHomeContent(this.state.type);
   },
 
   componentWillUnmount: function() {
     WikiPoetryStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function() {
+    this.setState(getHomeState());
+    var homeContent = WikiPoetryStore.getHome();
+    this.setState(homeContent);
   },
 
   render: function () {
@@ -87,13 +93,6 @@ var HomeContent = React.createClass({
         </section>
       </div>
     );
-  },
-
-  _onChange: function() {
-    this.setState(getHomeState());
-    API.getHomePage(WikiPoetryStore.getType(), function (data) {
-      this.setState(data);
-    }.bind(this));
   }
 });
 

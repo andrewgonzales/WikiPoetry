@@ -4,6 +4,10 @@ var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var ReactRouter = require('react-router');
 
+function getArticleContent() {
+  return WikiPoetryStore.getArticle();
+}
+
 var ArticleSubsection = React.createClass({
 
   mixins: [ReactRouter.History],
@@ -11,42 +15,21 @@ var ArticleSubsection = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      subContent: '',
-      replaced: []
     }
   },
 
   componentDidMount: function () {
-    API.getArticle({type: this.state.type, term: this.props.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this)); 
+    WikiPoetryStore.addArticleListener(this._onChange);
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    //To erase page before AJAX request enters new poem
-    
-    this.setState({
-      subContent: ''
-    });
-
-    API.getArticle({type: nextProps.type, term: nextProps.term}, function (data) {
-      this.setState({
-        subContent: data.poem,
-        replaced: data.replaced
-      });
-    }.bind(this));
+  componentWillUnMount: function () {
+    WikiPoetryStore.removeArticleListener(this._onChange);
   },
 
   handleClick: function (event, word) {
     event.preventDefault();
     WikiPoetryActionCreators.submitSearch(word);
-    API.getArticlePage(this.state.type, word, function (data) {
-      data.term = word;
-      this.history.pushState(data, '/Article/' + word, null );
-    }.bind(this));
+    WikiPoetryActionCreators.getArticleContent(this.state.type, word);
   },
 
   linkifyArticle: function (content, links) {
@@ -70,8 +53,8 @@ var ArticleSubsection = React.createClass({
   },
 
   render: function () {
-    var content = this.state.subContent;
-    var links = this.state.replaced;
+    var content = this.props.poem ? this.props.poem.poem : 'Please wait';
+    var links = this.props.poem ? this.props.poem.replaced : [];
     var linkedArticle;
     if (content) {
       linkedArticle = this.linkifyArticle(content, links);
@@ -85,6 +68,12 @@ var ArticleSubsection = React.createClass({
       </div>
     );
   },
+
+  _onChange: function () {
+    if (this.state.term) {
+      this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
+    }
+  }
 });
 
 module.exports = ArticleSubsection;
