@@ -71,7 +71,7 @@ var ArticleIntro = React.createClass({
   },
 
   _onChange: function () {
-    this.setState(getArticleContent());
+    // this.setState(getArticleContent());
     if (this.state.term) {
       this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
     }

@@ -42,6 +42,7 @@ function newPoem (poem) {
 
 function clearPoems () {
   _poems = [];
+}
 
 function newMode (editObj) {
   _editMode.editing = editObj.editing;
@@ -68,6 +69,7 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   getPoems: function () {
     return _poems;
+  },
 
   getMode: function () {
     return _editMode;
@@ -83,6 +85,7 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   emitArticleChange: function() {
     this.emit(ARTICLE_EVENT);
+  },
 
   emitEdit: function () {
     this.emit(EDIT_EVENT);
@@ -110,6 +113,7 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   removeArticleListener: function (callback) {
     this.removeListener(ARTICLE_EVENT, callback);
+  },
 
   addEditListener: function (callback) {
     this.on(EDIT_EVENT, callback);

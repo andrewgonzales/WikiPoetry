@@ -17,6 +17,11 @@ var ArticleSubsection = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
+      editMode: WikiPoetryStore.getMode()
+      // editMode: {
+      //   editing: false,
+      //   key: ''
+      // }
     }
   },
 
@@ -89,6 +94,8 @@ var ArticleSubsection = React.createClass({
   _onChange: function () {
     if (this.state.term) {
       this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
+    }
+  },
 
   _onEdit: function () {
     if (this.state.editMode.key === this.props.keyIndex) {
