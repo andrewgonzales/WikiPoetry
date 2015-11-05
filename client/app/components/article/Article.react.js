@@ -19,19 +19,28 @@ var Article = React.createClass({
     return {
       type: WikiPoetryStore.getType(),
       poems: WikiPoetryStore.getPoems(),
+      load: false
     }
   },
 
   componentDidMount: function () {
     WikiPoetryStore.addChangeListener(this._onChange);
+    WikiPoetryStore.addArticleListener(this._onArticleChange);
   },
 
   componentWillUnmount: function () {
     WikiPoetryStore.removeChangeListener(this._onChange);
+    WikiPoetryStore.removeArticleListener(this._onArticleChange);
+
   },
 
   handleClick: function (event) {
+    event.preventDefault();
+    WikiPoetryActionCreators.submitSearch(this.props.location.state.term);
     WikiPoetryActionCreators.getArticleContent(this.state.type, this.props.location.state.term);
+    this.setState({
+      load: true
+    });
   },
 
   render: function () {
@@ -39,6 +48,13 @@ var Article = React.createClass({
     var articleType = this.state.type;
     var poems = this.state.poems[0] ? this.state.poems : [{poem: 'Please wait'}];
     var articleIntro;
+    var loadGif;
+
+    if(this.state.load) {
+      loadGif = <img className="u-pull-left three columns" src="../images/loadingBar.gif" />
+    } else {
+      loadGif = <button onClick={this.handleClick}>Generate new poems</button>
+    }
 
     if (newInfo.text) {
       //Page does not exist
@@ -50,7 +66,7 @@ var Article = React.createClass({
     return (
       <div className="ten columns" id="article">
         <div className="article-container">
-          <button onClick={this.handleClick}>Create a new poem</button>
+          {loadGif}
           <h3 className="article-title">{this.props.location.state.term}</h3>
           <ArticleImage picture={newInfo.picture}  pictureCaption={newInfo.pictureCaption} />
           {articleIntro}
@@ -73,9 +89,15 @@ var Article = React.createClass({
     this.setState({
       type: WikiPoetryStore.getType(),
       term: WikiPoetryStore.getTerm(),
-      poems: WikiPoetryStore.getPoems()
+      poems: WikiPoetryStore.getPoems(),
     });
-  }
+  },
+
+  _onArticleChange: function () {
+    this.setState({
+      load: false
+    })
+  },
 });
 
 module.exports = Article;
