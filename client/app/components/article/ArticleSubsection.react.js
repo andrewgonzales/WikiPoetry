@@ -22,24 +22,12 @@ var ArticleSubsection = React.createClass({
 
   componentDidMount: function () {
     WikiPoetryStore.addArticleListener(this._onChange);
+    WikiPoetryStore.addEditListener(this._onEdit);
   },
 
   componentWillUnMount: function () {
     WikiPoetryStore.removeArticleListener(this._onChange);
-    //set up listener
-    WikiPoetryStore.addEditListener(this._onEdit);
-  },
-
-  componentWillUnmount: function () {
     WikiPoetryStore.removeEditListener(this._onEdit);
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    //To erase page before AJAX request enters new poem
-    
-    this.setState({
-      subContent: ''
-    });
   },
 
   handleClick: function (event, word) {
