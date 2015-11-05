@@ -36,6 +36,8 @@ WikiPoetryDispatcher.register(function (action) {
   console.log(action.actionType);
   switch(action.actionType) {
     case WikiConstants.ActionTypes.LOGIN:
+      console.log('are we in here?');
+      console.log(action.jwt);
       newLogin(jwt.decode(action.jwt, 'secret'), action.jwt);
       LoginStore.emitLogin();
       break;

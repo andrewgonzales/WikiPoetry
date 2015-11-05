@@ -24,7 +24,7 @@ var Login = React.createClass({
       // redirect to homepage
       this.history.pushState(null, '/', null);
       // call login actions 
-      WikiPoetryActionCreators.login(this.state.user, this.state.pass);
+      WikiPoetryActionCreators.login(jwt);
     }.bind(this));
   },
   render: function () {

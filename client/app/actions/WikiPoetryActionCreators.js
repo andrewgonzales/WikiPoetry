@@ -24,14 +24,14 @@ module.exports = {
   login: function (jwt) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.LOGIN,
-      jwt: jwt  
+      jwt: jwt
     });
   },
 
   signup: function (jwt) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.LOGIN,
-      jwt: jwt  
+      jwt: jwt
     });
   },
 
