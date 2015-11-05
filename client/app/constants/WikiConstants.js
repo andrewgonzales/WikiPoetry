@@ -6,9 +6,9 @@ module.exports = {
   ActionTypes: keyMirror({
     PICK_TYPE: null,
     SUBMIT_SEARCH: null,
-    LOGIN: null
-    GET_HOME: null
-    GET_ARTICLE: null
+    LOGIN: null,
+    GET_HOME: null,
+    GET_ARTICLE: null,
     GET_POEMS: null
   })
 };

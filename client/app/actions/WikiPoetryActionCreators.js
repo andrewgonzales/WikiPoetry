@@ -32,6 +32,7 @@ module.exports = {
       actionType: ActionTypes.LOGIN,
       jwt: jwt  
     });
+  },
 
   getHomeContent: function (type) {
     API.getHomeContent(type, function (data) {

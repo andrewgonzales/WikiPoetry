@@ -15,7 +15,6 @@ var Navbar = React.createClass({
         <ul>
           <li><Link to="/" activeClassName="link-active"><img src="images/wp_logo.jpg"/></Link></li>
           <li><Link to="/" activeClassName="link-active">Home</Link></li>
-          <li><Link to="/HowItWorks" activeClassName="link-active">How It Works</Link></li>
           <li><Link to="/AboutUs" activeClassName="link-active">About Us</Link></li>
           <li><Link to="/Login" activeClassName="link-active">Login</Link></li>
           <li><Link to="/Signup" activeClassName="link-active">Signup</Link></li>
