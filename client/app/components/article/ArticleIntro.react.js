@@ -4,6 +4,7 @@ var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var ReactRouter = require('react-router');
 
+
 function getSearchTerm () {
   return { 
     term: WikiPoetryStore.getTerm()
@@ -21,15 +22,18 @@ var ArticleIntro = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
+      editMode: WikiPoetryStore.getMode()
     }
   },
 
   componentDidMount: function () {
     WikiPoetryStore.addArticleListener(this._onChange);
+    WikiPoetryStore.addEditListener(this._onEdit);
   },
 
   componentWillUnMount: function () {
     WikiPoetryStore.removeArticleListener(this._onChange);
+    WikiPoetryStore.removeEditListener(this._onEdit);
   },
 
   handleClick: function (event, word) {
@@ -61,7 +65,13 @@ var ArticleIntro = React.createClass({
   render: function () {
     var content = this.props.poem;
     var links = this.props.links;
-    var linkedPoem = this.linkifyArticle(content, links);
+    var linkedPoem;
+    var editing = this.state.editMode.editing;
+    if (content && !editing) {
+      linkedPoem = this.linkifyArticle(content, links);
+    } else{
+      linkedPoem = <textarea name="userPoem" placeholder={content}></textarea>
+    }
 
     return (
       <p>
@@ -75,7 +85,16 @@ var ArticleIntro = React.createClass({
     if (this.state.term) {
       this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
     }
+  },
+
+  _onEdit: function () {
+    if (this.state.editMode.key === this.props.keyIndex) {
+      this.setState({
+        editMode: WikiPoetryStore.getMode()
+      });
+    }
   }
+
 });
 
 module.exports = ArticleIntro;

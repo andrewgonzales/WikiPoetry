@@ -18,10 +18,6 @@ var ArticleSubsection = React.createClass({
     return {
       type: WikiPoetryStore.getType(),
       editMode: WikiPoetryStore.getMode()
-      // editMode: {
-      //   editing: false,
-      //   key: ''
-      // }
     }
   },
 

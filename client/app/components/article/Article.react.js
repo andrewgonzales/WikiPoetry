@@ -10,6 +10,8 @@ var ArticleRedirect = require('./ArticleRedirect.react');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var API = require('../../api/wikiApi');
+var Edit = require('../edit/Edit.react');
+var Save = require('../edit/Save.react');
 
 var Article = React.createClass({
 
@@ -18,7 +20,8 @@ var Article = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      poems: WikiPoetryStore.getPoems()
+      poems: WikiPoetryStore.getPoems(), 
+      editMode: WikiPoetryStore.getMode()
     }
   },
 
@@ -43,13 +46,18 @@ var Article = React.createClass({
       articleIntro = <ArticleIntro poem={newInfo.poemData[0].poem} links={newInfo.poemData[0].replaced } type={articleType} />;
     }
     
+    var editing = this.state.editMode.editing;
+    var button;
+    editing ? button = <Save/> : button = <Edit keyIndex={'intro'}/>
     return (
       <div className="ten columns" id="article">
         <div className="article-container">
-          <h3 className="article-title">{this.props.location.state.term}</h3>
+          <h3 className="article-title">{this.props.location.state.term}{button}</h3>
           <ArticleImage picture={newInfo.picture}  pictureCaption={newInfo.pictureCaption} />
           {articleIntro}
           {newInfo.headings.map(function (heading, i) {
+          <ArticleIntro poem={newInfo.poemData[0].poem} links={newInfo.poemData[0].replaced } type={articleType} keyIndex={'intro'}/>
+          {newInfo.headings.map(function (heading, i) { 
             return (
               <ArticleSubsection
                 key={'heading' + i}
