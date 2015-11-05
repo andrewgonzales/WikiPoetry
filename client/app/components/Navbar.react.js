@@ -3,6 +3,7 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 var Link = ReactRouter.Link;
+var LoginStore = require('../stores/LoginStore');
 
 var Cartridge = require('./cartridge/Cartridge.react');
 

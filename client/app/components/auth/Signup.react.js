@@ -21,17 +21,17 @@ var Signup = React.createClass({
     // call action creators
     API.signup({user: this.state.user, pass: this.state.pass}, function(jwt) {
       // put jwt in localStorage
-      window.localStorage.setItem('user', jwt);
+      // window.localStorage.setItem('user', jwt);
       // redirect to homepage
-      this.history.pushState(null, '/', null );
+      this.history.pushState(null, '/login', null);
       // call login actions 
-      WikiPoetryActionCreators.signup(jwt);
+      // WikiPoetryActionCreators.signup(jwt);
     }.bind(this)); 
   },
 
   render: function () {
     return (
-      <div class="signup">
+      <div className="signup">
         <h1>Become a Poet</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
@@ -40,7 +40,7 @@ var Signup = React.createClass({
           <p>
             <input onChange={this.onChangePass} type="password" name="password" value={this.state.pass} placeholder="Password"></input>
           </p>
-          <p class="submit"><input type="submit" name="commit" value="Signup"></input></p>
+          <p className="submit"><input type="submit" name="commit" value="Signup"></input></p>
         </form>
       </div>
     );

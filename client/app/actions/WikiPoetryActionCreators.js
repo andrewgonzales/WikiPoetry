@@ -27,6 +27,7 @@ module.exports = {
       jwt: jwt  
     });
   },
+
   signup: function (jwt) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.LOGIN,
