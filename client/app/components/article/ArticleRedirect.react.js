@@ -36,13 +36,13 @@ var ArticleRedirect = React.createClass({
   },
 
   render: function () {
-    
+
     return (
       <div>
         <h4>{this.props.text}</h4>
         <h5 id="test"> Try this recommended post instead! </h5>
         <ul>
-          <li><a href="#" onClick={function(event){this.handleClick(event)}.bind(this)}  activeClassName="link-active" ref="love">Love</a></li>
+          <li><a href="#" onClick={this.handleClick}  activeClassName="link-active" ref="love">Love</a></li>
         </ul>
       </div>
     );
