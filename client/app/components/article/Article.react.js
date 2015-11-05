@@ -48,7 +48,7 @@ var Article = React.createClass({
     
     var editing = this.state.editMode.editing;
     var button;
-    editing ? button = <Save/> : button = <Edit keyIndex={'intro'}/>
+    editing ? button = <Save keyIndex={'intro'}/> : button = <Edit keyIndex={'intro'}/>
     return (
       <div className="ten columns" id="article">
         <div className="article-container">

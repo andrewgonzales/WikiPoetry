@@ -8,6 +8,7 @@ var SUBMIT_EVENT = 'submitted';
 var LOGIN_EVENT = 'login';
 var ARTICLE_EVENT = 'article change';
 var EDIT_EVENT = 'edit';
+var SAVE_EVENT = 'save';
 //Default type to shakespeare when page loads
 var _type = 'keats';
 var _home = {};
@@ -18,6 +19,10 @@ var _editMode = {
   editing: false,
   key: ''
 };
+// var _saveMode = {
+//   editing: true,
+//   key: ''
+// };
 
 function newType (type) {
   _type = type;
@@ -49,6 +54,12 @@ function newMode (editObj) {
   _editMode.key = editObj.key;
 }
 
+// function newSave (saveObj) {
+//   _saveMode.editing = saveObj.editing;
+//   _saveMode.key = saveObj.key;
+//   console.log(_saveMode);
+// }
+
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   getType: function () {
@@ -75,6 +86,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _editMode;
   },
 
+  // getSaveMode: function () {
+  //   return _saveMode;
+  // },
+
   emitChange: function () {
     this.emit(CHANGE_EVENT);
   },
@@ -90,6 +105,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
   emitEdit: function () {
     this.emit(EDIT_EVENT);
   },
+
+  // emitSave: function () {
+  //   this.emit(SAVE_EVENT);
+  // },
 
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
@@ -122,6 +141,14 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
   removeEditListener: function(callback) {
     this.removeListener(EDIT_EVENT, callback);
   }
+
+  // addSavePoemListener: function (callback) {
+  //   this.on(SAVE_EVENT, callback);
+  // },
+
+  // removeSavePoemListener: function (callback) {
+  //   this.removeListener(SAVE_EVENT, callback);
+  // }
 });
 
 WikiPoetryDispatcher.register(function (action) {
@@ -157,6 +184,11 @@ WikiPoetryDispatcher.register(function (action) {
     case WikiConstants.ActionTypes.EDIT_SECTION:
       newMode(action.mode);
       WikiPoetryStore.emitEdit();
+      break;
+
+    case WikiConstants.ActionTypes.SAVE_POEM:
+      newSave(action.mode);
+      WikiPoetryStore.emitSave();
       break;
 
     default: 

@@ -17,18 +17,21 @@ var ArticleSubsection = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      editMode: WikiPoetryStore.getMode()
+      editMode: WikiPoetryStore.getMode(),
+      // saveMode: WikiPoetryStore.getSaveMode()
     }
   },
 
   componentDidMount: function () {
     WikiPoetryStore.addArticleListener(this._onChange);
     WikiPoetryStore.addEditListener(this._onEdit);
+    WikiPoetryStore.addEditListener(this._onSave);
   },
 
   componentWillUnMount: function () {
     WikiPoetryStore.removeArticleListener(this._onChange);
     WikiPoetryStore.removeEditListener(this._onEdit);
+    WikiPoetryStore.removeEditListener(this._onSave);
   },
 
   handleClick: function (event, word) {
@@ -64,12 +67,13 @@ var ArticleSubsection = React.createClass({
     var userText;
     var button;
     var editing = this.state.editMode.editing;
+    console.log('editing: ', editing);
     if (content && !editing) {
       linkedArticle = this.linkifyArticle(content, links);
     }
     if (editing) {
       userText = <textarea name="userPoem" placeholder={content}></textarea>
-      button = <Save/>
+      button = <Save keyIndex={this.props.keyIndex}/>
     } else {
       button = <Edit keyIndex={this.props.keyIndex}/>
     }
@@ -94,6 +98,14 @@ var ArticleSubsection = React.createClass({
   },
 
   _onEdit: function () {
+    if (this.state.editMode.key === this.props.keyIndex) {
+      this.setState({
+        editMode: WikiPoetryStore.getMode()
+      });
+    }
+  },
+
+  _onSave: function () {
     if (this.state.editMode.key === this.props.keyIndex) {
       this.setState({
         editMode: WikiPoetryStore.getMode()

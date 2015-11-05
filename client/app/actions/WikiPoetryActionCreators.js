@@ -33,7 +33,7 @@ module.exports = {
       actionType: ActionTypes.LOGOUT
     });
   },
-  
+
   signup: function (jwt) {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.LOGOUT
@@ -51,6 +51,19 @@ module.exports = {
       }
     });
   },
+
+  // savePoem: function (bool, key) {
+  //   //API call
+
+  //   //Dispatcher
+  //   WikiPoetryDispatcher.dispatch({
+  //     actionType: ActionTypes.SAVE_POEM,
+  //     mode: {
+  //       editing: bool,
+  //       key: key
+  //     },
+  //   });
+  // },
 
   getHomeContent: function (type) {
     API.getHomeContent(type, function (data) {
