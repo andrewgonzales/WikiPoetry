@@ -10,7 +10,8 @@ var ArticleSubsection = require('../article/ArticleSubsection.react');
 function getSearchState() {
   return {
     type: WikiPoetryStore.getType(),
-    term: WikiPoetryStore.getTerm()
+    term: WikiPoetryStore.getTerm(),
+    load: false
   }
 }
 
@@ -36,10 +37,17 @@ var Search = React.createClass({
   },
 
   render: function () {
+    var loadGif;
+    if(this.state.load) {
+      loadGif = <img className="u-pull-left three columns" src="../images/loadingBar.gif" />
+    } else {
+      loadGif =  <button type="submit" name="submitButton">Search</button>
+    }
+
     return (
       <form className="searchForm" onSubmit={this._onSubmit}>
         <input className="searchBar" type="search" placeholder="Search" ref="search"/>
-        <button type="submit" name="submitButton">Search</button>
+        {loadGif}
       </form>
     );
   },
@@ -51,6 +59,9 @@ var Search = React.createClass({
     //Send value to server before erasing it!
     WikiPoetryActionCreators.submitSearch(search);
     WikiPoetryActionCreators.getArticleContent(this.state.type, search);
+    this.setState({
+      load: true
+    });
 
     this.refs.search.value = '';
   },

@@ -18,7 +18,7 @@ var Article = React.createClass({
   getInitialState: function () {
     return {
       type: WikiPoetryStore.getType(),
-      poems: WikiPoetryStore.getPoems()
+      poems: WikiPoetryStore.getPoems(),
     }
   },
 
@@ -28,6 +28,10 @@ var Article = React.createClass({
 
   componentWillUnmount: function () {
     WikiPoetryStore.removeChangeListener(this._onChange);
+  },
+
+  handleClick: function (event) {
+    WikiPoetryActionCreators.getArticleContent(this.state.type, this.props.location.state.term);
   },
 
   render: function () {
@@ -46,6 +50,7 @@ var Article = React.createClass({
     return (
       <div className="ten columns" id="article">
         <div className="article-container">
+          <button onClick={this.handleClick}>Create a new poem</button>
           <h3 className="article-title">{this.props.location.state.term}</h3>
           <ArticleImage picture={newInfo.picture}  pictureCaption={newInfo.pictureCaption} />
           {articleIntro}
