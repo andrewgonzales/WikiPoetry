@@ -79,7 +79,6 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _poems;
   },
 
-<<<<<<< HEAD
   getLoad: function () {
     return _load;
   },

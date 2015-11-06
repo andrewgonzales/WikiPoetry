@@ -85,7 +85,7 @@ var ArticleSubsection = React.createClass({
       userTextArea = <textarea id="userPoem" name="userPoem" defaultValue={content} onChange={this.editText}></textarea>
       var userPoem = this.state.value;
       button = <Save keyIndex={this.props.keyIndex} wholeArticle={this.props.wholeArticle} userPoem={userPoem}/>
-    } else if (!editing and !load) {
+    } else if (!editing && !load) {
       displayPoem = linkedArticle;
     }
     else {

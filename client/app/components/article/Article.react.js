@@ -21,7 +21,7 @@ var Article = React.createClass({
     return {
       type: WikiPoetryStore.getType(),
       poems: WikiPoetryStore.getPoems(),
-      load: WikiPoetryStore.getLoad()
+      load: WikiPoetryStore.getLoad(),
       editMode: WikiPoetryStore.getMode()
     }
   },
@@ -115,7 +115,7 @@ var Article = React.createClass({
                 poem={newInfo.poemData[i + 1]}
                 term={newInfo.term}
                 type={articleType}
-                load={load}/>
+                load={load}
                 wholeArticle={wholeArticle}/>
             );
           })}
@@ -152,6 +152,7 @@ var Article = React.createClass({
         editMode: WikiPoetryStore.getMode()
       });
     }
+  }
 });
 
 module.exports = Article;
