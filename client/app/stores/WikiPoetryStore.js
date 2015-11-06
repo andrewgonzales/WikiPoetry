@@ -8,7 +8,8 @@ var SUBMIT_EVENT = 'submitted';
 var LOGIN_EVENT = 'login';
 var ARTICLE_EVENT = 'article change';
 var TYPE_EVENT = 'type';
-
+var EDIT_EVENT = 'edit';
+var SAVE_EVENT = 'save';
 //Default type to shakespeare when page loads
 var _type = 'keats';
 var _home = {};
@@ -16,6 +17,10 @@ var _article = {};
 var _term = '';
 var _poems = [];
 var _load = false;
+var _editMode = {
+  editing: false,
+  key: ''
+};
 
 function newType (type) {
   _type = type;
@@ -46,6 +51,12 @@ function clearPoems () {
   _poems = [];
 }
 
+function newMode (editObj) {
+  _editMode.editing = editObj.editing;
+  _editMode.key = editObj.key;
+}
+
+
 var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   getType: function () {
@@ -68,6 +79,7 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _poems;
   },
 
+<<<<<<< HEAD
   getLoad: function () {
     return _load;
   },
@@ -76,7 +88,11 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  emitSubmit: function() {
+  getMode: function () {
+    return _editMode;
+  },
+
+  emitSubmit: function () {
     this.emit(SUBMIT_EVENT);
   },
 
@@ -86,6 +102,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   emitType: function () {
     this.emit(TYPE_EVENT);
+  },
+
+  emitEdit: function () {
+    this.emit(EDIT_EVENT);
   },
 
   addChangeListener: function (callback) {
@@ -118,7 +138,16 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   removeTypeListener: function (callback) {
     this.removeListener(TYPE_EVENT, callback);
+  },
+
+  addEditListener: function (callback) {
+    this.on(EDIT_EVENT, callback);
+  },
+
+  removeEditListener: function(callback) {
+    this.removeListener(EDIT_EVENT, callback);
   }
+
 });
 
 WikiPoetryDispatcher.register(function (action) {
@@ -150,6 +179,16 @@ WikiPoetryDispatcher.register(function (action) {
 
     case WikiConstants.ActionTypes.CLEAR_POEMS:
       clearPoems();
+      break;
+
+    case WikiConstants.ActionTypes.EDIT_SECTION:
+      newMode(action.mode);
+      WikiPoetryStore.emitEdit();
+      break;
+
+    case WikiConstants.ActionTypes.GET_USER_POEM:
+      newArticleContent(action.userPoem);
+      WikiPoetryStore.emitArticleChange();
       break;
 
     default: 

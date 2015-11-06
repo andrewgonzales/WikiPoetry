@@ -11,5 +11,7 @@ module.exports = {
     GET_ARTICLE: null,
     GET_POEMS: null,
     LOADING: null
+    EDIT_SECTION: null,
+    GET_USER_POEM: null,
   })
 };
