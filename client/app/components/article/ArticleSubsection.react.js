@@ -102,7 +102,7 @@ var ArticleSubsection = React.createClass({
           {this.props.subheading}
           {button}
         </h4>
-        <p className="subcontent">{displayPoem}</p>
+        <p className="subcontent">{linkedArticle}</p>
         <div>{userTextArea}</div>
       </div>
     );
