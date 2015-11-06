@@ -31,6 +31,11 @@ Common Styles
   height: 100px;
 }
 
+.label {
+  float:left;
+  padding-right: 3px;
+}
+
 /************************************
 Home Styles
 ************************************/
