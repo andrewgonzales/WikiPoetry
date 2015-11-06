@@ -28,6 +28,7 @@ Common Styles
 
 .header {
   padding-top: 10px;
+  height: 100px;
 }
 
 /************************************
@@ -113,10 +114,6 @@ Article Styles
   display: table;
 }
 
-.spinner{
-  float: left;
-}
-
 .caption {
   display: table-caption;
   caption-side: bottom;
@@ -124,4 +121,42 @@ Article Styles
   font-size: 0.9em
   margin: 3px;
   padding: 3px;
+}
+/************************************
+Spinner Styles
+************************************/
+
+.loading {
+  margin-top: -15%;
+}
+@media (min-width: 708px) {
+  .message {
+    font-size: 20px;
+    padding-left: 10%;
+  }
+}
+@media (min-width: 863px) {
+  .message {
+    font-size: 23px;
+    padding-left: 10%;
+  }
+}
+@media (min-width: 924px) {
+  .message {
+    font-size: 28px;
+    padding-left: 10%;
+  }
+}
+@media (min-width: 925px) {
+  .message {
+    font-size: 2em;
+    padding-left: 10%;
+  }
+}
+
+@media (min-width: 1386px) {  
+  .message {
+    font-size: 3em;
+    padding-left: 10%;
+  }
 }

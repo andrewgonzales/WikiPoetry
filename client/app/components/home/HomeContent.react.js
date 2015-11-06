@@ -57,7 +57,6 @@ var HomeContent = React.createClass({
   },
 
   _onChange: function() {
-    console.log('change')
     this.setState(getHomeState());
     var homeContent = WikiPoetryStore.getHome();
     this.setState(homeContent);

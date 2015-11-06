@@ -41,16 +41,14 @@ var Search = React.createClass({
   render: function () {
     var loadGif;
     if(this.state.load) {
-      loadGif = <div>
-                <img className="u-cf two columns spinner" src="../images/loadingBar.gif" />
-                </div>
+      loadGif = <button type="submit" name="submitButton" disabled>Search</button>;
     } else {
       loadGif =  <button type="submit" name="submitButton">Search</button>
     }
 
     return (
       <form className="searchForm" onSubmit={this._onSubmit}>
-        <input className="searchBar" type="search" placeholder="Search" ref="search"/>
+        <input className="searchBar" type="search" placeholder="Search" ref="search" required/>
         {loadGif}
       </form>
     );

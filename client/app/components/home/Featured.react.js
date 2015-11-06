@@ -4,6 +4,8 @@ var ReactRouter = require('react-router');
 var Link = ReactRouter.Link;
 var API = require('./../../api/wikiApi');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
+//Listeners in HomeContent
+var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 
 var Featured = React.createClass({
   mixins: [ReactRouter.History],
@@ -28,10 +30,8 @@ var Featured = React.createClass({
   handleClick: function () {
     var search = this.props.link;
 
-    API.getArticlePage(this.state.type, search, function (data) {
-      data.term = search;
-      this.history.pushState(data, '/Article/' + search, null );
-    }.bind(this));
+    WikiPoetryActionCreators.submitSearch(search);
+    WikiPoetryActionCreators.getArticleContent(this.state.type, search)
   },
 
   render: function () {
