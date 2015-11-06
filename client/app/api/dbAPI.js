@@ -22,6 +22,7 @@ exports.getPoem = function (term, callback) {
     type: 'GET',
     data: {term: term},
     success: function(data) {
+      console.log('getPoem success data:', data);
       callback(data);
     },
     error: function(xhr, status, err) {

@@ -54,10 +54,17 @@ module.exports = {
   getUserPoem: function (term) {
     db.getPoem(term, function (data) {
       // format object
+      console.log('getUserPoem data:', data);
       var formattedData = {
         headings: [data.first.title, data.second.title, data.third.title, data.fourth.title],
         picture: data.picture,
-        pictureCaption: data.caption
+        pictureCaption: data.caption,
+        poemData: [
+          {poem: data.first.text, replaced: []},
+          {poem: data.second.text, replaced: []},
+          {poem: data.third.text, replaced: []},
+          {poem: data.fourth.text, replaced: []}
+        ] 
       };
 
       WikiPoetryDispatcher.dispatch({
@@ -77,14 +84,16 @@ module.exports = {
   },
 
   getArticleContent: function (type, term) { 
-    API.getArticlePage(type, term, function (data) {
-      data.term = term;
-      data.keyIndex = 'intro';
-      WikiPoetryDispatcher.dispatch({
-        actionType: ActionTypes.GET_ARTICLE,
-        content: data
+    if (type !== 'user') {
+      API.getArticlePage(type, term, function (data) {
+        data.term = term;
+        data.keyIndex = 'intro';
+        WikiPoetryDispatcher.dispatch({
+          actionType: ActionTypes.GET_ARTICLE,
+          content: data
+        });
       });
-    });
+    }
   },
 
   getNewPoems: function(type, term, amount) {

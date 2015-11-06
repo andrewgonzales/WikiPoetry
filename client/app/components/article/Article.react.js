@@ -52,6 +52,7 @@ var Article = React.createClass({
 
   render: function () {
     var newInfo = this.props.location.state;
+    console.log('newInfo', newInfo);
     var articleType = this.state.type;
     var poems = this.state.poems[0] ? this.state.poems : [{poem: 'Please wait'}];
     var load = this.state.load  
