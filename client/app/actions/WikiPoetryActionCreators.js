@@ -3,7 +3,7 @@
 var WikiPoetryDispatcher = require('../dispatcher/WikiPoetryDispatcher');
 var WikiConstants = require('../constants/WikiConstants');
 var API = require('./../api/wikiApi');
-
+var db = require('./../api/dbAPI');
 var ActionTypes = WikiConstants.ActionTypes;
 
 module.exports = {
@@ -52,18 +52,29 @@ module.exports = {
     });
   },
 
-  // savePoem: function (bool, key) {
-  //   //API call
+  savePoem: function (wholeArticle) {
+    //API call
+    db.savePoem(wholeArticle, function (data){
+      console.log('saved to db');
+    });
+   
+  },
 
-  //   //Dispatcher
-  //   WikiPoetryDispatcher.dispatch({
-  //     actionType: ActionTypes.SAVE_POEM,
-  //     mode: {
-  //       editing: bool,
-  //       key: key
-  //     },
-  //   });
-  // },
+  getUserPoem: function (term) {
+    db.getPoem(term, function (data) {
+      // format object
+      var formattedData = {
+        headings: [data.first.title, data.second.title, data.third.title, data.fourth.title],
+        picture: data.picture,
+        pictureCaption: data.caption
+      };
+
+      WikiPoetryDispatcher.dispatch({
+        actionType: ActionTypes.GET_USER_POEM,
+        userPoem: formattedData 
+      });
+    })
+  },
 
   getHomeContent: function (type) {
     API.getHomeContent(type, function (data) {
@@ -74,9 +85,10 @@ module.exports = {
     });
   },
 
-  getArticleContent: function (type, term) {
+  getArticleContent: function (type, term) { 
     API.getArticlePage(type, term, function (data) {
       data.term = term;
+      data.keyIndex = 'intro';
       WikiPoetryDispatcher.dispatch({
         actionType: ActionTypes.GET_ARTICLE,
         content: data

@@ -186,9 +186,9 @@ WikiPoetryDispatcher.register(function (action) {
       WikiPoetryStore.emitEdit();
       break;
 
-    case WikiConstants.ActionTypes.SAVE_POEM:
-      newSave(action.mode);
-      WikiPoetryStore.emitSave();
+    case WikiConstants.ActionTypes.GET_USER_POEM:
+      newArticleContent(action.userPoem);
+      WikiPoetryStore.emitArticleChange();
       break;
 
     default: 

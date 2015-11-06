@@ -27,10 +27,14 @@ var Article = React.createClass({
 
   componentDidMount: function () {
     WikiPoetryStore.addChangeListener(this._onChange);
+    WikiPoetryStore.addEditListener(this._onEdit);
+
   },
 
   componentWillUnmount: function () {
     WikiPoetryStore.removeChangeListener(this._onChange);
+    WikiPoetryStore.removeEditListener(this._onEdit);
+
   },
 
   render: function () {
@@ -48,7 +52,31 @@ var Article = React.createClass({
     
     var editing = this.state.editMode.editing;
     var button;
-    editing ? button = <Save keyIndex={'intro'}/> : button = <Edit keyIndex={'intro'}/>
+    var wholeArticle = {
+      picture: newInfo.picture,
+      caption: newInfo.pictureCaption,
+      first: {
+        title: newInfo.term,
+        text: newInfo.poemData[0].poem
+      },
+      second: {
+        title: newInfo.headings[0],
+        text: newInfo.poemData[1].poem
+      },
+      third: {
+        title: newInfo.headings[1],
+        text: newInfo.poemData[2].poem
+      },
+      fourth: {
+        title: newInfo.headings[2],
+        text: newInfo.poemData[3].poem
+      }
+    };
+    if (editing) {
+      button = <Save keyIndex={'intro'}/>
+    } else {
+      button = <Edit keyIndex={'intro'}/>
+    }
     return (
       <div className="ten columns" id="article">
         <div className="article-container">
@@ -65,7 +93,8 @@ var Article = React.createClass({
                 subheading={heading}
                 poem={newInfo.poemData[i + 1]}
                 term={newInfo.term}
-                type={articleType}/>
+                type={articleType}
+                wholeArticle={wholeArticle}/>
             );
           })}
         </div>
@@ -79,6 +108,14 @@ var Article = React.createClass({
       term: WikiPoetryStore.getTerm(),
       poems: WikiPoetryStore.getPoems()
     });
+  },
+
+  _onEdit: function () {
+    if (this.state.editMode.key === this.props.location.state.keyIndex) {
+      this.setState({
+        editMode: WikiPoetryStore.getMode()
+      });
+    }
   }
 });
 

@@ -1,8 +1,17 @@
 var React = require('react');
 var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
 var API = require('./../../api/wikiApi');
+var WikiPoetryStore = require('../../stores/WikiPoetryStore');
 
 var Cartridge = React.createClass({
+
+  componentDidMount: function() {
+    WikiPoetryStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    WikiPoetryStore.removeChangeListener(this._onChange);
+  },
 
   render: function () {
 
@@ -27,7 +36,17 @@ var Cartridge = React.createClass({
   },
 
   _onCartridgeChange: function (event) {
-    WikiPoetryActionCreators.pickType(event.target.value);
+    if (event.target.value === 'user') {
+      WikiPoetryActionCreators.getUserPoem(this.state.term)
+    } else {
+      WikiPoetryActionCreators.pickType(event.target.value);
+    }
+  },
+
+  _onChange: function () {
+    this.setState({
+      term: WikiPoetryStore.getTerm()
+    });
   }
 });
 

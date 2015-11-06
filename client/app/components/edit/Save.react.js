@@ -17,24 +17,34 @@ var Save = React.createClass({
     event.preventDefault();
     this.setState({editMode: !this.state.editMode});
     //call action creator
-    console.log('save editMode: ', this.state.editMode);
-    // WikiPoetryActionCreators.savePoem(this.state.editMode, this.props.keyIndex);
+    WikiPoetryActionCreators.savePoem(this.props.wholeArticle);
     WikiPoetryActionCreators.editMode(this.state.editMode, this.props.keyIndex);
   },
 
   render: function () {
+    var userPoem = this.props.userPoem;
+    var poemKey;
+     if (this.props.keyIndex.slice(-1) === '0') {
+      poemKey = 'second';
+    } else if (this.props.keyIndex.slice(-1) === '1') {
+      poemKey = 'third';
+    } else if (this.props.keyIndex.slice(-1) === '2') {
+      poemKey = 'fourth';
+    } else {
+      poemKey = 'first';
+    }
+    var wholeArticle = this.props.wholeArticle;
+    if (poemKey) {
+      wholeArticle[poemKey].text = userPoem;
+    }
+
     return (
       <form className="editPoem">
         <button onClick={this.savePoem} type="button" name ="saveButton">Save</button>
       </form>
     );
-  }, 
+  }
 
-   _onSubmit: function(event) {
-    event.preventDefault();
-    //TODO
-    //WikiPoetryActionCreators.save
-  },
 
 });
 
