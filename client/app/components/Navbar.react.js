@@ -40,7 +40,7 @@ var Navbar = React.createClass({
     return (
       <div>
         <ul>
-          <li><Link to="/" activeClassName="link-active"><img src="images/wp_logo.jpg"/></Link></li>
+          <li><Link to="/" activeClassName="link-active"><img id="logo" src="images/logo.png"/></Link></li>
           <li><Link to="/" activeClassName="link-active">Home</Link></li>
           <li><Link to="/AboutUs" activeClassName="link-active">About Us</Link></li>
           <li><Link to={"/" + log} onClick={clickEvent} activeClassName="link-active">{log}</Link></li>
