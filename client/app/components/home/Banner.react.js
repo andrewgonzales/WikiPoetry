@@ -21,9 +21,10 @@ var Banner = React.createClass({
   },
 
   render: function () {
+    var text = this.state.user === '' ? '' : ', ' + this.state.user;
     return (
       <div>
-        <h3>Welcome to WikiPoetry, {this.state.user}</h3>
+        <h3>Welcome to WikiPoetry{text}</h3>
         <p>Your number one source for computer generated poetry.</p>
       </div>
     );
