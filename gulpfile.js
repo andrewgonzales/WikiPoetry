@@ -6,6 +6,7 @@ var reactify = require('reactify'); //Transforms React JSX to JS
 var source = require('vinyl-source-stream'); // Use conventional text streams with Gulp
 var lint = require('gulp-eslint');
 var concat = require('gulp-concat');
+var minifyCss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
 var streamify = require('gulp-streamify');
 var rename = require('gulp-rename');
@@ -108,6 +109,7 @@ gulp.task('js', function () {
 gulp.task('css', function () {
   gulp.src(config.paths.css)
   .pipe(concat('bundle.css'))
+  .pipe(minifyCss())
   .pipe(gulp.dest(config.paths.dist + '/css'))
 });
 

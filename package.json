@@ -50,6 +50,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^1.0.0",
     "gulp-jest": "^0.4.0",
+    "gulp-minify-css": "^1.2.1",
     "gulp-mocha": "^2.1.3",
     "gulp-nodemon": "^2.0.4",
     "gulp-rename": "^1.2.2",
