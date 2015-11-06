@@ -62,16 +62,23 @@ var ArticleIntro = React.createClass({
     var content = this.props.poem;
     var links = this.props.links;
     var linkedPoem = this.linkifyArticle(content, links);
+    var load = this.props.load;
+    var displayPoem;
+
+    if(!load) {
+      displayPoem = linkedPoem;
+    } else {
+      displayPoem = '';
+    }
 
     return (
       <p>
-        {linkedPoem}
+        {displayPoem}
       </p>
     );
   },
 
   _onChange: function () {
-    this.setState(getArticleContent());
     if (this.state.term) {
       this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
     }

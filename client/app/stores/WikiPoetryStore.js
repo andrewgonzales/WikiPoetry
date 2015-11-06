@@ -7,27 +7,34 @@ var CHANGE_EVENT = 'change';
 var SUBMIT_EVENT = 'submitted';
 var LOGIN_EVENT = 'login';
 var ARTICLE_EVENT = 'article change';
+var TYPE_EVENT = 'type';
+
 //Default type to shakespeare when page loads
 var _type = 'keats';
 var _home = {};
 var _article = {};
 var _term = '';
 var _poems = [];
+var _load = false;
 
 function newType (type) {
   _type = type;
+  _load = true;
 };
 
 function newTerm (term) {
   _term = term;
+  _load = true;
 }
 
 function newHomeContent (home) {
   _home = home;
+  _load = false;
 }
 
 function newArticleContent (article) {
   _article = article;
+  _load = false;
 }
 
 function newPoem (poem) {
@@ -61,6 +68,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
     return _poems;
   },
 
+  getLoad: function () {
+    return _load;
+  },
+
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
@@ -71,6 +82,10 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   emitArticleChange: function() {
     this.emit(ARTICLE_EVENT);
+  },
+
+  emitType: function () {
+    this.emit(TYPE_EVENT);
   },
 
   addChangeListener: function (callback) {
@@ -95,6 +110,14 @@ var WikiPoetryStore = assign({}, EventEmitter.prototype, {
 
   removeArticleListener: function (callback) {
     this.removeListener(ARTICLE_EVENT, callback);
+  },
+
+  addTypeListener: function (callback) {
+    this.on(TYPE_EVENT, callback);
+  },
+
+  removeTypeListener: function (callback) {
+    this.removeListener(TYPE_EVENT, callback);
   }
 });
 
@@ -102,7 +125,7 @@ WikiPoetryDispatcher.register(function (action) {
   switch(action.actionType) {
     case WikiConstants.ActionTypes.PICK_TYPE:
       newType(action.type);
-      WikiPoetryStore.emitChange();
+      WikiPoetryStore.emitType();
       break;
 
     case WikiConstants.ActionTypes.GET_HOME:
@@ -127,6 +150,7 @@ WikiPoetryDispatcher.register(function (action) {
 
     case WikiConstants.ActionTypes.CLEAR_POEMS:
       clearPoems();
+      break;
 
     default: 
   }

@@ -112,6 +112,11 @@ Article Styles
 .imgContainer img {
   display: table;
 }
+
+.spinner{
+  float: left;
+}
+
 .caption {
   display: table-caption;
   caption-side: bottom;
