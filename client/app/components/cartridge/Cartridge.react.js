@@ -29,7 +29,6 @@ var Cartridge = React.createClass({
           <label htmlFor="beatles" name="cartridge">The Beatles</label>
         <input type="radio" name="cartridge" value="user" id="user" onChange={this._onCartridgeChange}/>
           <label htmlFor="user" name="cartridge">User</label>
-
       </form>
     );
   },
@@ -38,8 +37,7 @@ var Cartridge = React.createClass({
     if (event.target.value === 'user') {
       WikiPoetryActionCreators.getUserPoem(this.state.term);
     }
-    WikiPoetryActionCreators.pickType(event.target.value);
-    
+    WikiPoetryActionCreators.pickType(event.target.value);   
   },
 
   _onChange: function () {
