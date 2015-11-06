@@ -15,7 +15,6 @@ var Banner = React.createClass({
     LoginStore.removeLoginListener(this._onChange);
   },
   _onChange: function () {
-    console.log('do we get in here: YES');
     this.setState({
       user: LoginStore.getUser()
     });

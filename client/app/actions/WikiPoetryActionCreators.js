@@ -28,10 +28,9 @@ module.exports = {
     });
   },
 
-  signup: function (jwt) {
+  logout: function () {
     WikiPoetryDispatcher.dispatch({
-      actionType: ActionTypes.LOGIN,
-      jwt: jwt
+      actionType: ActionTypes.LOGOUT
     });
   },
 
