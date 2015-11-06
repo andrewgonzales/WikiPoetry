@@ -19,18 +19,20 @@ var Article = React.createClass({
     return {
       type: WikiPoetryStore.getType(),
       poems: WikiPoetryStore.getPoems(),
-      load: false
+      load: WikiPoetryStore.getLoad()
     }
   },
 
   componentDidMount: function () {
     WikiPoetryStore.addChangeListener(this._onChange);
     WikiPoetryStore.addArticleListener(this._onArticleChange);
+    WikiPoetryStore.addTypeListener(this._onType);
   },
 
   componentWillUnmount: function () {
     WikiPoetryStore.removeChangeListener(this._onChange);
     WikiPoetryStore.removeArticleListener(this._onArticleChange);
+    WikiPoetryStore.removeTypeListener(this._onType);
 
   },
 
@@ -39,28 +41,31 @@ var Article = React.createClass({
     WikiPoetryActionCreators.submitSearch(this.props.location.state.term);
     WikiPoetryActionCreators.getArticleContent(this.state.type, this.props.location.state.term);
     this.setState({
-      load: true
-    });
+      load: WikiPoetryStore.getLoad()
+    })
   },
 
   render: function () {
     var newInfo = this.props.location.state;
     var articleType = this.state.type;
     var poems = this.state.poems[0] ? this.state.poems : [{poem: 'Please wait'}];
+    var load = this.state.load  
     var articleIntro;
     var loadGif;
 
-    if(this.state.load) {
-      loadGif = <img className="u-pull-left three columns" src="../images/loadingBar.gif" />
-    } else {
+    if(this.state.load && !newInfo.text) {
+      loadGif = <h3>We are thinking of new poetry for you</h3>  
+    } else if (!newInfo.text && !this.state.load){
       loadGif = <button onClick={this.handleClick}>Generate new poems</button>
+    } else {
+      loadGif = <h2>Poem could not be generated...</h2>
     }
 
     if (newInfo.text) {
       //Page does not exist
       articleIntro = <ArticleRedirect text={newInfo.text}/>;
     } else {
-      articleIntro = <ArticleIntro poem={newInfo.poemData[0].poem} links={newInfo.poemData[0].replaced } type={articleType} />;
+      articleIntro = <ArticleIntro load={load} poem={newInfo.poemData[0].poem} links={newInfo.poemData[0].replaced } type={articleType} />;
     }
     
     return (
@@ -77,7 +82,8 @@ var Article = React.createClass({
                 subheading={heading}
                 poem={newInfo.poemData[i + 1]}
                 term={newInfo.term}
-                type={articleType}/>
+                type={articleType}
+                load={load}/>
             );
           })}
         </div>
@@ -95,9 +101,17 @@ var Article = React.createClass({
 
   _onArticleChange: function () {
     this.setState({
-      load: false
+      load: WikiPoetryStore.getLoad()
     })
   },
+
+  _onType: function () {
+    this.setState({
+      type: WikiPoetryStore.getType(),
+      load: WikiPoetryStore.getLoad()
+    })
+    WikiPoetryActionCreators.getArticleContent(WikiPoetryStore.getType(), this.props.location.state.term);
+  }
 });
 
 module.exports = Article;

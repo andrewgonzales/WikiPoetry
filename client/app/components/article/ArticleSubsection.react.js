@@ -55,16 +55,24 @@ var ArticleSubsection = React.createClass({
   render: function () {
     var content = this.props.poem ? this.props.poem.poem : 'Please wait';
     var links = this.props.poem ? this.props.poem.replaced : [];
+    var load = this.props.load;
     var linkedArticle;
+    var displayPoem;
     if (content) {
       linkedArticle = this.linkifyArticle(content, links);
+    }
+
+    if(!load) {
+      displayPoem = linkedArticle;
+    } else {
+      displayPoem = '';
     }
 
     return (
       <div className="subsection">
         <div className="input">{this.props.error}</div>
         <h4 className="subheading">{this.props.subheading}</h4>
-        <p className="subcontent">{linkedArticle}</p>
+        <p className="subcontent">{displayPoem}</p>
       </div>
     );
   },

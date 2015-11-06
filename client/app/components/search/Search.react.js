@@ -11,7 +11,7 @@ function getSearchState() {
   return {
     type: WikiPoetryStore.getType(),
     term: WikiPoetryStore.getTerm(),
-    load: false
+    load: WikiPoetryStore.getLoad()
   }
 }
 
@@ -29,17 +29,21 @@ var Search = React.createClass({
   componentDidMount: function() {
     WikiPoetryStore.addChangeListener(this._onChange);
     WikiPoetryStore.addArticleListener(this._onArticleChange);
+    WikiPoetryStore.addTypeListener(this._onType);
   },
 
   componentWillUnmount: function() {
     WikiPoetryStore.removeChangeListener(this._onChange);
     WikiPoetryStore.removeArticleListener(this._onArticleChange);
+    WikiPoetryStore.removeTypeListener(this._onType);
   },
 
   render: function () {
     var loadGif;
     if(this.state.load) {
-      loadGif = <img className="u-pull-left three columns" src="../images/loadingBar.gif" />
+      loadGif = <div>
+                <img className="u-cf two columns spinner" src="../images/loadingBar.gif" />
+                </div>
     } else {
       loadGif =  <button type="submit" name="submitButton">Search</button>
     }
@@ -60,7 +64,7 @@ var Search = React.createClass({
     WikiPoetryActionCreators.submitSearch(search);
     WikiPoetryActionCreators.getArticleContent(this.state.type, search);
     this.setState({
-      load: true
+      load: WikiPoetryStore.getLoad()
     });
 
     this.refs.search.value = '';
@@ -69,6 +73,9 @@ var Search = React.createClass({
   _onArticleChange: function () {
     this.setState(getArticleContent());
     this.setState(getSearchState());
+    this.setState({
+      load: WikiPoetryStore.getLoad()
+    });
     if (this.state.term) {
       this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
     }
@@ -76,6 +83,13 @@ var Search = React.createClass({
 
   _onChange: function(event) {
     this.setState(getSearchState());
+  },
+
+  _onType: function () {
+    this.setState({
+      type: WikiPoetryStore.getType(),
+      load: WikiPoetryStore.getLoad()
+    })
   }
 });
 

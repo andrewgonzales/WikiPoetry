@@ -33,8 +33,8 @@ function getHomeState() {
       picture: '',
       tag: '',
       text: [],
-    }
-
+    },
+    load: WikiPoetryStore.getLoad()
   };
 }
 
@@ -47,17 +47,28 @@ var HomeContent = React.createClass({
   //Let components render first then perform AJAX request
   componentDidMount: function () {
     WikiPoetryStore.addChangeListener(this._onChange);
+    WikiPoetryStore.addTypeListener(this._onType);
     WikiPoetryActionCreators.getHomeContent(this.state.type);
   },
 
   componentWillUnmount: function() {
     WikiPoetryStore.removeChangeListener(this._onChange);
+    WikiPoetryStore.removeTypeListener(this._onType);
   },
 
   _onChange: function() {
+    console.log('change')
     this.setState(getHomeState());
     var homeContent = WikiPoetryStore.getHome();
     this.setState(homeContent);
+  },
+
+  _onType: function() {
+    this.setState({
+      type: WikiPoetryStore.getType(),
+      load: WikiPoetryStore.getLoad()
+    })
+    WikiPoetryActionCreators.getHomeContent(WikiPoetryStore.getType());
   },
 
   render: function () {
