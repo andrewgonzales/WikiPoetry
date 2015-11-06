@@ -6,6 +6,10 @@ var reactify = require('reactify'); //Transforms React JSX to JS
 var source = require('vinyl-source-stream'); // Use conventional text streams with Gulp
 var lint = require('gulp-eslint');
 var concat = require('gulp-concat');
+var minifyCss = require('gulp-minify-css');
+var uglify = require('gulp-uglify');
+var streamify = require('gulp-streamify');
+var rename = require('gulp-rename');
 var mocha = require('gulp-mocha');
 var jest = require('gulp-jest');
 var exec = require('child_process').exec;
@@ -56,8 +60,6 @@ gulp.task('nodemon', function (cb) {
     });
 });
 
-
-
 gulp.task('jest', function (cb) {
   exec('jest', function (err, stdout, stderr) {
     console.log(stdout);
@@ -98,13 +100,16 @@ gulp.task('js', function () {
   .transform(reactify)
   .bundle()
   .on('error', console.error.bind(console))
-  .pipe(source('bundle.js'))
+  .pipe(source('main.js'))
+  .pipe(streamify(uglify()))
+  .pipe(rename('bundle.js'))
   .pipe(gulp.dest(config.paths.dist + '/scripts'))
 });
-
+ 
 gulp.task('css', function () {
   gulp.src(config.paths.css)
   .pipe(concat('bundle.css'))
+  .pipe(minifyCss())
   .pipe(gulp.dest(config.paths.dist + '/css'))
 });
 
