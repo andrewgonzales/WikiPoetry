@@ -7,7 +7,6 @@ var CHANGE_EVENT = 'change';
 var SUBMIT_EVENT = 'submitted';
 var LOGIN_EVENT = 'login';
 var ARTICLE_EVENT = 'article change';
-
 //Default type to shakespeare when page loads
 var _type = 'keats';
 var _home = {};

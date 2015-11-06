@@ -5,7 +5,6 @@ var API = require('./../../api/login');
 
 var Login = React.createClass({
   mixins: [ReactRouter.History],
-
   getInitialState: function() {
     return {user: '', pass: ''};
   },
@@ -23,14 +22,14 @@ var Login = React.createClass({
       // put jwt in localStorage
       window.localStorage.setItem('user', jwt);
       // redirect to homepage
-      this.history.pushState(null, '/', null );
+      this.history.pushState(null, '/', null);
       // call login actions 
       WikiPoetryActionCreators.login(jwt);
-    }.bind(this)); 
+    }.bind(this));
   },
   render: function () {
     return (
-      <div class="login">
+      <div className="login">
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
@@ -39,7 +38,7 @@ var Login = React.createClass({
           <p>
             <input onChange={this.onChangePass} type="password" name="password" value={this.state.pass} placeholder="Password"></input>
           </p>
-          <p class="submit"><input type="submit" name="commit" value="Login"></input></p>
+          <p className="submit"><input type="submit" name="commit" value="Login"></input></p>
         </form>
       </div>
     );
