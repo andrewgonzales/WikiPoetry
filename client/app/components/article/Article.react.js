@@ -54,7 +54,7 @@ var Article = React.createClass({
     var loadGif;
 
     if(this.state.load && !newInfo.text) {
-      loadGif = <h3>We are thinking of new poetry for you</h3>  
+      loadGif = ''; 
     } else if (!newInfo.text && !this.state.load){
       loadGif = <button onClick={this.handleClick}>Generate new poems</button>
     } else {
@@ -95,7 +95,7 @@ var Article = React.createClass({
     this.setState({
       type: WikiPoetryStore.getType(),
       term: WikiPoetryStore.getTerm(),
-      poems: WikiPoetryStore.getPoems(),
+      poems: WikiPoetryStore.getPoems()
     });
   },
 

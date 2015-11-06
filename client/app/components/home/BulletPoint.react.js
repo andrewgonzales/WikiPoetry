@@ -3,6 +3,9 @@ var ReactRouter = require('react-router');
 var Link = ReactRouter.Link;
 var API = require('./../../api/wikiApi');
 var WikiPoetryStore = require('../../stores/WikiPoetryStore');
+//Listener is in HomeContent
+var WikiPoetryActionCreators = require('../../actions/WikiPoetryActionCreators');
+
 
 var BulletPoint = React.createClass({
   mixins: [ReactRouter.History],
@@ -21,13 +24,11 @@ var BulletPoint = React.createClass({
     return [before, after];
   },
 
-  handleClick: function () {
+  handleClick: function (event) {
     var search = this.props.link;
 
-    API.getArticlePage(this.state.type, search, function (data) {
-      data.term = search;
-      this.history.pushState(data, '/Article/' + search, null );
-    }.bind(this));
+    WikiPoetryActionCreators.submitSearch(search);
+    WikiPoetryActionCreators.getArticleContent(this.state.type, search)
   },
 
   render: function () {
