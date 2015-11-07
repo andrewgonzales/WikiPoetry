@@ -99,7 +99,6 @@ module.exports = {
   getNewPoems: function(type, term, amount) {
     var params = {type: type, term: term, amount: amount};
     API.getArticle(params, function (poemData) {
-      console.log('POEMDATA', poemData);
       WikiPoetryDispatcher.dispatch({
         actionType: ActionTypes.GET_POEMS,
         content: poemData

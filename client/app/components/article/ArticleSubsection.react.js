@@ -82,7 +82,6 @@ var ArticleSubsection = React.createClass({
       linkedArticle = this.linkifyArticle(content, links);
     }
     if (editing) {
-      console.log('editing');
       userTextArea = <textarea id="userPoem" name="userPoem" defaultValue={content} onChange={this.editText}></textarea>
       var userPoem = this.state.value;
       button = <Save keyIndex={this.props.keyIndex} wholeArticle={this.props.wholeArticle} userPoem={userPoem}/>
@@ -90,7 +89,6 @@ var ArticleSubsection = React.createClass({
     } /*else if (!editing && !load) {
     }*/
     else {
-      console.log('not editing');
       displayPoem = linkedArticle;
       button = <Edit keyIndex={this.props.keyIndex}/>
     }
@@ -109,7 +107,6 @@ var ArticleSubsection = React.createClass({
   },
 
   _onChange: function () {
-    console.log('article content: ',getArticleContent());
     if (this.state.term) {
       this.history.pushState(getArticleContent(), '/Article/' + this.state.term, null);
     }

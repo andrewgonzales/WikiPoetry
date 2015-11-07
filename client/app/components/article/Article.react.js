@@ -63,7 +63,6 @@ var Article = React.createClass({
     var loadGif;
     var upperTerm = [];
     var splitTerm;
-    console.log(newInfo, 'term');
     splitTerm = this.props.location.state.term.split(' ');
     for(var i = 0; i < splitTerm.length; i++) {
       upperTerm.push(this.capitalizeFirstLetter(splitTerm[i]));

@@ -44,7 +44,6 @@ function newArticleContent (article) {
 
 function newPoem (poem) {
   _poems = poem;
-  console.log('store poems', _poems);
 }
 
 function clearPoems () {
