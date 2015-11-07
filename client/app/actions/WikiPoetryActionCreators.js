@@ -55,7 +55,8 @@ module.exports = {
     db.getPoem(term, function (data) {
       // format object
       var formattedData = {
-        headings: [data.first.title, data.second.title, data.third.title, data.fourth.title],
+        term: term,
+        headings: [data.second.title, data.third.title, data.fourth.title],
         picture: data.picture,
         pictureCaption: data.caption,
         poemData: [
