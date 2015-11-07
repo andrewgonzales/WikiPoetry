@@ -7,6 +7,9 @@ html {
 body {
   height: 100%;
 }
+a:hover {
+  cursor: pointer;
+}
 .column, .columns {
   margin-left: 1%;
 }
@@ -62,7 +65,12 @@ Home Styles
 }
 
 #categories {
-  border: none;
+  width: 100%;
+}
+
+#categories td {
+  border-bottom: 0px;
+  padding: 0px;
 }
 
 .homearticle h4 {
