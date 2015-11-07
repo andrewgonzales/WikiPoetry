@@ -63,8 +63,7 @@ var Article = React.createClass({
     var loadGif;
     var upperTerm = [];
     var splitTerm;
-
-    splitTerm = newInfo.term.split(' ');
+    splitTerm = this.props.location.state.term.split(' ');
     for(var i = 0; i < splitTerm.length; i++) {
       upperTerm.push(this.capitalizeFirstLetter(splitTerm[i]));
       upperTerm.push(' ');
@@ -142,6 +141,7 @@ var Article = React.createClass({
 
   _onArticleChange: function () {
     this.setState({
+
       load: WikiPoetryStore.getLoad()
     })
   },

@@ -55,7 +55,8 @@ module.exports = {
     db.getPoem(term, function (data) {
       // format object
       var formattedData = {
-        headings: [data.first.title, data.second.title, data.third.title, data.fourth.title],
+        term: term,
+        headings: [data.second.title, data.third.title, data.fourth.title],
         picture: data.picture,
         pictureCaption: data.caption,
         poemData: [
@@ -98,7 +99,6 @@ module.exports = {
   getNewPoems: function(type, term, amount) {
     var params = {type: type, term: term, amount: amount};
     API.getArticle(params, function (poemData) {
-      console.log('POEMDATA', poemData);
       WikiPoetryDispatcher.dispatch({
         actionType: ActionTypes.GET_POEMS,
         content: poemData
