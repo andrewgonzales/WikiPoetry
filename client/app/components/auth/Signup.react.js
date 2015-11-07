@@ -31,8 +31,8 @@ var Signup = React.createClass({
 
   render: function () {
     return (
-      <div className="signup">
-        <h1>Become a Poet</h1>
+      <div className="signupdiv">
+        <h1>Get your poetic license.</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
             <input onChange={this.onChangeUser} value={this.state.user} type="text" name="login" placeholder="Username or Email"></input>
@@ -40,7 +40,7 @@ var Signup = React.createClass({
           <p>
             <input onChange={this.onChangePass} type="password" name="password" value={this.state.pass} placeholder="Password"></input>
           </p>
-          <p className="submit"><input type="submit" name="commit" value="Signup"></input></p>
+          <p className="submit"><input type="submit" name="commit" value="Become a poet"></input></p>
         </form>
       </div>
     );
