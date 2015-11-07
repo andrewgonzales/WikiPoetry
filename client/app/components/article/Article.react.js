@@ -50,6 +50,10 @@ var Article = React.createClass({
     });
   },
 
+  capitalizeFirstLetter: function (string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  },
+
   render: function () {
     var newInfo = this.props.location.state;
     var articleType = this.state.type;
@@ -57,11 +61,19 @@ var Article = React.createClass({
     var load = this.state.load  
     var articleIntro;
     var loadGif;
+    var upperTerm = [];
+    var splitTerm;
+
+    splitTerm = newInfo.term.split(' ');
+    for(var i = 0; i < splitTerm.length; i++) {
+      upperTerm.push(this.capitalizeFirstLetter(splitTerm[i]));
+      upperTerm.push(' ');
+    }
 
     if(this.state.load && !newInfo.text) {
       loadGif = ''; 
     } else if (!newInfo.text && !this.state.load){
-      loadGif = <button onClick={this.handleClick}>Generate new poems</button>
+      loadGif = <button className='generate' onClick={this.handleClick}>Generate new poems</button>
     } else {
       loadGif = <h2>Poem could not be generated...</h2>
     }
@@ -99,7 +111,7 @@ var Article = React.createClass({
       <div className="ten columns" id="article">
         <div className="article-container">
           {loadGif}
-          <h3 className="article-title">{newInfo.term}</h3>
+          <h3 className="article-title">{upperTerm}</h3>
           <ArticleImage picture={newInfo.picture}  pictureCaption={newInfo.pictureCaption} />
           {articleIntro}
           {newInfo.headings.map(function (heading, i) {

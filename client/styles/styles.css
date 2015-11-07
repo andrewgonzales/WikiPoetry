@@ -135,6 +135,10 @@ Article Styles
   width: 40%; 
 }
 
+.generate {
+  margin-top: 15px;
+}
+>>>>>>> feat/capitalize added uppercase to Title of article
 /************************************
 Spinner Styles
 ************************************/
