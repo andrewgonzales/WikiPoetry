@@ -52,7 +52,6 @@ var Article = React.createClass({
 
   render: function () {
     var newInfo = this.props.location.state;
-    console.log('newInfo', newInfo);
     var articleType = this.state.type;
     var poems = this.state.poems[0] ? this.state.poems : [{poem: 'Please wait'}];
     var load = this.state.load  
@@ -95,16 +94,12 @@ var Article = React.createClass({
         text: newInfo.poemData[3].poem
       }
     };
-    if (editing) {
-      button = <Save keyIndex={'intro'}/>
-    } else {
-      button = <Edit keyIndex={'intro'}/>
-    }
+  
     return (
       <div className="ten columns" id="article">
         <div className="article-container">
           {loadGif}
-          <h3 className="article-title">{this.props.location.state.term}{button}</h3>
+          <h3 className="article-title">{newInfo.term}</h3>
           <ArticleImage picture={newInfo.picture}  pictureCaption={newInfo.pictureCaption} />
           {articleIntro}
           {newInfo.headings.map(function (heading, i) {

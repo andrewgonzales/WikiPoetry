@@ -54,7 +54,6 @@ module.exports = {
   getUserPoem: function (term) {
     db.getPoem(term, function (data) {
       // format object
-      console.log('getUserPoem data:', data);
       var formattedData = {
         headings: [data.first.title, data.second.title, data.third.title, data.fourth.title],
         picture: data.picture,

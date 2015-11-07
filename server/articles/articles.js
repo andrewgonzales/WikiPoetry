@@ -73,10 +73,7 @@ module.exports.save = function (req, res, next) {
 
 module.exports.get = function (req, res, next) {
   var title = req.query.term;
-  console.log('req query', req.query);
-  console.log('title sent to db', title);
   Articles.findOne({'first.title': title}, function (err, result) {
-    console.log('query result:', result);
     if(err) {
       res.send('error');
     } else if(result) {
@@ -87,11 +84,4 @@ module.exports.get = function (req, res, next) {
     }
   });
 };
-
-// Person.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, person) {
-//   if (err) return handleError(err);
-//   console.log('%s %s is a %s.', person.name.first, person.name.last, person.occupation) // Space Ghost is a talk show host.
-// })
-
-// { "_id" : ObjectId("563d284ae1bd8c781401436d"), "picture" : "upload.wikimedia.org/wikipedia/en/thumb/9/9e/Flag_of_Japan.svg/125px-Flag_of_Japan.svg.png", "caption" : "Japan should eyes to one\n", "fourth" : { "title" : "Prehistory and ancient history", "text" : " with blow belet and seen\n and more Japan\n World same should stood\n country sat she she so seem\n the such she seeth,\n" }, "third" : { "title" : "History", "text" : "Japan History poem poem blah blah" }, "second" : { "title" : "Etymology", "text" : " China sees in the piteless in the blow so seen she deep\n and heart of been\n the she Japanese make,\n Japan with the blow to were blows so some line\n the period from a sun she said,\n" }, "first" : { "title" : "Japan", "text" : " the more soft early some sing,\n first the seen heart,\n period behes and world's China Japan to the must with her sees deep she to her world's\n in in her seem\n she spressies the for the to her she,\n" }, "__v" : 0 }
 

@@ -124,10 +124,17 @@ Article Styles
   display: table-caption;
   caption-side: bottom;
   width: 275%;
-  font-size: 0.9em
+  font-size: 0.9em;
   margin: 3px;
   padding: 3px;
 }
+
+#userPoem {
+  border: 1px solid #888;
+  outline: none;
+  width: 40%; 
+}
+
 /************************************
 Spinner Styles
 ************************************/
@@ -165,4 +172,4 @@ Spinner Styles
     font-size: 3em;
     padding-left: 10%;
   }
-}
+
