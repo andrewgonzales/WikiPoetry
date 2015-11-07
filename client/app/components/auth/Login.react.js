@@ -29,8 +29,8 @@ var Login = React.createClass({
   },
   render: function () {
     return (
-      <div className="login">
-        <h1>Login</h1>
+      <div className="logindiv">
+        <h1>Enter the world of WikiPoetry</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
             <input onChange={this.onChangeUser} value={this.state.user} type="text" name="login" placeholder="Username or Email"></input>
@@ -38,7 +38,7 @@ var Login = React.createClass({
           <p>
             <input onChange={this.onChangePass} type="password" name="password" value={this.state.pass} placeholder="Password"></input>
           </p>
-          <p className="submit"><input type="submit" name="commit" value="Login"></input></p>
+          <p className="submit"><input type="submit" name="commit" value="Get in there"></input></p>
         </form>
       </div>
     );

@@ -11,7 +11,7 @@ a:hover {
   cursor: pointer;
 }
 .column, .columns {
-  margin-left: 1%;
+  margin-left: 4%;
 }
 
 .navbar, .header, .banner {
@@ -46,12 +46,16 @@ a:hover {
   padding-right: 3px;
 }
 
+.logindiv, .signupdiv {
+  margin-left: 230px;
+}
+
 /************************************
 Home Styles
 ************************************/
 
-.home-container {
-  margin-right: 0%;
+.homecontent {
+  width:100%; 
 }
 
 .banner {
