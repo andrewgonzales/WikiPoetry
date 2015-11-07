@@ -3,7 +3,7 @@
 var WikiPoetryDispatcher = require('../dispatcher/WikiPoetryDispatcher');
 var WikiConstants = require('../constants/WikiConstants');
 var API = require('./../api/wikiApi');
-
+var db = require('./../api/dbAPI');
 var ActionTypes = WikiConstants.ActionTypes;
 
 module.exports = {
@@ -32,6 +32,45 @@ module.exports = {
     WikiPoetryDispatcher.dispatch({
       actionType: ActionTypes.LOGOUT
     });
+  },  
+
+  editMode: function (bool, key) {
+    WikiPoetryDispatcher.dispatch({
+      actionType: ActionTypes.EDIT_SECTION,
+      mode: {
+        editing: bool,
+        key: key
+      }
+    });
+  },
+
+  savePoem: function (wholeArticle) {
+    //API call
+    db.savePoem(wholeArticle, function (data){
+      console.log('saved to db');
+    }); 
+  },
+
+  getUserPoem: function (term) {
+    db.getPoem(term, function (data) {
+      // format object
+      var formattedData = {
+        headings: [data.first.title, data.second.title, data.third.title, data.fourth.title],
+        picture: data.picture,
+        pictureCaption: data.caption,
+        poemData: [
+          {poem: data.first.text, replaced: []},
+          {poem: data.second.text, replaced: []},
+          {poem: data.third.text, replaced: []},
+          {poem: data.fourth.text, replaced: []}
+        ] 
+      };
+
+      WikiPoetryDispatcher.dispatch({
+        actionType: ActionTypes.GET_USER_POEM,
+        userPoem: formattedData 
+      });
+    })
   },
 
   getHomeContent: function (type) {
@@ -43,14 +82,17 @@ module.exports = {
     });
   },
 
-  getArticleContent: function (type, term) {
-    API.getArticlePage(type, term, function (data) {
-      data.term = term;
-      WikiPoetryDispatcher.dispatch({
-        actionType: ActionTypes.GET_ARTICLE,
-        content: data
+  getArticleContent: function (type, term) { 
+    if (type !== 'user') {
+      API.getArticlePage(type, term, function (data) {
+        data.term = term;
+        data.keyIndex = 'intro';
+        WikiPoetryDispatcher.dispatch({
+          actionType: ActionTypes.GET_ARTICLE,
+          content: data
+        });
       });
-    });
+    }
   },
 
   getNewPoems: function(type, term, amount) {

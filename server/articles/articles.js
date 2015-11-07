@@ -53,7 +53,7 @@ module.exports.save = function (req, res, next) {
       // article found, update it 
       Articles.update({first: {title: article.first.title}}, article, function (err, result) {
         if(result) {
-          res.send('updated');
+          res.status(201).send(article).end();
         } else if(err) {
           res.send(err);
         }
@@ -62,7 +62,7 @@ module.exports.save = function (req, res, next) {
       // no user generated article found, create one
       Articles.create(article, function (err, result) {
         if(result) {
-          res.send('created');
+          res.status(201).send(article).end();
         } else if(err) {
           res.send(err);
         }
@@ -72,14 +72,15 @@ module.exports.save = function (req, res, next) {
 };
 
 module.exports.get = function (req, res, next) {
-  var title = req.body.title;
-  Articles.findOne({first: {title: title}}, function (err, result) {
+  var title = req.query.term;
+  Articles.findOne({'first.title': title}, function (err, result) {
     if(err) {
-      res.send('error')
+      res.send('error');
     } else if(result) {
-      res.json(result);
+      // res.json(result);
+      res.status(200).json(result).end();
     } else {
-      res.send('empty');
+      res.send('not found');
     }
   });
 };
