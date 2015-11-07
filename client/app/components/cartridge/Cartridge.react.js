@@ -17,18 +17,30 @@ var Cartridge = React.createClass({
 
     return (
       <form>
+        <div>
         <input type="radio" name="cartridge" value="keats" id="keats" onChange={this._onCartridgeChange} defaultChecked={true}/>
-          <label htmlFor="keats" name="cartridge">John Keats</label>
+          <label className="labels" htmlFor="keats" name="cartridge">John Keats</label>
+        </div>
+        <div>
         <input type="radio" name="cartridge" value="shakespeare" id="shakespeare" onChange={this._onCartridgeChange} />
-          <label htmlFor="shakespeare" name="cartridge">Shakespeare</label>
+          <label className="labels" htmlFor="shakespeare" name="cartridge">Shakespeare</label>
+        </div>
+        <div>
         <input type="radio" name="cartridge" value="dylan" id="Dylan" onChange={this._onCartridgeChange}/>
-          <label htmlFor="Dylan" name="cartridge">Bob Dylan</label>
+          <label className="labels" htmlFor="Dylan" name="cartridge">Bob Dylan</label>
+        </div>
+        <div>
         <input type="radio" name="cartridge" value="frost" id="frost" onChange={this._onCartridgeChange}/>
-          <label htmlFor="frost" name="cartridge">Robert Frost</label>
+          <label className="labels" htmlFor="frost" name="cartridge">Robert Frost</label>
+        </div>
+        <div>
         <input type="radio" name="cartridge" value="beatles" id="beatles" onChange={this._onCartridgeChange}/>
-          <label htmlFor="beatles" name="cartridge">The Beatles</label>
+          <label className="labels" htmlFor="beatles" name="cartridge">The Beatles</label>
+        </div>
+        <div>
         <input type="radio" name="cartridge" value="user" id="user" onChange={this._onCartridgeChange}/>
-          <label htmlFor="user" name="cartridge">User</label>
+          <label className="labels" htmlFor="user" name="cartridge">User</label>
+        </div>
       </form>
     );
   },

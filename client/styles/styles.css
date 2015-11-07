@@ -18,6 +18,11 @@ a:hover {
   background-color: #f9f9f9;
 }
 
+.labels {
+  margin-right: 15px;
+  float: right;
+}
+
 .navbar {
   padding-left: 15px;
   width: 100%;
