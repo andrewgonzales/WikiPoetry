@@ -135,6 +135,9 @@ Article Styles
   width: 40%; 
 }
 
+.generate {
+  margin-top: 15px;
+}
 /************************************
 Spinner Styles
 ************************************/
